@@ -18,11 +18,15 @@ class MT_Photo extends MT_Common {
 
 	
 	public function __construct($id = NULL) {
-		parent::__construct('wp_mt_photo', $id);
+		parent::__construct(self::getTableName(), $id);
 	}
 
 	public function __toString() {
 		return 'photo';
+	}
+	
+	public static function getTableName() {
+		return 'wp_mt_photo';
 	}
 	
 	public function isDeletable() {
@@ -38,7 +42,7 @@ class MT_Photo extends MT_Common {
 		if (!empty($galleryId)) {
 			$whereCondition = "id = ".$galleryId." AND";
 		}
-		return parent::get_max('date', $whereCondition . "`show` = 1");
+		return parent::get_aggregate('MAX', 'date', $whereCondition . "`show` = 1");
 	}
 	
 	        /**
@@ -72,14 +76,14 @@ class MT_Photo extends MT_Common {
 		return parent::check_dataset_exits("path = '$path'");
 	}
 	
-	public function delete() {
-		if(parent::hasId()) {
+	public static function delete() {
+/*		if(parent::hasId()) {
 			if($this->getFile()->delete()) {
 				// TODO
 			} else {
 				
 			}
-		}
+		}*/
 	}
 	
 	public function renameFile($galleryId) {
@@ -115,7 +119,7 @@ class MT_Photo extends MT_Common {
 		} else {
 			$whereCondition .= "`show` = '1'";
 		}
-		return parent::get_count('id', $whereCondition);
+		return parent::get_aggregate('COUNT', 'id', $whereCondition);
 	}
 	
 	/**
@@ -136,7 +140,7 @@ class MT_Photo extends MT_Common {
 	 * @return	int				Number of pictures
 	 */
 	public function getNumPhotos($photographerId) {
-		return parent::get_count('id', "photographer = '".$photographerId."' AND `show` = '1'");
+		return parent::get_aggregate('COUNT', 'id', "photographer = '".$photographerId."' AND `show` = '1'");
 	}
 
 }

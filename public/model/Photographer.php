@@ -10,14 +10,22 @@ class MT_Photographer extends MT_Common {
 	public static $photographersPath = 'Fotograf/';
 	
 	public function __construct($id = NULL) {
-		parent::__construct('wp_mt_photographer', $id);
+		parent::__construct(self::getTableName(), $id);
 	}
 	
 	public function __toString() {
 		return 'photographer';
 	}
 	
-	public function insert($data) {
+	public static function getTableName() {
+		return 'wp_mt_photographer';
+	}
+	
+	public function getName() {
+		return 'Fotografen';
+	}
+	
+	public static function insert($data) {
 		$data['date'] = time();
 		parent::insert($data);
 	}
@@ -37,12 +45,6 @@ class MT_Photographer extends MT_Common {
 	 */
 	public function hasPhotos() {
 		return ($this->getNumPhotos > 0);
-	}
-	
-	######## Get ########
-	
-	public function getName() {
-		return 'Fotografen';
 	}	
 	
 }

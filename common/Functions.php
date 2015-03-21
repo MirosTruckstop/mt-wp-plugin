@@ -175,8 +175,7 @@ abstract class MT_Functions {
 	 *
 	 * @return	void
 	 */
-	public static function submitButton()
-	{
+	public static function submitButton() {
 		echo '<input type="submit" value="Änderung speichern" class="button button-primary">';
 	}
 
@@ -185,39 +184,12 @@ abstract class MT_Functions {
 	 *
 	 * @return	void
 	 */
-	public static function cancelButton( $link )
-	{
+	public static function cancelButton( $link ) {
 		if ( !empty( $link) ) {
 			self::button($link, 'Abbrechen', 'button');
 		} else {
 			self::button( 'javascript:history.back()', 'Abbrechen', 'button');
 		}
-	}
-
-// TODO: Zend?, Verwendung?
-	/**
-	 * Gibt die Tabelle mt_$typ in einem assoziativen Array zurück, wobei die Spalte
-	 * $typ_$first der Schlüssel und die Spalte $typ_$second jeweils der Inhalt
-	 * des Array's ist. 
-	 *
-	 * @param	string	$typ		Table name (e.g. 'category')
-	 * @param	string	$first		Array key
-	 * @param	string	$second		Array value
-	 * @return	array				Associative array
-	 */
-	function getAllInAssocArray( $typ, $first = 'id', $second = 'name' )
-	{	
-		$array = array();
-
-		$query = "SELECT " . $typ . "_" . $first . ", " . $typ . "_" . $second . "
-					FROM mt_" . $typ . "
-					ORDER BY " . $typ . "_" . $second;
-		$result = mysql_query($query);
-		while($row = mysql_fetch_array($result)) {
-			$array[ $row[0] ] = $row[1];
-		}
-		
-		return $array;
 	}
         
 	/**
@@ -237,8 +209,7 @@ abstract class MT_Functions {
 	 * @param	string|null		$selectedGallery	Selected gallery
 	 * @return	void
 	 */
-	public static function outputAllGalleries( $selectedGallery = NULL )
-	{	
+	public static function outputAllGalleries( $selectedGallery = NULL ) {	
 		$resultString = '';
 		$tempOptgroup = NULL;
 		
@@ -351,5 +322,5 @@ abstract class MT_Functions {
 	private function _outputPaginationLink( $page, $num, $sort, $text, $additionalLink = 'NULL' ) {
 		echo '<a href="?' . $additionalLink . 'page=' . $page . '&num=' . $num . '&sort=' . $sort . '">' . $text . '</a>';
 	}
-
+	
 }

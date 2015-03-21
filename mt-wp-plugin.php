@@ -193,14 +193,80 @@ function mt_add_shortcode_statistics() {
 	return $returnString;
 }
 
+add_shortcode('mt_news', 'mt_add_shortcode_news');
+function mt_add_shortcode_news() {
+	$returnString = '';
+
+	$dateYear_old = '';
+	$dateMonth_old = '';
+	$dateDay_old = '';
+
+	$newsItems = MT_News::getAll(array('title', 'text', 'gallery', 'date' ), 'date DESC');
+	foreach ($newsItems as $item) {
+		// News link
+		if( empty( $item->gallery ) ) {
+			$news_link = 'Home';
+		} else {
+			$news_link = MT_Photo::$__photoPathAbs.$item->gallery;
+		}
+
+		// Year
+		$dateYear = strftime( '%Y', $item->date );
+		if( $dateYear != $dateYear_old && $dateYear != date( 'Y', time() ) ) {
+			$dateYear_old = $dateYear;
+			$returnString .= '
+			</table>
+			<hr>
+			<center><h1>' . $dateYear . '</h1></center>';
+		}
+
+		// Month
+		$dateMonth = strftime( '%B', $item->date );
+		if($dateMonth != $dateMonth_old) {
+				
+			// Beim ersten Monat <table> noch nicht beenden
+			if( !empty( $dateMonth_old ) ) {
+				$returnString .= '</table>';
+			}
+			$dateMonth_old = $dateMonth;
+
+			$returnString .= '
+			<h3>' . $dateMonth . '</h3>
+			<table class="table_quer" cellSpacing="4" cellPadding="1">
+				<colgroup>
+    				<col width="95px">
+    				<col width="*">
+  				</colgroup>';
+					}
+					
+		// Day
+		$returnString .= '<tr>';
+				
+		$dateDay = strftime( '%a, %d.%m.', $item->date );
+				
+		if($dateDay != $dateDay_old) {
+			$dateDay_old = $dateDay;
+					
+			$returnString .= '<th>'. $dateDay . ':</th>';
+		}
+		else {
+			$returnString .= '<th></th>';
+		}
+		$returnString .= '<td><a href="' . $news_link . '">' . $item->title . '</a><br>' . $item->text . '</td>
+				</tr>';
+	}
+	$returnString .= '</table>';		
+	return $returnString;
+}
+
+
 add_shortcode('mt_photographers', 'mt_add_shortcode_photographers');
 function mt_add_shortcode_photographers() {
 	$returnString = '<ul>';
 	
-	$photographer = new MT_Photographer();
 	$photo = new MT_Photo();
 	
-	$items = $photographer->getAll(array('id', 'name'), 'name');
+	$items = MT_Photographer::getAll(array('id', 'name'), 'name');
 	foreach ($items as &$item) {
 		$returnString .= '<li><a href="'.MT_Photographer::$photographersPath.$item->id.'">'.$item->name.'</a>&nbsp;<span class="style_grew">('.$photo->getNumPhotos($item->id).')</span></li>';				
 	}

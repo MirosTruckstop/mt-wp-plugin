@@ -17,27 +17,27 @@ class MT_Gallery extends MT_Common {
 	 * @var int
 	 */
 	static $__newTimestamp = 604800;
-
 	
-	protected $belongsTo = 'category';
-	protected $hasOne = 'subcategory';
-		
 	public function __construct($id = NULL) {
-		parent::__construct('wp_mt_gallery', $id);
+		parent::__construct(self::getTableName(), $id);
 	}
 	
 	public function __toString() {
 		return 'gallery';
 	}
 	
-	public function insert($data) {
+	public static function getTableName() {
+		return 'wp_mt_gallery';
+	}
+
+	public function getName() {
+		return 'Gallerien';
+	}
+
+	public static function insert($data) {
 		$data['date'] = time();
 		$data['path'] = MT_Functions::nameToPath($data['name']);
 		parent::insert($data);
-	}
-	
-	public function getName() {
-		return 'Gallerien';
 	}
 	
 	/**
@@ -88,7 +88,7 @@ class MT_Gallery extends MT_Common {
 	 * @throws	Exception
 	 */
 	public function getNumGalleries($categoryId, $subcategoryId = '0') {
-		return parent::get_count('name', "category = '" . $categoryId . "' AND subcategory = '" . $subcategoryId . "'");
+		return parent::get_aggregate('COUNT', 'name', "category = '" . $categoryId . "' AND subcategory = '" . $subcategoryId . "'");
 	}
 	
 	/**

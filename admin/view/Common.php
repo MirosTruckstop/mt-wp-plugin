@@ -25,7 +25,6 @@ abstract class MT_Admin_Table_Common {
 	public function __construct( $model, $cssClass ) {
 		if ($model instanceof MT_Common) {
 			$this->model = $model;
-			$this->model->setOutputType('ARRAY_N');
 			$this->cssClass = $cssClass;
 			
 			// Pagination
@@ -125,7 +124,6 @@ abstract class MT_Admin_Table_Common {
 		foreach ($leftJoin as $joinTable => $joinSelect) {
 			$query->joinLeft($joinTable, 'wp_mt_'.$this->model->__toString().'.'.$joinTable.'=wp_mt_'.$joinTable.'.id', $joinSelect);
 		}
-		echo $query;
 		return $query->getResult('ARRAY_N');
 	}
 

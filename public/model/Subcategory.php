@@ -6,21 +6,23 @@
  */
 class MT_Subcategory extends MT_Common {
 	
-	protected $belongsTo = 'category';
-	
 	public function __construct($id = NULL) {
-		parent:: __construct('wp_mt_subcategory', $id);
+		parent:: __construct(self::getTableName(), $id);
 	}
 	
 	public function __toString() {
 		return 'subcategory';
 	}
 	
+	public static function getTableName() {
+		return 'wp_mt_subcategory';
+	}
+	
 	public function getName() {
 		return "Unterkategorien";
 	}
 	
-	public function insert($data) {
+	public static function insert($data) {
 		$data['path'] = MT_Functions::nameToPath($data['name']);
 		parent::insert($data);
 	}

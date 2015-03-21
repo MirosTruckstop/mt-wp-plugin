@@ -216,8 +216,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	 * @return	void
 	 */
 	private function _outputAllPhotographers($selectedPhotographer = 1) {
-		$photographer = new MT_Photographer();
-		$result = $photographer->getAll(array('id', 'name'), 'name');
+		$result = MT_Photographer::getAll(array('id', 'name'), 'name');
 		foreach ($result as $row) {
 			echo '<option value="'.$row->id.'" '.MT_Functions::selected($selectedPhotographer, $row->id).'>'.$row->name.'</option>';
 		}

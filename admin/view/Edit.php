@@ -20,10 +20,6 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	public function __construct( $model, $cssClass = 'widefat') {
 		parent::__construct($model, $cssClass);
 		parent::setPerPage(1);
-		parent::setFields(array(
-			new MT_Admin_Field(NULL, 'Feld'),
-			new MT_Admin_Field(NULL, 'Wert')			
-		));
 	}
 	
 	public function setData($data) {
@@ -70,6 +66,10 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 		}
 	}
 	
+	protected function _outputTableHead() {
+		echo '<tr><th>Feld</th><th>Wert</th></tr>';
+	}
+
 	protected function _outputTableNavBottom() {
 		if ($this->model->hasId() || $this->model == 'news' || $this->model == 'photographer' || $this->model == 'photo' ) {
 			echo MT_Functions::submitButton();

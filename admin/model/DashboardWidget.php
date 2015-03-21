@@ -51,15 +51,14 @@ class MT_Admin_DashboardWidget {
 		$unToDate = time() - $this->_deleteTime;
 
 		// Request number of temp files
-		$mangementTemp = new MT_ManagementTemp();
-		$numTempFiles = $mangementTemp->get_count('id', "temp_date <= '" . $unToDate . "'");			
+		$numTempFiles = MT_ManagementTemp::get_aggregate('COUNT', 'id', "date <= '" . $unToDate . "'");			
 		
 		if($numTempFiles > 0) {
 			echo '
-			<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('. $row->numTempFiles . ')';
+			<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('.$numTempFiles.')';
 
 			// Delete temp files
-			$mangementTemp->deleteAll("temp_date <= '". $unToDate . "'");
+			MT_ManagementTemp::delete('date <= '.$unToDate);
 		}
 	}
 }
