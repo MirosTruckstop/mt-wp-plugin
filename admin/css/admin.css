@@ -1,0 +1,68 @@
+/* #################### Navigation #################### */
+//nav ul {
+//	list-style-type:none;
+//}
+/*
+table.horizontal {
+	border:1px solid #CCC;
+	border-collapse:collapse;
+	width:100%;
+	margin:15px 0px;
+}
+table.horizontal tr {
+	border:1px solid #CCC;
+}
+table.horizontal tbody tr:hover {
+	background-color:#CCC;
+}
+table.horizontal th,
+table.horizontal td {
+	padding:3px 10px;
+	text-align:left;
+	vertical-align:middle;
+}
+table.horizontal th {
+	font-weight:bolder;
+}
+table.horizontal thead tr,
+table.horizontal tfoot tr {
+	height:35px;
+	background-image: -moz-linear-gradient(#ffffff 50%, #CECECE);
+	background:#5C443A;
+	color:#FFF;
+}
+.row_1 {
+}
+input[type="submit"],
+button {
+	color:#FFF;
+	background:#06C;
+	border:none;
+	border-radius: 10px;
+	padding:2px 8px;
+	box-shadow:2px 2px 2px #666;
+	margin:2px;
+}
+a.button {
+	text-decoration:none;
+}
+
+button[type="addButton"] {
+	background:#5C443A;
+}
+button[type="deleteButton"] {
+	background:#C00;
+}
+
+.box {
+	border:1px solid #000;
+	margin:20px 0px 5px 0px;
+	padding:10px 5px;
+}
+.box#green {
+	border-color:green;
+}
+.box#red {
+	border-color:red;
+}
+*/
