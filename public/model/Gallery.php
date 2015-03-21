@@ -87,7 +87,7 @@ class MT_Gallery extends MT_Common {
 	 * @return	string					Number of galleries
 	 * @throws	Exception
 	 */
-	public function getNumGalleries($categoryId, $subcategoryId = '0') {
+	public static function getNumGalleries($categoryId, $subcategoryId = '0') {
 		return parent::get_aggregate('COUNT', 'name', "category = '" . $categoryId . "' AND subcategory = '" . $subcategoryId . "'");
 	}
 	
@@ -100,7 +100,7 @@ class MT_Gallery extends MT_Common {
 	 * @return	boolean
 	 * @throws	Exception
 	 */
-	public function checkLinkToHauptparkplatz( $categorieId, $subcategorieId = '0' ) {
+	public static function checkLinkToHauptparkplatz( $categorieId, $subcategorieId = '0' ) {
 		return (parent::get_attribute('id', "category = '". $categorieId . "' AND subcategory = '" . $subcategorieId . "' AND hauptparkplatz != ''")) != FALSE;
 	}
 	
@@ -111,8 +111,7 @@ class MT_Gallery extends MT_Common {
 	 * @return	boolean
 	 */
 	public function checkGalleryIsNew() {
-		$photo = new MT_Photo();
-		return (time() - $photo->getLatestPhotoDate($this->id) <= self::$__newTimestamp);
+		return (time() - MT_Photo::getLatestPhotoDate($this->id) <= self::$__newTimestamp);
 	}
 	
 	/**
@@ -122,8 +121,7 @@ class MT_Gallery extends MT_Common {
 	 * @return	boolean
 	 */
 	public function checkIsPhotoInGallery() {
-		$photo = new MT_Photo();
-		return ($photo->getCount($this->id) > 0);
+		return (MT_Photo::getCount($this->id) > 0);
 	}
 
 }

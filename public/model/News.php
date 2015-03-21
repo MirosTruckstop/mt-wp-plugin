@@ -34,7 +34,7 @@ class MT_News extends MT_Common {
 	 *
 	 * @return	int	Latest news timestamp
 	 */
-	public function getLatestNewsTimestamp() {
+	public static function getLatestNewsTimestamp() {
 		return parent::get_aggregate('MAX', 'date');
 	}
 }

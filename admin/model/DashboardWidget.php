@@ -24,21 +24,20 @@ class MT_Admin_DashboardWidget {
 	private function _testPhotoPaths() {
 		$error = false;
 
-		$query = (new MT_QueryBuilder('mt_wp_'))
+		$query = (new MT_QueryBuilder('wp_mt_'))
 			->from('photo', 'path')
-			->join('gallery', TRUE, 'name');
+			->join('gallery', TRUE, 'name')
+			->limit(10);
 		foreach ($query->getResult('ARRAY_A') as $row) {				
 			$file = MT_Photo::$__photoPath . $row['path'];
 						
 			if( !file_exists( $file ) ) {
 				$error = true;
-				echo '
-			<p class="style_red">Fehler! Das Bild <a href="' . $file . '" target="_blank">' . $file . '</a> in der Galerie "' . $row['name'] . '" wurde nicht gefunden!</p>';
+				echo '<p class="style_red">Fehler! Bild <a href="' . $file . '" target="_blank">' . $file . '</a> in der Galerie "' . $row['name'] . '" wurde nicht gefunden!</p>';
 			}
 		}
-		if( !$error) {
-			echo '
-			<p class="style_green">Alles OK! Alle Bilder wurden gefunden!</p>';
+		if(!$error) {
+			echo '<p class="style_green">Alles OK! Alle Bilder wurden gefunden!</p>';
 		}
 	}
 

@@ -49,13 +49,14 @@ abstract class MT_Common {
 		return false;
 	}
 	
-	public function getOne($select = NULL, $outputType = NULL) {
+	public function getOne($select = NULL, $outputType = 'OBJECT') {
 		if(!empty($this->id)) {
 			$query = (new MT_QueryBuilder())
 				->from($this->tableName, $select)
 				->whereEqual($this->tableName.'.id', $this->id);
 			return $query->getResultOne($outputType);		
 		}
+		return FALSE;
 	}
 	
 	public static function getAll($select = '*', $orderBy = NULL) {

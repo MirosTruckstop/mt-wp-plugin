@@ -106,7 +106,7 @@ abstract class MT_Functions {
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
 		$mangementTemp = new MT_ManagementTemp($ip);
-		$item = $mangementTemp->getOne();
+		$item = $mangementTemp->getOne(NULL, 'ARRAY_A');
 		$sortDb = $item['sort'];
 		$numDb = $item['num'];
 

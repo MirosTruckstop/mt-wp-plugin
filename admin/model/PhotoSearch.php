@@ -7,21 +7,18 @@
  */
 class MT_Admin_PhotoSearch {
 
-	private $photo;
-	
 	/**
 	 * Konstruiert MT_PhotoSearch Objekt
 	 *
 	 * @return void
 	 */ 
 	public function __construct(){
-		$this->photo = new MT_Photo();
 		// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
-		if($this->photo->getCount('neue_bilder') < '8' or $_GET['action'] === 'search') {
+		if(MT_Photo::getCount('neue_bilder') < '8' or $_GET['action'] === 'search') {
 			$this->_searchNewPhotos( MT_Photo::$__photoPath, time() );
 	
 			// Datum der letzten Suche speichern
-			update_option( 'datum_letzte_suche', time() );
+			update_option('datum_letzte_suche', time());
 		}
 	}
 
@@ -31,7 +28,7 @@ class MT_Admin_PhotoSearch {
       * @return int  number of new photos
       */
     public function getNumPhotos() {
-        return $this->photo->getCount('neue_bilder');
+        return MT_Photo::getCount('neue_bilder');
     }
         
 	/**
@@ -44,7 +41,6 @@ class MT_Admin_PhotoSearch {
 	private function _searchNewPhotos($dir, $startTime) { 
 		if (!is_dir($dir)) {
 			return FALSE;
-//			throw new Exception('$dir is not a directory');
 		}
 		$fp = opendir( $dir );
 		while( $file = readdir( $fp ) ) {
@@ -64,8 +60,8 @@ class MT_Admin_PhotoSearch {
 				$dbFile = $dbDirname . '/' . $basename;
 		
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist
-				if( !$this->photo->checkPhotoIsInDb($dbFile) ) {
-					$this->photo->insert(array(
+				if(!MT_Photo::checkPhotoIsInDb($dbFile)) {
+					MT_Photo::insert(array(
 						'path'        => $dbFile,
 						'name_old'    => $basename,
 						'gallery'     => MT_Gallery::getIdFromPath($dbDirname),
@@ -74,7 +70,7 @@ class MT_Admin_PhotoSearch {
 					));
 				}	
 			}
-		}		
+		}
 		closedir( $fp );
 	}
 }

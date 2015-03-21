@@ -2,12 +2,15 @@
 
 class MT_Admin_NewsGeneration {
 	
-	private $model;
+	/**
+	 * Timestamp of the last news
+	 * 
+	 * @var int 
+	 */
 	private $timestampLatestNews;
 	
 	public function __construct() {
-		$this->model = new MT_News();
-		$this->timestampLatestNews = $this->model->getLatestNewsTimestamp();
+		$this->timestampLatestNews = MT_News::getLatestNewsTimestamp();
 	}
 
 	/**
@@ -17,8 +20,7 @@ class MT_Admin_NewsGeneration {
 	 * @return	boolean
 	 */
 	public function checkGenerateNews() {
-		$photo = new MT_Photo();
-		return ($this->timestampLatestNews < $photo->getLatestPhotoDate() );
+		return ($this->timestampLatestNews < MT_Photo::getLatestPhotoDate() );
 	}
 	
 	public function getGeneratedNews() {
@@ -37,13 +39,11 @@ class MT_Admin_NewsGeneration {
 			->groupBy('wp_mt_category.name, wp_mt_subcategory.name, wp_mt_gallery.name')
 			->orderBy('numPhotos DESC');
 		
-//		echo $query;
-		
-		foreach ($query->getResult() as $row) {
+		foreach ($query->getResult() as $item) {
 			array_push($news, array(
-				0 => $this->generateTitle($row->categoryName, $row->subcategoryName, $row->galleryName, $row->date, $row->numPhotos),
-				1 => $this->generateText($row->numPhotos),
-				2 => $row->id
+				0 => $this->generateTitle($item->categoryName, $item->subcategoryName, $item->galleryName, $item->date, $item->numPhotos),
+				1 => $this->generateText($item->numPhotos),
+				2 => $item->id
 			));
 		}
 		return $news;

@@ -9,7 +9,7 @@ class MT_View_Photographer {
 	 */
 	public static $_dateFormat = '%e. %B %Y';
 	
-	private $_item;
+	private $item;
 
 	/**
 	 * [...]
@@ -18,18 +18,13 @@ class MT_View_Photographer {
 	 * [...]
 	 */
 	public function __construct($id) {
-		$photographer = new MT_Photographer($id);
-		$this->_item = $photographer->getOne(NULL, 'OBJECT');
-		var_dump($this->_item);				
-		// Couldn't find photographer in database
-		if( empty( $this->_item->name ) ) {
-			unset( $this->_item );
-			$this->_name = 'Fehler';
-		} else {
-			$this->_name = $this->_item->name;
-			$photo = new MT_Photo();
-			$this->_numPhotos = $photo->getNumPhotos($photographer->getId());
+		$this->item = (new MT_Photographer($id))->getOne();
+		
+		if (empty($this->item)) {
+			throw new Exception('Die ausgewählte Fotograf existiert nicht.');
 		}
+
+		$this->_numPhotos = MT_Photo::getNumPhotos($this->item->id);
 	}
 
 //	public function outputTitle()
@@ -45,20 +40,15 @@ class MT_View_Photographer {
 	public function outputBreadcrumb() {
 		?>
 				<a href="../Fotografen">Fotografen</a>&nbsp;>
-				<a href=""><?php echo $this->_name; ?></a>
+				<a href=""><?php echo $this->item->name; ?></a>
 		<?php
 	}
 
 	public function outputContent(){
 		$this->outputBreadcrumb();
-		echo '<h2>'.$this->_name.'</h1>';
-		if( isset( $this->_item ) ) {
-			$this->_outputContentPhotographer($this->_item);
-			$this->_outputContentPhotographerPhotos($this->_item);
-		} else {
-			// Ausgabe der Fehlermeldung
-			echo "<p>" . _("Die ausgewählte Fotograf existiert nicht!"). "</p>";
-		}
+		echo '<h1>'.$this->item->name.'</h1>';
+		$this->_outputContentPhotographer();
+		$this->_outputContentPhotographerPhotos();
 	}
 
 	/**
@@ -66,24 +56,24 @@ class MT_View_Photographer {
 	 *
 	 * @return void
 	 */
-	private function _outputContentPhotographer($item)
+	private function _outputContentPhotographer()
 	{
 		?>
 			<table class="table_quer">
 			 <tr>
 			  <th>Name:</th>
-			  <td><?php echo $item->name; ?></td>
+			  <td><?php echo $this->item->name; ?></td>
 			 </tr>
 			 <tr>
 			  <th>Truckstop-Fotograf seit:</th>
-			  <td><?php echo strftime(self::$_dateFormat, $item->date ); ?></td>
+			  <td><?php echo strftime(self::$_dateFormat, $this->item->date ); ?></td>
 			 </tr>
 		 		<?php
-			 	if( !empty( $item->amera ) ) {
+			 	if( !empty( $this->item->amera ) ) {
 					?>
 			 <tr>
 			  <th>Kamera:</th>
-			  <td><?php echo $item->camera; ?></td>
+			  <td><?php echo $this->item->camera; ?></td>
 			 </tr>
 			 		<?php
 			 	}
@@ -101,8 +91,8 @@ class MT_View_Photographer {
 	 *
 	 * @return void
 	 */
-	private function _outputContentPhotographerPhotos($item) {
-		if( !empty( $this->_numPhotos ) ) {
+	private function _outputContentPhotographerPhotos() {
+		if($this->_numPhotos > 0) {
 			?>
 			<h2>Bilder</h2>
 			<table class="table_hoch_2">
@@ -121,7 +111,7 @@ class MT_View_Photographer {
 				->joinInner('category', 'wp_mt_category.id = wp_mt_gallery.category', array('id AS categoryId', 'name AS categoryName'))
 				->joinLeftOuter('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory', array('id AS subcategoryId', 'name subcategoryName'))
 				->whereEqual('wp_mt_photo.show', 1)
-				->whereEqual('photographer', $item->id)
+				->whereEqual('photographer', $this->item->id)
 				->groupBy(array('categoryName', 'subcategoryName', 'galleryName'))
 				->orderBy(array('categoryName', 'subcategoryName', 'galleryName'));
 			foreach ($query->getResult() as $row) {	

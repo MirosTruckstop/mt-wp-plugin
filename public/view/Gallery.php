@@ -2,61 +2,14 @@
 
 class MT_View_Gallery {
 
+	private $item;
+	
 	/**
 	 * Category path
 	 *
 	 * @var string
 	 */
-	private $_categoryPath = '../kategorie/';
-
-	/**
-	 * Galleries ID
-	 *
-	 * @var int
-	 */
-	private $_id;
-
-	/**
-	 * Galleries name
-	 *
-	 * @var string
-	 */
-	private $_name;
-
-	/**
-	 * Galleries linkt to Hauptparkplatz
-	 *
-	 * @var string
-	 */
-	private $_hauptparkplatz;
-
-	/**
-	 * Galleries category id
-	 *
-	 * @var string
-	 */
-	private $_categoryId;
-
-	/**
-	 * Galleries category name
-	 *
-	 * @var string
-	 */
-	private $_categoryName;
-
-	/**
-	 * Galleries subcategory name
-	 *
-	 * @var string
-	 */
-	private $_subcategoryName;
-	
-	/**
-	 * Galleries description
-	 *
-	 * @var string
-	 */
-	private $_description;
+	public static $_categoryPath = '../kategorie/';
 
 	/**
 	 * Number of photos in gallery
@@ -85,8 +38,6 @@ class MT_View_Gallery {
 	 * @var string
 	 */
 	private $_userSort;
-	
-	private $photo;
 
 
 	/**
@@ -96,45 +47,33 @@ class MT_View_Gallery {
 	 * [...]
 	 */
 	public function __construct($id) {
-		$this->_id = $id;
 
 		// Construct query
 		$query = (New MT_QueryBuilder('wp_mt_'))
 			->from('gallery', array('id as galleryId', 'name as galleryName', 'description', 'hauptparkplatz'))
-			->join('category', TRUE, array('id AS categoryID', 'name AS categoryName'))
+			->join('category', TRUE, array('id AS categoryId', 'name AS categoryName'))
 			->joinLeft('subcategory', TRUE, 'name as subcategoryName')
-			->whereEqual('wp_mt_gallery.id', $this->_id);
-		$item = $query->getResultOne();
+			->whereEqual('wp_mt_gallery.id', $id);
+		$this->item = $query->getResultOne();
 				
-		$this->_name = $item['galleryName'];
-		$this->_description = $item['description'];
-		$this->_hauptparkplatz = $item['hauptparkplatz'];
-		$this->_categoryId = $item['categoryId'];
-		$this->_categoryName = $item['categoryName'];
-		$this->_subcategoryName = $item['subcategoryName'];
-
-		
-		$this->photo = new MT_Photo();
-		
-		if( empty( $this->_name ) ) {
-			unset( $this->_id );
-			$this->_name = 'Fehler';
-		} else {
-			$userSettings = MT_Functions::getUserSettings( $_GET['sort'], $_GET['num'] );
-			$this->_userNum = $userSettings['num'];
-			$this->_userSort = $userSettings['sort'];
-
-			// Seitennummer
-			$this->_userPage = $_GET['page'];
-
-				// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
-				if( empty( $this->_userPage ) || $this->_userPage > $this->photo->getNumPages($this->_id, $this->_userNum) ) {
-					$this->_userPage = 1;
-				}
-
-			// Anzahl der Bilder in der Galerie
-			$this->_numPhotos = $this->photo->getCount($this->_id);
+		if (empty($this->item)) {
+			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
 		}
+		
+		$userSettings = MT_Functions::getUserSettings( $_GET['sort'], $_GET['num'] );
+		$this->_userNum = $userSettings['num'];
+		$this->_userSort = $userSettings['sort'];
+
+		// Seitennummer
+		$this->_userPage = $_GET['page'];
+
+		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
+		if( empty( $this->_userPage ) || $this->_userPage > MT_Photo::getNumPages($this->item->galleryId, $this->_userNum) ) {
+			$this->_userPage = 1;
+		}
+
+		// Anzahl der Bilder in der Galerie
+		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
 	}
 
 
@@ -154,46 +93,36 @@ class MT_View_Gallery {
 
 
 	public function outputBreadcrumb() {
-		if( isset($this->_id) ) {
-			$categoryLink = $this->_categoryPath . $this->_categoryId;
-				echo '
+		$categoryLink = self::$_categoryPath . $this->item->categoryId;
+			echo '
                                     <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                                        <a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->_categoryName . '</span></a>&nbsp;>'
-                                     . MT_Functions::getIfNotEmpty( $this->_subcategoryName, '<a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->_subcategoryName . '</span></a>&nbsp;>' ) . '
-                                        <a href="" itemprop="url"><span itemprop="title">' . $this->_name . '</span></a>
+                                        <a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->categoryName . '</span></a>&nbsp;>'
+                                     . MT_Functions::getIfNotEmpty( $this->item->subcategoryName, '<a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->subcategoryName . '</span></a>&nbsp;>' ) . '
+                                        <a href="" itemprop="url"><span itemprop="title">' . $this->item->galleryName . '</span></a>
                                     </div>';
-		}
 	}
 
 
 	public function outputContent() {
 		$this->outputBreadcrumb();
-		echo '<h2>' . $this->_name . '</h2>';
+		echo '<h2>' . $this->item->galleryName . '</h2>';
 
-		if( isset( $this->_id ) ) {
-
-			// ggf. Galeriebeschreibung
-			if( !empty( $this->_description ) ) {
-				echo '
-				<p>' . $this->_description . '</p>';
-			}
+		// ggf. Galeriebeschreibung
+		if( !empty( $this->item->description ) ) {
+			echo '<p>' . $this->item->description . '</p>';
+		}
 			
-			if( !empty( $this->_numPhotos) ) {
-				$this->_outputContentHeader();
-				$this->_outputContentPhotos();
-				$this->_outputContentFooter();
-			} else {
-				// Falls sich in der Galerie noch keine Bilder befinden
-				?>
+		if( !empty( $this->_numPhotos) ) {
+			$this->_outputContentHeader();
+			$this->_outputContentPhotos();
+			$this->_outputContentFooter();
+		} else {
+			// Falls sich in der Galerie noch keine Bilder befinden
+			?>
 			<p align="center"><img src="/design/images/baustelle.gif"></p>
 			<p>In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!</p>
-			<p>Zurück zur Übersicht: <a href="../<?php echo getIfNotEmpty( $this->_subcategoryName, '../'); ?>"><?php echo $this->_categoryName; ?></a></p>
-				<?php
-			}
-		} else {
-			// Ausgabe der Fehlermeldung
-			echo '
-			<p>Die ausgewählte Galerie exestiert nicht!</p>';
+			<p>Zurück zur Übersicht: <a href="../<?php echo getIfNotEmpty( $this->item->subcategoryName, '../'); ?>"><?php echo $this->item->categoryName; ?></a></p>
+			<?php
 		}
 	}
 
@@ -203,8 +132,7 @@ class MT_View_Gallery {
 	 *
 	 * @return void
 	 */
-	private function _outputContentHeader()
-	{
+	private function _outputContentHeader() {
 		// Auswahlleiste
 		?>
 			<div id="auswahl_leiste">
@@ -234,7 +162,7 @@ class MT_View_Gallery {
 			</div>
 		<?php
 
-		MT_Functions::__outputPagination( $this->_id, $this->_userPage, $this->_userNum, $this->_userSort);
+		MT_Functions::__outputPagination( $this->item->galleryId, $this->_userPage, $this->_userNum, $this->_userSort);
 	}
 
 
@@ -247,7 +175,7 @@ class MT_View_Gallery {
 		$query = (new MT_QueryBuilder('wp_mt_'))
 			->from('photo', array('id as photoId', 'path', 'description', 'date'))
 			->joinInner('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
-			->whereEqual('gallery', $this->_id)
+			->whereEqual('gallery', $this->item->galleryId)
 			->whereEqual('`show`', '1')
 			->orderBy('date');
 				
@@ -260,7 +188,7 @@ class MT_View_Gallery {
 		$query->limit($this->_userNum, ( $this->_userPage - 1 ) * $this->_userNum);
 		foreach ($query->getResult() as $row) {
 
-            $alt = $this->_name . ' (' . $this->_categoryName . '): ' . $row->description; // photo's alternate text
+            $alt = $this->item->galleryName.' (' . $this->item->categoryName . ')'.MT_Functions::getIfNotEmpty($row->description, ': '.$row->description); // photo's alternate text
 			$this->_outputPhoto( $row->path,
 						$this->__getPhotoKeywords($alt),
 						$alt,
@@ -326,15 +254,15 @@ class MT_View_Gallery {
 					</colgroup>
 					<tr>
 						<td></td>
-						<td><?php MT_Functions::__outputPagination( $this->_id, $this->_userPage, $this->_userNum, $this->_userSort ); ?></td>
+						<td><?php MT_Functions::__outputPagination( $this->item->galleryId, $this->_userPage, $this->_userNum, $this->_userSort ); ?></td>
 						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php echo _("Nach oben"); ?></a></span></td>
 					</tr>
 		<?php
 		// Verlinkung der Galerie mit dem Hauptparkplatz
-		if( !empty( $this->_hauptparkplatz ) ) {
+		if( !empty( $this->item->hauptparkplatz ) ) {
 			?>
 					<tr>
-						<td colspan="3"><center><a href="http://rosensturm.de/<?php echo $this->_hauptparkplatz; ?>.html" target="_blank"><?php $this->_name; ?> auf dem Hauptparkplatz</a></center></td>
+						<td colspan="3"><center><a href="http://rosensturm.de/<?php echo $this->item->hauptparkplatz; ?>.html" target="_blank"><?php $this->item->galleryName; ?> auf dem Hauptparkplatz</a></center></td>
 					</tr>
 			<?php
 		}

@@ -7,31 +7,9 @@ class MT_View_Category {
 	 *
 	 * @var string
 	 */
-	private $_galleryPath = '../galerie/';
-    
-	/**
-	 * Categories ID
-	 *
-	 * @var string
-	 */
-	private $_id;
+	public static $_galleryPath = '../galerie/';
 
-	/**
-	 * Categories name
-	 *
-	 * @var string
-	 */
-	private $_name;
-	
-	/**
-	 * Categories description
-	 *
-	 * @var string
-	 */
-	 private $_description;
-
-	 private $gallery;
-	 private $photo;
+	private $item;
 
 	/**
 	 * [...]
@@ -40,24 +18,11 @@ class MT_View_Category {
 	 * [...]
 	 */
 	public function __construct($id) {
-		$this->_id = $id;
-            
-		// Construct query
-		$query = (new MT_QueryBuilder('wp_mt_'))
-			->from('category', array('name', 'description'))
-			->whereEqual('id', $this->_id);
-		$item = $query->getResultOne();
-		$this->_name = $item['name'];
-		$this->_description = $item['description'];
+		$this->item = (new MT_Category($id))->getOne(array('id', 'name', 'description'));
 		
-		// Couldn't find category
-		if( empty( $this->_name ) ) {
-			unset( $this->_id );
-			$this->_name = _("Fehler");
+		if (empty($this->item)) {
+			throw new Exception('Diese Kategorie existiert nicht');
 		}
-		
-		$this->gallery = new MT_Gallery();
-		$this->photo = new MT_Photo();
 	}
 
 //	public function outputTitle()
@@ -71,15 +36,12 @@ class MT_View_Category {
 //	}
 
 	public function outputContent() {
-		echo '<h2>'.$this->_name.'</h2>';
+		echo '<h2>'.$this->item->name.'</h2>';
 		
-		if( isset( $this->_id ) ) {
-			if( !empty( $this->_description ) ) {
-				echo '
-				<p>' . $this->_description . '</p>';
-			}
-			$this->_outputContentGalleries();
+		if( !empty( $this->item->description ) ) {
+			echo '<p>' . $this->item->description . '</p>';
 		}
+		$this->_outputContentGalleries();
 	}
 
 	/**
@@ -96,12 +58,12 @@ class MT_View_Category {
 		$query = (new MT_QueryBuilder('wp_mt_'))
 			->from('gallery', array('id AS galleryId', 'name AS galleryName', 'hauptparkplatz', 'updated'))
 			->joinLeft('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory', array('id AS subcategoryId', 'name AS subcategoryName'))
-			->whereEqual('wp_mt_gallery.category', $this->_id)
+			->whereEqual('wp_mt_gallery.category', $this->item->id)
 			->orderBy(array('wp_mt_subcategory.id', 'wp_mt_gallery.name'));
 
 		foreach ($query->getResult('ARRAY_A') as $row) {
 			$counter++;
-			$this->gallery = new MT_Gallery($row['galleryId']);
+			$tmpGallery = new MT_Gallery($row['galleryId']);
 
 			// Link der Galerie zum Hauptparkplatz
 			if( !empty( $row['hauptparkplatz'] ) ) {
@@ -112,7 +74,7 @@ class MT_View_Category {
 
 			// Anfang der Uebersicht
 			if( $counter == 1 ) {
-				$numGalleries = $this->gallery->getNumGalleries($this->_id , $row['subcategoryId']);
+				$numGalleries = MT_Gallery::getNumGalleries($this->item->id , $row['subcategoryId']);
 				
 				if( !empty($row['subcategoryName']) ) {
 					echo '
@@ -120,7 +82,7 @@ class MT_View_Category {
 				}
 
 				// Falls mindestens eine der Gallerien mit dem Hauptparkplatz verknüpft ist
-				$checkLinkToHauptparkplatz = $this->gallery->checkLinkToHauptparkplatz($this->_id, $row['subcategoryId']);
+				$checkLinkToHauptparkplatz = MT_Gallery::checkLinkToHauptparkplatz($this->item->id, $row['subcategoryId']);
 				if( $checkLinkToHauptparkplatz ) {
 						
 					// Beginn der Tabelle
@@ -144,7 +106,7 @@ class MT_View_Category {
   			}
 
 			// Ausgabe der Galerien
-			$this->_outputListItem( $this->_galleryPath . $row['galleryId'], $row['galleryName'], $this->photo->getCount($row['galleryId']), $this->gallery->checkGalleryIsNew() );
+			$this->_outputListItem(self::$_galleryPath . $row['galleryId'], $row['galleryName'], MT_Photo::getCount($row['galleryId']), $tmpGallery->checkGalleryIsNew());
 
 			// Ende der Uebersicht
 				// Anzahl der Galerien in dem Bereich bzw in der Kategorie in dem Bereich

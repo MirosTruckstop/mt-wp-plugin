@@ -167,7 +167,7 @@ class MT_QueryBuilder {
 		return $wpdb->get_results($this->get(), $output_type);
 	}
 	
-	public function getResultOne($output_type = 'ARRAY_A') {
+	public function getResultOne($output_type = 'OBJECT') {
 		global $wpdb;
 		return $wpdb->get_row($this->get(), $output_type);
 	}

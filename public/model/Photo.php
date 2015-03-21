@@ -38,26 +38,25 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @return	string			Latest photo timestamp
 	 */
-	public function getLatestPhotoDate($galleryId = NULL) {
+	public static function getLatestPhotoDate($galleryId = NULL) {
 		if (!empty($galleryId)) {
-			$whereCondition = "id = ".$galleryId." AND";
+			$whereCondition = 'id = '.$galleryId.' AND';
 		}
 		return parent::get_aggregate('MAX', 'date', $whereCondition . "`show` = 1");
 	}
 	
-	        /**
-         * Get photo path.
-         * 
-         * @param   int     $id     Photo id
-         * @return  string          Photo path
-		 * @deprecated since version number
-         */
+	/**
+	 * Get photo path.
+	 * 
+	 * @param   int     $id     Photo id
+	 * @return  string          Photo path
+	*/
 	public function getPath() {
 		return parent::get_attribute('path');
 	}
 	
 	private function getAbsolutePath() {
-		return $__photoPath . $this->getPath();
+		return self::$__photoPath . $this->getPath();
 	}
 	
 	private function getFile() {
@@ -70,10 +69,9 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @param	string		$path	Photo's  database path
 	 * @return	boolean
-	 * @deprecated since version number
 	 */
-	public function checkPhotoIsInDb($path) {
-		return parent::check_dataset_exits("path = '$path'");
+	public static function checkPhotoIsInDb($path) {
+		return parent::get_attribute('id', 'path = `'.$path.'`');
 	}
 	
 	public static function delete() {
@@ -104,9 +102,8 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @param	string|null		$galleryId	Gallery's ID
 	 * @return	string				Number of pictures
-	 * @deprecated since version number
 	 */
-	public function getCount( $galleryId = NULL ) {
+	public static function getCount($galleryId = NULL) {
 		$whereCondition = '';
 		if( isset( $galleryId ) ) {
 			if($galleryId === 'neue_bilder') {
@@ -130,8 +127,8 @@ class MT_Photo extends MT_Common {
 	 * @param	string	$num	Number
 	 * @return	string			Number of pages
 	 */
-	public function getNumPages($galleryId, $num) {
-		return ceil( $this->getCount($galleryId) / $num ); // ceil liefert die nächste ganze Zahl (Aufrunden)
+	public static function getNumPages($galleryId, $num) {
+		return ceil(self::getCount($galleryId) / $num ); // ceil liefert die nächste ganze Zahl (Aufrunden)
 	}
 	
 	/**
@@ -139,7 +136,7 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @return	int				Number of pictures
 	 */
-	public function getNumPhotos($photographerId) {
+	public static function getNumPhotos($photographerId) {
 		return parent::get_aggregate('COUNT', 'id', "photographer = '".$photographerId."' AND `show` = '1'");
 	}
 
