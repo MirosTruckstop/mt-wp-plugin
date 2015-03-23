@@ -291,6 +291,7 @@ function mt_admin_menu() {
     add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo', null, null, 5);
     add_submenu_page('mt-photo', 'Photos verwalten', 'Photos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
 	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
+	add_submenu_page('mt-photo', 'Test', 'Test', 'manage_options', 'mt-test', 'mt_page_test');
 
     add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, null, 6);
     add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
@@ -364,6 +365,14 @@ function mt_settings_page() {
  
 }
 
+function mt_page_test() {
+	$photo = new MT_Photo();
+	echo $photo->update(array(
+		'gallery' => 5
+	), array(
+		'id' => 1
+	));
+}
 function mt_page_photos() {
 	require_once(MT_DIR . '/admin/model/ImageFile.php');
 	require_once(MT_DIR . '/admin/model/PhotoSearch.php');

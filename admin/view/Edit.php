@@ -33,11 +33,7 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 		$data = $_POST['data'];
 		if(!empty($data)) {
 			if ($this->model->hasId()) {
-				if( $this->model->update($data[0]) ) {
-					MT_Functions::box( 'save' );
-				} else {
-					MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
-				}
+				parent::update($data[0]);
 			} else {
 				if( $this->model->insertAll($data) ) {
 					MT_Functions::box( 'save' );

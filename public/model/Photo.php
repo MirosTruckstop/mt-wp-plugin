@@ -91,9 +91,12 @@ class MT_Photo extends MT_Common {
 			$dirname = self::$__photoPath . $gallery->get_attribute('fullPath');
 			$basename = $gallery->get_attribute('path') . '_' . $this->getId();
 			
-			$newFile = $dirname . '/' . $basename . '.' . $file->getExtension();
-			$file->rename($newFile);
+			$newFile = $dirname.$basename.'.'.$file->getExtension();
+			if ($file->rename($newFile)) {
+				return $newFile;
+			}
 		}
+		return FALSE;
 	}
 	
 	/**

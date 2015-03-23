@@ -35,7 +35,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 			new MT_Admin_Field(NULL, '#'),
 			new MT_Admin_Field(NULL, 'Bild'),
 			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
-			new MT_Admin_Field(NULL, 'Beschreibun')			
+			new MT_Admin_Field(NULL, 'Beschreibung')			
 		));
 		parent::setPerPage(8);
 		
@@ -48,7 +48,6 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 		
 		// Neue Bilder
 		if( !$this->gallery->hasId() ) {
-
 			new MT_Admin_PhotoSearch();
 		}
 	}
@@ -63,6 +62,8 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
                     $tmpDate = time();
 
                     foreach ($photos as $id => $data) {
+echo $id;
+echo "______";
                         // Nur wenn Checkbox aktiviert ist, wird Foto aktualisert
                         if (array_key_exists('checked', $data)) {
                             unset($data['checked']);
@@ -72,8 +73,8 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
  * HERE weiter arbeiten
  * 
  */
-                            $data['path'] = MT_Admin_Photo::__renamePhoto($data['path'], $id, $data['gallery']);
-                            $data['path'] = str_replace( $this->_photoPath, '', $data['path'] );
+//	                        $data['path'] = MT_Photo::renameFile($data['path'], $id, $data['gallery']);
+							$data['path'] = str_replace($this->_photoPath, '', $photoM->renameFile($data['gallery']));
                             
                             // Neue Bilder
                             if ( !($this->gallery->hasId()) ) {
@@ -84,12 +85,12 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
                             // Bilder einer Galerie
                             else {
                                 // Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
-                                if ( !MT_Functions::isTimestampInStringForm( $data['date'] ) ) {
+                                if ( !MT_Functions::isTimestampInStringForm($data['date']) ) {
                                     unset( $data['date'] );
                                     // TODO: info to user?
                                 }
                             }
-							$this->model->update($data, array(
+							parent::update($data, array(
 								'id' => $id
 							));
                         }
@@ -178,7 +179,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 								value="checked" <?php MT_Functions::checked( $this->gallery->getId(), NULL); ?>>
 							<input
 								type="hidden"
-								name="photos[<?php echo $id; ?>][photo_path]"
+								name="photos[<?php echo $id; ?>][path]"
 								value="<?php echo $file; ?>"></td>
 						<td><a href="?title=add&typ=photo&id=<?php echo $id; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
 						<td>
@@ -187,21 +188,22 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 						echo "<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>";
 			}
 			?>
-							<select name="photos[<?php echo $id; ?>][photo_gallery]" size="1">
+							<select name="photos[<?php echo $id; ?>][gallery]" size="1" required>
+								<option value=""></option>
 								<?php echo MT_Functions::outputAllGalleries( $galleryId ) ; ?>
 							</select><br /><br />
-							<select name="photos[<?php echo $id; ?>][photo_photographer]" size="1">
+							<select name="photos[<?php echo $id; ?>][photographer]" size="1" required>
 								<?php $this->_outputAllPhotographers( $photographerId ); ?>
 							</select>
 							<input
 								type="text"
-								name="photos[<?php echo $id; ?>][photo_date]"
+								name="photos[<?php echo $id; ?>][date]"
 								value="<?php echo $date; ?>"
 								maxlength="10" />
 						</td>
 						<td>
 							<textarea
-								name="photos[<?php echo $id; ?>][photo_description]"
+								name="photos[<?php echo $id; ?>][description]"
 								cols="28"
 								rows="4"><?php echo $description; ?></textarea>
 						</td>

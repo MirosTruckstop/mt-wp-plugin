@@ -53,16 +53,14 @@ button[type="addButton"] {
 button[type="deleteButton"] {
 	background:#C00;
 }
-
 .box {
-	border:1px solid #000;
-	margin:20px 0px 5px 0px;
-	padding:10px 5px;
+	border: 1px solid #000;
+	margin: 20px 0px 5px 0px;
+	padding: 10px 5px;
 }
 .box#green {
-	border-color:green;
+	border-color: green;
 }
 .box#red {
-	border-color:red;
-}
-*/
+	border-color: red;
+}*/

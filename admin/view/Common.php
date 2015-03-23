@@ -50,6 +50,14 @@ abstract class MT_Admin_Table_Common {
 		$this->fields = $fields;
 	}
 	
+	protected function update($data, array $conditionValue = NULL) {
+		if($this->model->update($data, $conditionValue) ) {
+			MT_Functions::box( 'save' );
+		} else {
+			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
+		}
+	}
+	
 	/**
 	 * Output table
 	 *

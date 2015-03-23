@@ -145,14 +145,14 @@ class MT_View_Gallery {
 								<input name="page" value="<?php echo $this->_userPage; ?>" type="hidden">
 								<?php echo _("Bilder pro Seite"); ?>:&nbsp;
 								<select name="num" size="1">
-									<option value="5" <?php MT_Functions::selected( $this->_userNum, '5' ); ?>>5</option>
-									<option value="10" <?php MT_Functions::selected( $this->_userNum, '10' ); ?>>10</option>
-									<option value="15" <?php MT_Functions::selected( $this->_userNum, '15' ); ?>>15</option>
+									<option value="5" <?php echo MT_Functions::selected( $this->_userNum, '5' ); ?>>5</option>
+									<option value="10" <?php echo MT_Functions::selected( $this->_userNum, '10' ); ?>>10</option>
+									<option value="15" <?php echo MT_Functions::selected( $this->_userNum, '15' ); ?>>15</option>
 								</select>
 								&nbsp;<?php echo _("Sortieren nach"); ?>:&nbsp;
 								<select name="sort" size="1">
-									<option value="date" <?php MT_Functions::selected( $this->_userSort, 'date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Neu - Alt"); ?></option>
-									<option value="-date" <?php MT_Functions::selected( $this->_userSort, '-date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Alt - Neu"); ?></option>
+									<option value="date" <?php echo MT_Functions::selected( $this->_userSort, 'date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Neu - Alt"); ?></option>
+									<option value="-date" <?php echo MT_Functions::selected( $this->_userSort, '-date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Alt - Neu"); ?></option>
 								</select>
 								<input type="submit" value="OK" class="button">
 							</td>

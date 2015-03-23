@@ -145,17 +145,16 @@ abstract class MT_Common {
      * @return Updated object
      */
     public function update(array $data, array $conditionValue = NULL) {
-        global $wpdb;
-
         if(empty($data)) {
-            return false;
+            return FALSE;
         }
 		
 		if(!empty($this->id)) {
 			$conditionValue['id'] = $this->id;
 		}
 
-        return $wpdb->update( $this->tableName, $data, $conditionValue);
+		global $wpdb;
+        return $wpdb->update(static::getTableName(), $data, $conditionValue);
     }
 
     /**

@@ -19,9 +19,9 @@ abstract class MT_Functions {
 	 */
 	public static function selected( $first, $second ) {
 		if( $first == $second ) {
-			echo ' selected';
+			return ' selected';
 		} else {
-			echo '';
+			return '';
 		}
 	}
 

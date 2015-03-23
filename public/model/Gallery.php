@@ -49,6 +49,9 @@ class MT_Gallery extends MT_Common {
 	 * @return False oder ID
 	 */
 	public static function getIdFromPath($path) {
+		if(substr($path, -1) != '/') {
+			$path .= '/';
+		}
 		return array_search($path, self::__getAllGalleryPaths());	
 	}
 
@@ -60,7 +63,7 @@ class MT_Gallery extends MT_Common {
 	public static function __getAllGalleryPaths() {
 		if (empty(self::$__allGalleryPaths)) {
 			$query = new MT_QueryBuilder('wp_mt_');
-			$query->from('gallery', array('gallery_id', 'id, fullPath'));
+			$query->from('gallery', array('id, fullPath'));
 			foreach ($query->getResult() as $item) {
 				self::$__allGalleryPaths[$item->id] = $item->fullPath;				
 			}
