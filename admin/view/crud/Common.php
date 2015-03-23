@@ -21,8 +21,10 @@ abstract class MT_Admin_Table_Common {
 	protected $order;
 	protected $fields;
 	protected $page;
+	private $title;
+	protected $query;
 
-	public function __construct( $model, $cssClass ) {
+	public function __construct($model, $cssClass = 'widefat') {
 		if ($model instanceof MT_Common) {
 			$this->model = $model;
 			$this->cssClass = $cssClass;
@@ -37,8 +39,18 @@ abstract class MT_Admin_Table_Common {
 			throw new Exception("\$model is not of type MT_Common", NULL, NULL);
 		}
 	}
+	
+	public function setTitle($value) {
+		$this->title = $value;
+	}
+	
+	public function setQuery($value) {
+		if ($value instanceof MT_QueryBuilder) {
+			$this->query = $value;
+		}
+	}
 
-	public function setPerPage( $value ) {
+	public function setPerPage($value) {
 		$this->perPage = $value;
 	}
 	
@@ -50,23 +62,18 @@ abstract class MT_Admin_Table_Common {
 		$this->fields = $fields;
 	}
 	
-	protected function update($data, array $conditionValue = NULL) {
-		if($this->model->update($data, $conditionValue) ) {
-			MT_Functions::box( 'save' );
-		} else {
-			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
-		}
-	}
-	
-	/**
-	 * Output table
-	 *
-	 * @return void
-	 */	
-	protected function _outputForm() {
+	protected abstract function outputHeadMessages();
+	protected abstract function _outputTableBody();
+	protected abstract function _outputTableNavBottom();
+
+	public function outputContent() {
 		?>
+		<div class="wrap">
+			<h2><?php echo $this->title; ?></h2>
+			<div class="tablenav top">
+				<?php $this->outputHeadMessages() ?>
+			</div>
 			<form name="<?php echo $this->model; ?>" action="" method="post">
-				<input type="hidden" name="id" value="<?php //echo $this->model->getId(); ?>">
 				<table class="<?php echo $this->cssClass; ?>">
 					<thead>
 						<?php $this->_outputTableHead(); ?>
@@ -78,11 +85,20 @@ abstract class MT_Admin_Table_Common {
 						<?php $this->_outputTableHead(); ?>
 					</tfoot>
 				</table>
-				<div class="tablenav bottom">
-					<?php $this->_outputTableNavBottom(); ?>
-				</div>
 			</form>
-		<?php
+			<div class="tablenav bottom">
+				<?php $this->_outputTableNavBottom(); ?>
+			</div>			
+		</div>
+<?php
+	}
+	
+	protected function update($data, array $conditionValue = NULL) {
+		if($this->model->update($data, $conditionValue) ) {
+			MT_Functions::box( 'save' );
+		} else {
+			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
+		}
 	}	
 
 	/**
@@ -102,12 +118,12 @@ abstract class MT_Admin_Table_Common {
 		}
 		echo '</tr>';
 	}
-	
-	protected function _outputTableNavBottom() {
-		return '';
-	}
 
 	protected function getResult() {
+		if (!empty($this->query)) {
+			return $this->query->getResult();
+		}
+
 		$select = array();
 		$leftJoin = array();
 		foreach ($this->fields as $field) {

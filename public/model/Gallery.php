@@ -49,6 +49,7 @@ class MT_Gallery extends MT_Common {
 	 * @return False oder ID
 	 */
 	public static function getIdFromPath($path) {
+		// Add a backslash, if path doesn't end with one
 		if(substr($path, -1) != '/') {
 			$path .= '/';
 		}

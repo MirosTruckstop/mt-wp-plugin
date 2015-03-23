@@ -5,8 +5,7 @@
  * @category   MT
  * @package    Admin
  */
-class MT_View_List extends MT_Admin_Table_Common
-{
+class MT_View_List extends MT_Admin_Table_Common {
 	
 	/**
 	 * Construct MT_Admin_Table_Manage object
@@ -15,18 +14,18 @@ class MT_View_List extends MT_Admin_Table_Common
 	 * @param	string	$class	CSS table class
 	 * @return	void
 	 */
-	public function __construct($model, $cssClass = 'widefat' ) {
-		parent::__construct($model, $cssClass);
+	public function __construct($model) {
+		parent::__construct($model);
+		parent::setTitle($this->model->getName() . ' ' . MT_Functions::addButton( '?page=mt-'.$this->model.'&type=edit'));
 	}
 	
-	public function outputContent() {
-		echo '<div class="wrap">';
-		echo '<h2>' . $this->model->getName() . ' ' . MT_Functions::addButton( '?page=mt-'.$this->model.'&type=edit') . '</h2>';
+	protected function outputHeadMessages() {
         if ( $_GET['action'] === 'delete' ) {
 			$this->_delete( $_GET['id'] );
-        }
-		parent::_outputForm();
-		echo '</div>';
+        }		
+	}
+	
+	protected function _outputTableNavBottom() {
 	}
 
 	/**
@@ -51,12 +50,12 @@ class MT_View_List extends MT_Admin_Table_Common
 		}
 	}
 	
-        /**
-         * Delete database entry.
-         * 
-         * @param int   $id Data id
-         */
-        private function _delete( $id ) {
+	/**
+	 * Delete database entry.
+	 * 
+	 * @param int   $id Data id
+	 */
+	private function _delete( $id ) {
             
             $check = FALSE;
             
@@ -85,6 +84,6 @@ class MT_View_List extends MT_Admin_Table_Common
             } else {
                 MT_Functions::box( 'notDelete' );
             }
-        }	
+	}	
 }
 ?>

@@ -5,32 +5,15 @@
  * @category   MT
  * @package    Admin
  */
-class MT_Admin_PhotoSearch {
+abstract class MT_Admin_Model_PhotoSearch {
 
 	/**
-	 * Konstruiert MT_PhotoSearch Objekt
+	 * Supported photo extensions
 	 *
-	 * @return void
-	 */ 
-	public function __construct(){
-		// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
-		if(MT_Photo::getCount('neue_bilder') < '8' or $_GET['action'] === 'search') {
-			$this->_searchNewPhotos('../bilder', time() );
+	 * @var array
+	 */
+	public static $__photoExtensions = array( "jpg", "jpeg", "png" );
 	
-			// Datum der letzten Suche speichern
-			update_option('datum_letzte_suche', time());
-		}
-	}
-
-    /**
-      * Get the number of new photos.
-      * 
-      * @return int  number of new photos
-      */
-    public function getNumPhotos() {
-        return MT_Photo::getCount('neue_bilder');
-    }
-        
 	/**
 	 * Search new photos on webspace
 	 *
@@ -38,25 +21,20 @@ class MT_Admin_PhotoSearch {
 	 * @param	string	$startTime	Start time
 	 * @return	void
 	 */
-	private function _searchNewPhotos($dir, $startTime) { 
+	public static function search($dir) { 
 		if (!is_dir($dir)) {
 			return FALSE;
 		}
 		$fp = opendir( $dir );
-		while( $file = readdir( $fp ) ) {
+		while($basename = readdir($fp)) {
 			// Folder	
-			if( is_dir($dir.'/'.$file) && $file != "." && $file != "..") {
-//				 echo '<b>Ordner: '.$dir.'/'.$file.'</b><br>';
-// TODO: überhabeparameter = neue Zeit?
-				$this->_searchNewPhotos($dir.'/'.$file, $startTime );
+			if( is_dir($dir.'/'.$basename) && $basename != "." && $basename != "..") {
+				//echo '<b>Ordner: '.$dir.'/'.$file.'</b><br>';
+				self::search($dir.'/'.$basename);
 			}
 
-			// File
-			$imageFile = new MT_Admin_ImageFile($dir.'/'.$file);
-			if($imageFile->isPhoto()) {
+			if(self::isPhoto($dir.'/'.$basename)) {
 				$dbDirname = str_replace(MT_Photo::$__photoPath, '', $dir).'/';
-				$basename = $file;
-
 				$dbFile = $dbDirname.$basename;
 		
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist
@@ -72,6 +50,11 @@ class MT_Admin_PhotoSearch {
 			}
 		}
 		closedir($fp);
+	}
+	
+	private static function isPhoto($file) {
+		$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+		return is_file($file) && in_array($fileExtension, self::$__photoExtensions);
 	}
 }
 ?>

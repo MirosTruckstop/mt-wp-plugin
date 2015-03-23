@@ -15,9 +15,9 @@ define('MT_DIR', WP_PLUGIN_DIR . "/" . plugin_basename(dirname(__FILE__)));
  * Require scripts
  */
 require_once(MT_DIR . '/admin/model/form/Field.php');
-require_once(MT_DIR . '/admin/view/Common.php');
-require_once(MT_DIR . '/admin/view/Edit.php');
-require_once(MT_DIR . '/admin/view/List.php');
+require_once(MT_DIR . '/admin/view/crud/Common.php');
+require_once(MT_DIR . '/admin/view/crud/Edit.php');
+require_once(MT_DIR . '/admin/view/crud/List.php');
 
 require_once(MT_DIR . '/common/Functions.php');
 require_once(MT_DIR . '/common/QueryBuilder.php');
@@ -65,7 +65,7 @@ function mt_wp_dashboard_setup() {
 	);	
 }
 function mt_dashboard_widget_function() {
-	require_once(MT_DIR.'/admin/model/DashboardWidget.php');
+	require_once(MT_DIR.'/admin/view/DashboardWidget.php');
 	$dashboardWidget = new MT_Admin_DashboardWidget();
 	$dashboardWidget->outputContent();
 }
@@ -288,10 +288,10 @@ function mt_admin_menu() {
 	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
 
     // Add top-level and submenu menu item
-    add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo', null, null, 5);
-    add_submenu_page('mt-photo', 'Photos verwalten', 'Photos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
-	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
-	add_submenu_page('mt-photo', 'Test', 'Test', 'manage_options', 'mt-test', 'mt_page_test');
+    add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo-add', null, null, 5);
+	add_submenu_page('mt-photo-add', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
+	add_submenu_page('mt-photo-add', 'Photos verwalten', 'Photos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
+	add_submenu_page('mt-photo-add', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
 
     add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, null, 6);
     add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
@@ -365,23 +365,28 @@ function mt_settings_page() {
  
 }
 
-function mt_page_test() {
-	$photo = new MT_Photo();
-	echo $photo->update(array(
-		'gallery' => 5
-	), array(
-		'id' => 1
-	));
-}
 function mt_page_photos() {
-	require_once(MT_DIR . '/admin/model/ImageFile.php');
 	require_once(MT_DIR . '/admin/model/PhotoSearch.php');
-	require_once(MT_DIR . '/admin/view/PhotoEdit.php');
+	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
 
 	$photoEditView = new MT_View_PhotoEdit($_GET['id']);
 	$photoEditView->outputContent();
 }
 
+function mt_page_photos_add() {
+	require_once(MT_DIR . '/admin/model/PhotoSearch.php');
+	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
+
+	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
+	if(MT_Photo::getCountNewPhotos() < '8' or $_GET['action'] === 'search') {
+		MT_Admin_Model_PhotoSearch::search('../bilder');
+		// Datum der letzten Suche speichern
+		update_option('datum_letzte_suche', time());
+	}
+	$photoEditView = new MT_View_PhotoEdit();
+	$photoEditView->outputContent();
+	
+}
 
 function mt_page_news_generate() {
 	require_once(MT_DIR . '/admin/model/NewsGeneration.php');

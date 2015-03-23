@@ -92,7 +92,7 @@ class MT_Photo extends MT_Common {
 			$basename = $gallery->get_attribute('path') . '_' . $this->getId();
 			
 			$newFile = $dirname.$basename.'.'.$file->getExtension();
-			if ($file->rename($newFile)) {
+			if (rename($file, $newFile)) {
 				return $newFile;
 			}
 		}
@@ -107,19 +107,15 @@ class MT_Photo extends MT_Common {
 	 * @return	string				Number of pictures
 	 */
 	public static function getCount($galleryId = NULL) {
-		$whereCondition = '';
+		$whereCondition .= "`show` = 1";
 		if( isset( $galleryId ) ) {
-			if($galleryId === 'neue_bilder') {
-				$whereCondition .= "`show` = '0'";
-			}
-			else {
-				$whereCondition .= "gallery = '" . $galleryId . "'
-									AND `show` = 1";
-			}
-		} else {
-			$whereCondition .= "`show` = '1'";
+			$whereCondition .= " AND gallery = '" . $galleryId . "'";
 		}
 		return parent::get_aggregate('COUNT', 'id', $whereCondition);
+	}
+	
+	public static function getCountNewPhotos() {
+		return parent::get_aggregate('COUNT', 'id', '`show` = 0');
 	}
 	
 	/**

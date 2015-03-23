@@ -10,6 +10,7 @@ class MT_Admin_Field {
 	private $maxLength;
 	private $reference;
 	public $referencedField;
+	private $cache;
 	
 	public function __construct($name, $label, $type = 'string') {
 		$this->name = $name;
@@ -70,34 +71,96 @@ class MT_Admin_Field {
 		if ($this->disabled) {
 			return $this->getString($value);
 		}
-		$arrayElement = 'data['.$elementNumber.']';
+		$arrayElement = 'data['.$elementNumber.']['.$this->name.']';
 
-		if( $this->type === 'string' ) {
-
-			if( $this->required ) {
-				$attribute = 'required';
-			}
-
-			return '<input type="text" name="' . $arrayElement . '[' . $this->name . ']" size="50" maxlength="' . $this->maxLength . '" value="' . $value . '" ' . $attribute . '>';
+		if($this->required) {
+			$attribute = 'required';
 		}
-		else if( $this->type === 'text' ) {
-                   			
-			if( $this->required ) {
-				$attribute = 'required';
-			}
-			return '<textarea name="' . $arrayElement . '[' . $this->name . ']" cols="38" rows="4" ' . $attribute . '>' . $value . '</textarea>';
-		}
-		else if($this->type === 'reference' && $this->reference === 'gallery') {
-			return '<select name="'. $arrayElement . '[' . $this->name . ']" size="1">
+		
+		switch ($this->type) {
+			case 'string':
+				return '<input type="text" name="'.$arrayElement.'" size="50" maxlength="'.$this->maxLength.'" value="'.$value.'" '.$attribute .'>';
+			case 'hidde':
+				return '<input type="hidden" name="'.$arrayElement.'" value="'.$value.'">';
+			case 'bool':
+				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';
+			case 'text':
+				return '<textarea name="'.$arrayElement.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
+			case 'reference':
+				if($this->reference === 'gallery') {
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
 					<option value="0"></option>'
-				. MT_Functions::outputAllGalleries($value) .'
+				. $this->outputAllGalleries($value) .'
 				</select>';
+				}
+				else if($this->reference === 'photographer') {
+					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>'
+				. $this->outputAllPhotographers($value) .'
+				</select>';
+				}
+				else {
+					return $value;
+				}		
 		}
-		else if($this->type === 'reference') {
-			return $value;
-		}
-//		else {
-//			return $this->getString($value);
-//		}
 	}
+	
+	/**
+	 * Output all photographers (Form: <option>)
+	 *
+	 * @param	string	$selectedPhotographer	Selected photographer
+	 * @return	void
+	 */
+	private function outputAllPhotographers($selectedPhotographer = 1) {
+		$resultString = '';
+		if (empty($this->cache)) {
+			$this->cache = MT_Photographer::getAll(array('id', 'name'), 'name');
+		}
+		foreach ($this->cache as $item) {
+			$resultString .= '<option value="'.$item->id.'" '.MT_Functions::selected($selectedPhotographer, $item->id).'>'.$item->name.'</option>';
+		}
+		return $resultString;
+	}
+
+	/**
+	 * Outputs all galleries (Form: <optgroup>, <option>)
+	 *
+	 * @param	string|null		$selectedGallery	Selected gallery
+	 * @return	void
+	 */
+	private function outputAllGalleries($selectedGallery = NULL) {	
+		$resultString = '';
+		$tempOptgroup = NULL;
+		
+		if (empty($this->cache)) {
+			$query = (new MT_QueryBuilder('wp_mt_'))
+				->from('gallery', array( 'id' ))
+				->select('wp_mt_category.name as categoryName')
+				->select('wp_mt_subcategory.name as subcategoryName')
+				->select('wp_mt_gallery.name as galleryName')
+				->join('category', 'wp_mt_category.id = wp_mt_gallery.category')
+				->joinLeft('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory')
+				->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name', 'wp_mt_gallery.name'));
+			//TODO IS CALLED EACH TIME
+			//echo $query;
+			$this->cache = $query->getResult('ARRAY_A');
+		}
+		foreach ($this->cache as $row) {
+			$optgroup = $row['categoryName'] . MT_Functions::getIfNotEmpty( $row['subcategoryName'], ' > ' . $row['subcategoryName'] );
+			if( $tempOptgroup != $optgroup ) {
+				$tempOptgroup = $optgroup;
+				// Nicht beim ersten Mal beenden
+				if( isset( $tempOptgroup ) ) {
+					$resultString .= '</optgroup>';
+				}
+				$resultString .= '
+				<optgroup label="' . $optgroup .'">';
+			}
+			$resultString .= '
+					<option value="'.$row['id'].'"'.($row['id'] == $selectedGallery ? ' selected' : '').'>'.$row['galleryName'].'</option>
+			';
+		}
+		$resultString .= '</optgroup>';
+		return $resultString;
+	}
+	
 }

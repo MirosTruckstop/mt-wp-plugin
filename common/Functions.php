@@ -25,21 +25,6 @@ abstract class MT_Functions {
 		}
 	}
 
-	/**
-	 * Output "checked"
-	 *
-	 * @param	string	$first		The first of two values to compare 
-	 * @param	string	$second		The second argument, which gets compared to the first
-	 * @return	void
-	 */
-	public function checked($first, $second) {
-		if( $first == $second ) {
-			echo ' checked';
-		} else {
-			echo '';
-		}
-	}
-
     /**
       * Output information box.
       * 
@@ -48,7 +33,6 @@ abstract class MT_Functions {
       * @return  void
       */
 	public static function box( $typ, $text = NULL ) {
-		
 		if( $typ === 'exception' ) {
 			$id = 'red';
 			$text = 'Der folgende Fehler ist aufgetreten:<br><br>' . $text;
@@ -57,14 +41,14 @@ abstract class MT_Functions {
 			$id = 'green';
 			$text = 'Daten wurden erfolgreich gespeichert!';
 		}
-                else if( $typ === 'delete' ) {
+		else if( $typ === 'delete' ) {
 			$id = 'green';
 			$text = 'Daten wurden erfolgreich gelöscht!';
                 } 
-                else if( $typ === 'notDelete' ) {
+		else if( $typ === 'notDelete' ) {
 			$id = 'red';
 			$text = 'Daten konnten nicht gelöscht werden!';
-                }
+		}
 
 		echo '<div class="box" id="' . $id . '">' . $text . '</div>';		
 	}
@@ -201,49 +185,6 @@ abstract class MT_Functions {
 	public static function isTimestampInStringForm( $timestamp ) {
 		return ( strlen($timestamp) == 10 && $timestamp === strval(intval($timestamp)) );
 	}
-		
-
-	/**
-	 * Outputs all galleries (Form: <optgroup>, <option>)
-	 *
-	 * @param	string|null		$selectedGallery	Selected gallery
-	 * @return	void
-	 */
-	public static function outputAllGalleries( $selectedGallery = NULL ) {	
-		$resultString = '';
-		$tempOptgroup = NULL;
-		
-		$query = (new MT_QueryBuilder('wp_mt_'))
-			->from('gallery', array( 'id' ))
-			->select('wp_mt_category.name as categoryName')
-			->select('wp_mt_subcategory.name as subcategoryName')
-			->select('wp_mt_gallery.name as galleryName')
-			->join('category', 'wp_mt_category.id = wp_mt_gallery.category')
-			->joinLeft('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory')
-			->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name', 'wp_mt_gallery.name'));
-		//TODO IS CALLED EACH TIME
-		//echo $query;
-		$result = $query->getResult('ARRAY_A');
-		foreach ($result as $row) {
-			$optgroup = $row['categoryName'] . MT_Functions::getIfNotEmpty( $row['subcategoryName'], ' > ' . $row['subcategoryName'] );
-			if( $tempOptgroup != $optgroup ) {
-				$tempOptgroup = $optgroup;
-				// Nicht beim ersten Mal beenden
-				if( isset( $tempOptgroup ) ) {
-					$resultString .= '</optgroup>';
-				}
-				$resultString .= '
-				<optgroup label="' . $optgroup .'">';
-			}
-			$resultString .= '
-					<option value="'.$row['id'].'"'.($row['id'] == $selectedGallery ? ' selected' : '').'>'.$row['galleryName'].'</option>
-			';
-		}
-		$resultString .= '</optgroup>';
-		return $resultString;
-	}
-
-
 	
 
 	/**
@@ -290,9 +231,9 @@ abstract class MT_Functions {
                                 echo '&nbsp;&nbsp;';
                                 self::_outputPaginationLink( $page_naechste, $num, $sort, $page_naechste, $additionalLink );
                                 $points = TRUE;
-                        } else if( $points ) {
-                                echo '&nbsp;&nbsp;...';
-                                $points = FALSE;
+			} else if( $points ) {
+				echo '&nbsp;&nbsp;...';
+				$points = FALSE;
 			}
 		}
 	

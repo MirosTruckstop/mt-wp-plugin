@@ -19,6 +19,7 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	 */
 	public function __construct( $model, $cssClass = 'widefat') {
 		parent::__construct($model, $cssClass);
+		parent::setTitle($this->model->getName());
 		parent::setPerPage(1);
 	}
 	
@@ -26,10 +27,8 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 		parent::setPerPage(count($data));
 		$this->data = $data;
 	}
-
-	public function outputContent() {
-		echo '<div class="wrap">';
-		echo '<h2>' . $this->model->getName() . '</h2>';
+	
+	protected function outputHeadMessages() {
 		$data = $_POST['data'];
 		if(!empty($data)) {
 			if ($this->model->hasId()) {
@@ -42,14 +41,9 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 				}	
 			}
 		}
-		echo '<div class="tablenav top">';
-		// TODO: bisher nur für News, Photo und Photographer verfügbar
 		if($this->model->isDeletable()) {
 			$this->_delete();
 		}
-		echo '</div>';
-		parent::_outputForm();
-		echo '</div>';
 	}
 	
 	private function _delete() {
