@@ -95,9 +95,9 @@ class MT_View_Gallery {
 		} else {
 			// Falls sich in der Galerie noch keine Bilder befinden
 			?>
-			<p align="center"><img src="/design/images/baustelle.gif"></p>
+			<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
 			<p>In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!</p>
-			<p>Zurück zur Übersicht: <a href="../<?php echo getIfNotEmpty( $this->item->subcategoryName, '../'); ?>"><?php echo $this->item->categoryName; ?></a></p>
+			<p>Zurück zur Übersicht: <a href="../<?php echo MT_Functions::getIfNotEmpty( $this->item->subcategoryName, '../'); ?>"><?php echo $this->item->categoryName; ?></a></p>
 			<?php
 		}
 	}
@@ -229,8 +229,8 @@ class MT_View_Gallery {
 					</colgroup>
 					<tr>
 						<td></td>
-						<td><?php MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']; ?></td>
-						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php echo _("Nach oben"); ?></a></span></td>
+						<td><?php MT_Functions::__outputPagination($this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']); ?></td>
+						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)">Nach oben</a></span></td>
 					</tr>
 		<?php
 		// Verlinkung der Galerie mit dem Hauptparkplatz

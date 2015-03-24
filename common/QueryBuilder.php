@@ -65,7 +65,6 @@ class MT_QueryBuilder {
 		}
 		return $this;
 	}
-
 	
 	public function where($condition) {
 		if (!empty($condition)) {

@@ -7,7 +7,7 @@ class MT_Photographer extends MT_Common {
 	 *
 	 * @var string
 	 */
-	public static $photographersPath = 'Fotograf/';
+	public static $photographersPath = 'fotograf/';
 	
 	public function __construct($id = NULL) {
 		parent::__construct($id);
