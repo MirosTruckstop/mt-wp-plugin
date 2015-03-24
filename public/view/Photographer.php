@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_Photographer {
+class MT_View_Photographer implements MT_View_ICommon {
 
 	/**
 	 * Date format
@@ -27,26 +27,22 @@ class MT_View_Photographer {
 		$this->_numPhotos = MT_Photo::getNumPhotos($this->item->id);
 	}
 
-//	public function outputTitle()
-//	{
-//		echo $this->_name;
-//	}
-//        
-//	public function outputDescription()
-//	{
-//		echo _("Übersicht über den Fotografen") . " " . $this->_name;
-//	}
+	public function outputTitle() {
+		echo $this->item->name;
+	}
+        
+	public function outputDescription() {
+		echo "Übersicht über den Fotografen " . $this->outputTitle();
+	}
 
 	public function outputBreadcrumb() {
 		?>
-				<a href="../Fotografen">Fotografen</a>&nbsp;>
-				<a href=""><?php echo $this->item->name; ?></a>
+				<a href="../fotografen">Fotografen</a>&nbsp;>
+				<a href=""><?php echo $this->outputTitle(); ?></a>
 		<?php
 	}
 
 	public function outputContent(){
-		$this->outputBreadcrumb();
-		echo '<h1>'.$this->item->name.'</h1>';
 		$this->_outputContentPhotographer();
 		$this->_outputContentPhotographerPhotos();
 	}

@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_Gallery {
+class MT_View_Gallery implements MT_View_ICommon {
 
 	private $item;
 	
@@ -52,16 +52,13 @@ class MT_View_Gallery {
 		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
 	}
 
+	public function outputTitle() {
+		echo $this->item->galleryName;
+	}
 
-//	public function outputTitle()
-//	{
-//		echo $this->_name;
-//	}
-//
-//        public function outputDescription()
-//	{
-//		echo "Fotogalerie " . $this->_name . " in der Kategorie " . $this->_categoryName;
-//	}
+    public function outputDescription() {
+		echo "Fotogalerie " . $this->item->galleryName . " in der Kategorie " . $this->item->categoryName;
+	}
 
 	public function checkWidescreen() {
 		return !empty( $this->_numPhotos );
@@ -80,15 +77,12 @@ class MT_View_Gallery {
 
 
 	public function outputContent() {
-		$this->outputBreadcrumb();
-		echo '<h2>' . $this->item->galleryName . '</h2>';
-
 		// ggf. Galeriebeschreibung
-		if( !empty( $this->item->description ) ) {
+		if (!empty( $this->item->description)) {
 			echo '<p>' . $this->item->description . '</p>';
 		}
 			
-		if( !empty( $this->_numPhotos) ) {
+		if ($this->_numPhotos > 0) {
 			$this->_outputContentHeader();
 			$this->_outputContentPhotos();
 			$this->_outputContentFooter();

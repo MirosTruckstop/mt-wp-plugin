@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_Category {
+class MT_View_Category implements MT_View_ICommon {
 
 	/**
 	 * Gallery path
@@ -25,19 +25,15 @@ class MT_View_Category {
 		}
 	}
 
-//	public function outputTitle()
-//	{
-//		echo _($this->_name);
-//	}
-//        
-//        public function outputDescription()
-//	{
-//		echo "Übersicht über alle Fotogalerien der Kategorie " . $this->_name;
-//	}
+	public function outputTitle() {
+		echo $this->item->name;
+	}
+  
+	public function outputDescription() {
+		echo "Übersicht über alle Fotogalerien der Kategorie " . $this->outputTitle();
+	}
 
 	public function outputContent() {
-		echo '<h2>'.$this->item->name.'</h2>';
-		
 		if( !empty( $this->item->description ) ) {
 			echo '<p>' . $this->item->description . '</p>';
 		}
