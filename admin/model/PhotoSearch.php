@@ -5,8 +5,14 @@
  * @category   MT
  * @package    Admin
  */
-abstract class MT_Admin_Model_PhotoSearch {
+class MT_Admin_Model_PhotoSearch {
 
+	private $time;
+	
+	public function __construct() {
+		return $this;
+	}
+	
 	/**
 	 * Supported photo extensions
 	 *
@@ -21,7 +27,7 @@ abstract class MT_Admin_Model_PhotoSearch {
 	 * @param	string	$startTime	Start time
 	 * @return	void
 	 */
-	public static function search($dir) { 
+	public function search($dir) { 
 		if (!is_dir($dir)) {
 			return FALSE;
 		}
@@ -37,13 +43,19 @@ abstract class MT_Admin_Model_PhotoSearch {
 				$dbDirname = str_replace(MT_Photo::$__photoPath, '', $dir).'/';
 				$dbFile = $dbDirname.$basename;
 		
+				if (!isset($this->time)) {
+					$this->time = time();
+				} else {
+					$this->time += 5;
+				}
+
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist
 				if(!MT_Photo::checkPhotoIsInDb($dbFile)) {
 					MT_Photo::insert(array(
 						'path'        => $dbFile,
 						'name_old'    => $basename,
 						'gallery'     => MT_Gallery::getIdFromPath($dbDirname),
-						'date'        => time(),
+						'date'        => $this->time,
 						'show'        => 0
 					));
 				}	

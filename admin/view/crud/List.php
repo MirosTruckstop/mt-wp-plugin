@@ -39,7 +39,7 @@ class MT_View_List extends MT_Admin_Table_Common {
 			$j++;
 			echo '<tr ' . ($j % 2 == 1? 'class="alternate"' : '') . '>
 								<td><input type="checkbox" name="checked" value="' . $row[0] .'"></td>
-								<td><a href="?page=mt-'.$this->model->name.'&type=edit&id=' . $row[0] .'">' . $row[1] .'</a></td>';
+								<td><a href="?page=mt-'.$this->model->name().'&type=edit&id=' . $row[0] .'">' . $row[1] .'</a></td>';
 			for( $i = 2; $i < sizeof( $row ); $i++ ) {
 				echo '
 								<td>' . $this->fields[$i]->getString($row[$i]) .'</td>

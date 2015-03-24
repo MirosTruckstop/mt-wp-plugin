@@ -381,8 +381,8 @@ function mt_page_photos_add() {
 	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
 
 	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
-	if(MT_Photo::getCountNewPhotos() < '8' or $_GET['action'] === 'search') {
-		MT_Admin_Model_PhotoSearch::search('../bilder');
+	if(MT_Photo::getCountNewPhotos() < 10 or $_GET['action'] === 'search') {
+		(new MT_Admin_Model_PhotoSearch())->search('../bilder');
 		// Datum der letzten Suche speichern
 		update_option('datum_letzte_suche', time());
 	}

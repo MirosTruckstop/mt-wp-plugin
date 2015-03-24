@@ -63,7 +63,7 @@ button[type="addButton"] {
 }
 button[type="deleteButton"] {
 	background:#C00;
-}
+}*/
 .box {
 	border: 1px solid #000;
 	margin: 20px 0px 5px 0px;
@@ -74,4 +74,4 @@ button[type="deleteButton"] {
 }
 .box#red {
 	border-color: red;
-}*/
+}

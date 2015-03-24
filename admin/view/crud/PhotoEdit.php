@@ -2,9 +2,7 @@
 
 class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 
-
 	private $gallery;
-
 	
 	/**
 	 * Workaround to fix pagination link!
@@ -30,7 +28,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
 			new MT_Admin_Field(NULL, 'Beschreibung')			
 		));
-		parent::setPerPage(8);
+		parent::setPerPage(10);
 		
 		$this->gallery = new MT_Gallery($galleryId);
 		
@@ -55,7 +53,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 		}
 		parent::setQuery($query);
 
-        $this->_updatePhotos($_POST['photos']);
+        $this->_updatePhotos(stripslashes_deep($_POST['data']));
 	}
         
 	/**
@@ -63,32 +61,29 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	 * 
 	 * @param array $photos Photo ID's as keys an arrays as values
 	 */
-	private function _updatePhotos( $photos ) {
-		if( !empty( $photos) ) {
+	private function _updatePhotos($data) {
+		if(!empty($data)) {
 			$tmpDate = time();
 
-			foreach ($photos as $id => $data) {
+			foreach ($data as $id => $item) {
 				// Nur wenn Checkbox aktiviert ist, wird Foto aktualisert
-				if (array_key_exists('checked', $data)) {
-					unset($data['checked']);
+				if (array_key_exists('checked', $item)) {
+					unset($item['checked']);
                             
-					$data['path'] = MT_Photo::renameFile($id, $data['path'], $data['gallery']);
-                            
-					// Bilder einer Galerie
-					if (($this->gallery->hasId())) {
-						// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
-						if ( !MT_Functions::isTimestampInStringForm($data['date']) ) {
-							unset( $data['date'] );
-							// TODO: info to user?
-						}
+					$item['path'] = MT_Photo::renameFile($id, $item['path'], $item['gallery']);
+                    $item['date'] = strtotime($item['date']); 
+					// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
+					if ( !MT_Functions::isTimestampInStringForm($item['date']) ) {
+						unset( $item['date'] );
+						// TODO: info to user?
 					}
+
 					// Neue Bilder
-					else {
-						$data['show'] = 1;
-						$tmpDate += 2;
-						$data['date'] = $tmpDate;
+					if (!($this->gallery->hasId())) {
+						$item['show'] = 1;
 					}
-					parent::update($data, array(
+
+					parent::update($item, array(
 						'id' => $id
 					));
 				}
@@ -97,14 +92,17 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	}
 	
 	protected function outputHeadMessages() {
-		if( !($this->gallery->hasId()) ) {
+		if(($this->gallery->hasId()) ) {
+			MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', $this->_additionalLink . $this->gallery->getId() . '&');			
+		} else {
 			echo '<p>Insgesamt wurden <b>'.MT_Photo::getCountNewPhotos().' neue Bilder</b> gefunden! (Letzte Suche: ' . date( 'd.m.Y - H:i', get_option( 'datum_letzte_suche') ) . ' | <a href="' . $this->_linkOfThisSite . '&action=search">Neue Suche</a>)</p>';
 		}
-		MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', $this->_additionalLink . $this->gallery->getId() . '&');
 	}
 
 	protected function _outputTableNavBottom() {
-		MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', $this->_additionalLink . $this->gallery->getId() . '&');
+		if ($this->gallery->hasId()) {
+			MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', $this->_additionalLink . $this->gallery->getId() . '&');
+		}
 		echo MT_Functions::submitButton();
 		echo '&#160;'.MT_Functions::cancelButton('?page=mt-' . $this->model->name());
 	}
@@ -122,7 +120,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 							->setReference('gallery')
 							->setRequired();
 		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, 'reference'))->setReference('photographer');
-		$fields['date'] = (new MT_Admin_Field('date', NULL))->setMaxLength(10);
+		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date'))->setMaxLength(10);
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
@@ -139,11 +137,11 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 				<td><a href="?title=add&typ=photo&id=<?php echo $item->id; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
 				<td>
 					<?php (empty($item->galleryId) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
-					<?php echo $fields['gallery']->getElement($item->galleryId, $item->id); ?>
+					<?php echo $fields['gallery']->getElement($item->gallery, $item->id); ?>
 					<br /><br />
-					<?php
-					echo $fields['photographer']->getElement($item->photographerId, $item->id);
-					echo $fields['date']->getElement($item->date, $item->id);
+					<?php echo $fields['photographer']->getElement($item->photographer, $item->id); ?>
+					<br /><br />
+					<?php echo $fields['date']->getElement($item->date, $item->id);
 					?>
 				</td>
 				<td><?php echo $fields['description']->getElement($item->description, $item->id); ?></td>

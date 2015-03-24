@@ -82,7 +82,9 @@ class MT_Admin_Field {
 		switch ($this->type) {
 			case 'string':
 				return '<input type="text" name="'.$arrayElement.'" size="50" maxlength="'.$this->maxLength.'" value="'.$value.'" '.$attribute .'>';
-			case 'hidde':
+			case 'date':
+				return '<input type="text" name="'.$arrayElement.'" value="'.gmdate("d.m.Y H:i:s", $value).'">';
+			case 'hidden':
 				return '<input type="hidden" name="'.$arrayElement.'" value="'.$value.'">';
 			case 'bool':
 				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';

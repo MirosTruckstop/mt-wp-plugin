@@ -29,7 +29,7 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	}
 	
 	protected function outputHeadMessages() {
-		$data = $_POST['data'];
+		$data = stripslashes_deep($_POST['data']);
 		if(!empty($data)) {
 			if ($this->model->hasId()) {
 				parent::update($data[0]);

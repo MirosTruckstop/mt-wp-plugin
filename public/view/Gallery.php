@@ -184,14 +184,13 @@ class MT_View_Gallery implements MT_View_ICommon {
 	 */
 	private function _outputPhoto( $path, $keywords, $alt, $description, $date, $photographerId, $photographerName ) {
 		$schemaDateFormat   = 'Y-m-d';
-		$mtDateFormat       = 'd.m.Y - H:i:s';
+		$mtDateFormat       = 'd.m.Y - H:i';
 
-		echo '
-                        <div class="photo" itemscope itemtype="http://schema.org/ImageObject">
+		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--                        <span itemprob="publisher">MiRo\'s Truckstop</span>-->
                             <span itemprop="keywords">' . $keywords . '</span>
 			    <p><img alt="' . $alt . '" src="/bilder/' . $path . '" itemprop="contentURL"><br>
-			    <b>' . _("Fotograf") . ':</b>&nbsp;<a href="/artikel/Fotograf/' . $photographerId . '" rel="author"><span itemprop="author" itemp>' . $photographerName . '</span></a>&nbsp;|&nbsp;
+			    <b>' . _("Fotograf") . ':</b>&nbsp;<a href="/fotograf/' . $photographerId . '" rel="author"><span itemprop="author" itemp>' . $photographerName . '</span></a>&nbsp;|&nbsp;
                             <b>' . _("Eingestellt am") . ':</b>&nbsp;<meta itemprop="datePublished" content="' . date( $schemaDateFormat, $date ) . '">' . date( $mtDateFormat, $date ) . '</p>
 			    <p><span itemprop="description">' . $description . '</span></p>
                         </div>';
@@ -204,8 +203,7 @@ class MT_View_Gallery implements MT_View_ICommon {
          * @return  string                  Keyword string
          */
         private function __getPhotoKeywords( $keywordsString ) {
-                $remove = array('& ', '(', ')', ':', '"', 'in ');
-                return str_replace($remove, '', $keywordsString);
+			return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
         }
 
 	/**

@@ -70,9 +70,8 @@ abstract class MT_Admin_Table_Common {
 		?>
 		<div class="wrap">
 			<h2><?php echo $this->title; ?></h2>
-			<div class="tablenav top">
-				<?php $this->outputHeadMessages() ?>
-			</div>
+			<?php echo $this->outputHeadMessages(); ?>
+			<!--<div class="tablenav top"></div>-->
 			<form name="<?php echo $this->model->name(); ?>" action="" method="post">
 				<table class="<?php echo $this->cssClass; ?>">
 					<thead>
@@ -85,10 +84,10 @@ abstract class MT_Admin_Table_Common {
 						<?php $this->_outputTableHead(); ?>
 					</tfoot>
 				</table>
-			</form>
 			<div class="tablenav bottom">
 				<?php $this->_outputTableNavBottom(); ?>
 			</div>			
+			</form>
 		</div>
 <?php
 	}
