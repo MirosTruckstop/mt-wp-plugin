@@ -73,12 +73,12 @@ abstract class MT_Admin_Table_Common {
 			<div class="tablenav top">
 				<?php $this->outputHeadMessages() ?>
 			</div>
-			<form name="<?php echo $this->model; ?>" action="" method="post">
+			<form name="<?php echo $this->model->name(); ?>" action="" method="post">
 				<table class="<?php echo $this->cssClass; ?>">
 					<thead>
 						<?php $this->_outputTableHead(); ?>
 					</thead>
-					<tbody>
+					<tbody <?php echo ($this->model->name() == 'photo' ? 'class="sort"' : '') ;?>>
 						<?php $this->_outputTableBody(); ?>
 					</tbody>
 					<tfoot>

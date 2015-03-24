@@ -11,11 +11,13 @@ class MT_Admin_Field {
 	private $reference;
 	public $referencedField;
 	private $cache;
+	private $cssClass;
 	
-	public function __construct($name, $label, $type = 'string') {
+	public function __construct($name, $label, $type = 'string', $cssClass = NULL) {
 		$this->name = $name;
 		$this->label = $label;
 		$this->type = $type;
+		$this->cssClass = $cssClass;
 		return $this;
 	}
 	
@@ -85,7 +87,7 @@ class MT_Admin_Field {
 			case 'bool':
 				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';
 			case 'text':
-				return '<textarea name="'.$arrayElement.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
+				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
 			case 'reference':
 				if($this->reference === 'gallery') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>

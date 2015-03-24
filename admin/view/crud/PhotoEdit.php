@@ -106,7 +106,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	protected function _outputTableNavBottom() {
 		MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', $this->_additionalLink . $this->gallery->getId() . '&');
 		echo MT_Functions::submitButton();
-		echo '&#160;'.MT_Functions::cancelButton('?page=mt-' . $this->model);
+		echo '&#160;'.MT_Functions::cancelButton('?page=mt-' . $this->model->name());
 	}
 
 	/**
@@ -123,13 +123,13 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 							->setRequired();
 		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, 'reference'))->setReference('photographer');
 		$fields['date'] = (new MT_Admin_Field('date', NULL))->setMaxLength(10);
-		$fields['description'] = new MT_Admin_Field('description', NULL, 'text');
+		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $item) {
 			$file = MT_Photo::$__photoPath.$item->path;
 		?>
-			<tr <?php echo ($counter % 2 == 1? 'class="alternate"' : ''); ?>>
+			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>
 					<?php
 					echo $fields['checked']->getElement(!$this->gallery->hasId(), $item->id);

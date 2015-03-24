@@ -50,9 +50,9 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 		$action = $_GET['action'];
 		
 		if( $action === 'delete' ) {
-			MT_Functions::button( '?page=mt-' . $this->model . '&id=' . $this->model->getId() . '&action=delete', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
+			MT_Functions::button( '?page=mt-'.$this->model->name().'&id='.$this->model->getId().'&action=delete', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
 		} else {
-			MT_Functions::button( '?page=mt-add&model=' . $this->model . '&id=' . $this->model->getId() . '&action=delete', 'Löschen', 'deleteButton' );
+			MT_Functions::button( '?page=mt-add&model='.$this->model->name().'&id='.$this->model->getId().'&action=delete', 'Löschen', 'deleteButton' );
 		}
 	}
 	
@@ -61,10 +61,10 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		if ($this->model->hasId() || $this->model == 'news' || $this->model == 'photographer' || $this->model == 'photo' ) {
+		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' ) {
 			echo MT_Functions::submitButton();
 		}
-		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-' . $this->model );
+		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-'.$this->model->name());
 	}
 
 

@@ -16,7 +16,7 @@ class MT_View_List extends MT_Admin_Table_Common {
 	 */
 	public function __construct($model) {
 		parent::__construct($model);
-		parent::setTitle($this->model->getName() . ' ' . MT_Functions::addButton( '?page=mt-'.$this->model.'&type=edit'));
+		parent::setTitle($this->model->getName().' ' . MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 	}
 	
 	protected function outputHeadMessages() {
@@ -39,7 +39,7 @@ class MT_View_List extends MT_Admin_Table_Common {
 			$j++;
 			echo '<tr ' . ($j % 2 == 1? 'class="alternate"' : '') . '>
 								<td><input type="checkbox" name="checked" value="' . $row[0] .'"></td>
-								<td><a href="?page=mt-' . $this->model . '&type=edit&id=' . $row[0] .'">' . $row[1] .'</a></td>';
+								<td><a href="?page=mt-'.$this->model->name.'&type=edit&id=' . $row[0] .'">' . $row[1] .'</a></td>';
 			for( $i = 2; $i < sizeof( $row ); $i++ ) {
 				echo '
 								<td>' . $this->fields[$i]->getString($row[$i]) .'</td>
@@ -62,23 +62,19 @@ class MT_View_List extends MT_Admin_Table_Common {
             /**
              * TODO: Workaround
              */
-            if($this->model == 'photo') {
-                /**
-                 * @see MT_Admin_Photo
-                 */
-                require_once ( __LIBRARY__ . 'MT/Admin/Photo.php' );
-                
-                MT_Admin_Photo::__deletePhoto($id);
-                $check = TRUE;
-            }
-            // Photographer
-            else if ( $this->model == 'photographer' ) {
-                if ( !MT_Photographer::__hasPhotos($id) ) {
-                    $check = TRUE;
-                }
-            }
+			switch ($this->model->name()) {
+				case 'photo':
+					MT_Admin_Photo::__deletePhoto($id);
+					$check = TRUE;
+					break;
+				case 'photographer':
+					if ( !MT_Photographer::__hasPhotos($id) ) {
+						$check = TRUE;
+					}
+					break;
+			}
             
-            if ( $check ) {
+            if ($check) {
                 $this->_dbTable->delete( $this->_typ . '_id = ?', $id);
                 MT_Functions::box( 'delete' );
             } else {

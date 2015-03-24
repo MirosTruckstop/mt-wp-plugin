@@ -1,3 +1,14 @@
+tr.tr-sort:hover {
+	background-color: #ffffcc;
+}
+tr.tr-sort:active {
+	background-color: #ffff99;
+	border: 1px solid grey;
+}
+tr.tr-placeholder td {
+	line-height: 200px;
+	background-color: #cccccc;
+}
 /* #################### Navigation #################### */
 //nav ul {
 //	list-style-type:none;
