@@ -396,23 +396,25 @@ function mt_page_news_generate() {
 
 	$newsGeneration = new MT_Admin_NewsGeneration();
 	$newsData = $newsGeneration->getGeneratedNews();
-	$newsData = array_slice($newsData,0,5);
+//	$newsData = array_slice($newsData,0,5);
 
 	if (!$newsGeneration->checkGenerateNews()) {
 		?>
 		<div class="wrap">
-		<h2>News <?php echo MT_Functions::addButton('?page=mt-news&type=edit'); ?></h2>
+			<h2>News <?php echo MT_Functions::addButton('?page=mt-'.MT_News::name().'&type=edit'); ?></h2>
 		<p>Es gibt keine neuen Bilder, sodass keine News generiert werden können!</p>
 		</div>
-		<?php		
+		<?php
 	} else {
-		$editView = new MT_View_Edit( new MT_News($id) );
+		$editView = new MT_View_Edit(new MT_News());
 		$editView->setFields(array(
 			(new MT_Admin_Field('title', 'Title'))
 				->setRequired()
 				->setMaxLength(100),
 			(new MT_Admin_Field('text', 'Text', 'text'))->setRequired(),
-			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))->setReference('gallery')->setRequired()
+			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))
+				->setReference('gallery')
+				->setRequired()
 		));
 		$editView->setData($newsData);
 		$editView->outputContent();
@@ -432,7 +434,6 @@ function mt_page_news() {
 	} else {
 		$listView = new MT_View_List( new MT_News() );
 		$listView->setFields(array(
-			(new MT_Admin_Field('id', '#')),
 			(new MT_Admin_Field('title', 'Titel')),
 			(new MT_Admin_Field('date', 'Datum', 'date'))
 		));	
@@ -454,7 +455,6 @@ function mt_page_categories() {
 	} else {
 		$listView = new MT_View_List( new MT_Category() );
 		$listView->setFields(array(
-			(new MT_Admin_Field('id', '#')),
 			(new MT_Admin_Field('name', 'Name')),
 			(new MT_Admin_Field('path', 'Pfad'))
 		));
@@ -476,7 +476,6 @@ function mt_page_subcategories() {
 	} else {
 		$listView = new MT_View_List( new MT_Subcategory() );
 		$listView->setFields(array(
-			(new MT_Admin_Field('id', '#')),
 			(new MT_Admin_Field('name', 'Name')),
 			(new MT_Admin_Field('category', 'Kategorie'))
 				->setReference('category', 'name')
@@ -510,7 +509,6 @@ function mt_page_galleries() {
 	} else {
 		$listView = new MT_View_List( new MT_Gallery() );
 		$listView->setFields(array(
-			(new MT_Admin_Field('id', '#')),
 			(new MT_Admin_Field('name', 'Name')),
 			(new MT_Admin_Field('fullPath', 'Vollständiger Pfad'))
 		));
@@ -531,7 +529,6 @@ function mt_page_photographers() {
 	} else {
 		$listView = new MT_View_List( new MT_Photographer() );
 		$listView->setFields(array(
-			(new MT_Admin_Field('id', '#')),
 			(new MT_Admin_Field('name', 'Name'))
 		));
 		$listView->setOrder('name');

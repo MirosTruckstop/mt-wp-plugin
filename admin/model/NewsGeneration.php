@@ -24,9 +24,8 @@ class MT_Admin_NewsGeneration {
 	}
 	
 	public function getGeneratedNews() {
-		$news = array();
-		$query = new MT_QueryBuilder();
-		$query->from('photo')
+		$query = (new MT_QueryBuilder())
+			->from('photo')
 			->select('wp_mt_gallery.name as galleryName')
 			->select('wp_mt_category.name as categoryName')
 			->select('wp_mt_subcategory.name as subcategoryName')
@@ -38,12 +37,13 @@ class MT_Admin_NewsGeneration {
 			->where("wp_mt_photo.date >= " . $this->timestampLatestNews)
 			->groupBy('wp_mt_category.name, wp_mt_subcategory.name, wp_mt_gallery.name')
 			->orderBy('numPhotos DESC');
-		
+
+		$news = array();
 		foreach ($query->getResult() as $item) {
 			array_push($news, array(
-				0 => $this->generateTitle($item->categoryName, $item->subcategoryName, $item->galleryName, $item->date, $item->numPhotos),
-				1 => $this->generateText($item->numPhotos),
-				2 => $item->id
+				'title' => $this->generateTitle($item->categoryName, $item->subcategoryName, $item->galleryName, $item->date, $item->numPhotos),
+				'text' => $this->generateText($item->numPhotos),
+				'gallery' => $item->id
 			));
 		}
 		return $news;

@@ -1,9 +1,9 @@
 jQuery(function() {
-	jQuery('.sort').sortable({
-		cursor: 'move',
-		axis:   'y',
-		placeholder: 'tr-placeholder'
-	});
+//	jQuery('.sort').sortable({
+//		cursor: 'move',
+//		axis:   'y',
+//		placeholder: 'tr-placeholder'
+//	});
 	
 	var availableDescriptions = [];
     jQuery('.description-autocomplete')

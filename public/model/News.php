@@ -16,7 +16,7 @@ class MT_News extends MT_Common {
 	
 	public static function insert($data) {
 		$data['date'] = time();
-		parent::insert($data);
+		return parent::insert($data);
 	}
 	
 	public function isDeletable() {

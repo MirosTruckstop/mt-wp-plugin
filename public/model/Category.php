@@ -20,7 +20,7 @@ class MT_Category extends MT_Common {
 
 	public static function insert($data) {
 		$data['path'] = MT_Functions::nameToPath($data['name']);
-		parent::insert($data);
+		return parent::insert($data);
 	}
 
 }

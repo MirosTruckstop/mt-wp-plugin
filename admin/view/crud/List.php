@@ -5,7 +5,7 @@
  * @category   MT
  * @package    Admin
  */
-class MT_View_List extends MT_Admin_Table_Common {
+class MT_View_List extends MT_Admin_View_Common {
 	
 	/**
 	 * Construct MT_Admin_Table_Manage object
@@ -35,18 +35,19 @@ class MT_View_List extends MT_Admin_Table_Common {
 	 */
 	protected function _outputTableBody() {
 		$j = 0;
-		foreach ($this->getResult() as $row) {
+		foreach ($this->getResult() as $item) {
 			$j++;
 			echo '<tr ' . ($j % 2 == 1? 'class="alternate"' : '') . '>
-								<td><input type="checkbox" name="checked" value="' . $row[0] .'"></td>
-								<td><a href="?page=mt-'.$this->model->name().'&type=edit&id=' . $row[0] .'">' . $row[1] .'</a></td>';
-			for( $i = 2; $i < sizeof( $row ); $i++ ) {
-				echo '
-								<td>' . $this->fields[$i]->getString($row[$i]) .'</td>
-	';
+					<td><input type="checkbox" name="checked" value="' . $item['id'] .'"></td>';
+			for ($i = 1; $i < count($this->fields); $i++) {
+				$field = $this->fields[$i];
+				if($i == 1) {
+					echo '<td><a href="?page=mt-'.$this->model->name().'&type=edit&id=' . $item['id'] .'">' . $item[$field->name] .'</a></td>';					
+				} else {
+					echo '<td>'.$field->getString($item[$field->name]).'</td>';
+				}
 			}
-			echo '			</tr>
-	';
+			echo '</tr>';
 		}
 	}
 	

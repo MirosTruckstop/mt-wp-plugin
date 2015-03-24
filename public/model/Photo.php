@@ -41,6 +41,20 @@ class MT_Photo extends MT_Common {
 		return parent::get_aggregate('MAX', 'date', $whereCondition."`show` = 1");
 	}
 	
+	public function update(array $data, array $conditionValue = NULL) {
+		if (!empty($data['gallery'])) {
+			$data['path'] = MT_Photo::renameFile($conditionValue['id'], $data['path'], $data['gallery']);
+		}
+		if (!empty($data['date'])) {
+			$data['date'] = strtotime($data['date']);
+			// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
+			if (!MT_Functions::isTimestampInStringForm($data['date']) ) {
+				unset($data['date']);
+			}
+		}
+		return parent::update($data, $conditionValue);
+	}
+	
 	/**
 	 * Get photo path.
 	 * 
@@ -66,7 +80,7 @@ class MT_Photo extends MT_Common {
 	}
 	
 	// TODO: besser implementieren
-	public static function renameFile($photoId, $photoFile, $galleryId) {
+	private static function renameFile($photoId, $photoFile, $galleryId) {
 		$gallery = new MT_Gallery($galleryId);
 		$dirname = self::$__photoPath . $gallery->get_attribute('fullPath');
 		$basename = $gallery->get_attribute('path') . '_' . $photoId;

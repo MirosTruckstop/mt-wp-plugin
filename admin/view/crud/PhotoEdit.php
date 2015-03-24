@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_PhotoEdit extends MT_Admin_Table_Common {
+class MT_View_PhotoEdit extends MT_Admin_View_Common {
 
 	private $gallery;
 	
@@ -23,7 +23,6 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	public function __construct($galleryId = NULL) {
 		parent::__construct(new MT_Photo(), 'widefat');
 		parent::setFields(array(
-			new MT_Admin_Field(NULL, '#'),
 			new MT_Admin_Field(NULL, 'Bild'),
 			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
 			new MT_Admin_Field(NULL, 'Beschreibung')			
@@ -63,30 +62,26 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	 */
 	private function _updatePhotos($data) {
 		if(!empty($data)) {
-			$tmpDate = time();
-
-			foreach ($data as $id => $item) {
+			foreach ($data as $index => $item) {
 				// Nur wenn Checkbox aktiviert ist, wird Foto aktualisert
 				if (array_key_exists('checked', $item)) {
-					unset($item['checked']);
-                            
-					$item['path'] = MT_Photo::renameFile($id, $item['path'], $item['gallery']);
-                    $item['date'] = strtotime($item['date']); 
-					// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
-					if ( !MT_Functions::isTimestampInStringForm($item['date']) ) {
-						unset( $item['date'] );
-						// TODO: info to user?
-					}
+					unset($data[$index]['checked']);
 
 					// Neue Bilder
 					if (!($this->gallery->hasId())) {
-						$item['show'] = 1;
+						$data[$index]['show'] = 1;
 					}
-
-					parent::update($item, array(
-						'id' => $id
-					));
+				} else {
+					unset($data[$index]);
 				}
+			}
+		}
+		
+		if(!empty($data)) {
+			if (parent::updateOrInsertAll($data)) {
+				MT_Functions::box( 'save' );
+			} else {
+				MT_Functions::box( 'exception', 'TODO: Fehler beim Einfügen');					
 			}
 		}
 	}
@@ -114,6 +109,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 	 */
 	protected function _outputTableBody(){
 		$fields = array();
+		$fields['id'] = new MT_Admin_Field('id', NULL, 'hidden');
 		$fields['checked'] = new MT_Admin_Field('checked', NULL, 'bool');
 		$fields['path'] = new MT_Admin_Field('path', NULL, 'hidden');
 		$fields['gallery'] = (new MT_Admin_Field('gallery', NULL, 'reference'))
@@ -124,27 +120,28 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
-		foreach ($this->getResult() as $item) {
+		foreach ($this->getResult() as $index => $item) {
 			$file = MT_Photo::$__photoPath.$item->path;
 		?>
 			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>
 					<?php
-					echo $fields['checked']->getElement(!$this->gallery->hasId(), $item->id);
-					echo $fields['path']->getElement($file, $item->id);
+					echo $fields['id']->getElement($item->id, $index);
+					echo $fields['checked']->getElement(!$this->gallery->hasId(), $index);
+					echo $fields['path']->getElement($file, $index);
 					?>
 				</td>
-				<td><a href="?title=add&typ=photo&id=<?php echo $item->id; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
+				<td><a href="?title=add&typ=photo&id=<?php echo $index; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
 				<td>
 					<?php (empty($item->galleryId) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
-					<?php echo $fields['gallery']->getElement($item->gallery, $item->id); ?>
+					<?php echo $fields['gallery']->getElement($item->gallery, $index); ?>
 					<br /><br />
-					<?php echo $fields['photographer']->getElement($item->photographer, $item->id); ?>
+					<?php echo $fields['photographer']->getElement($item->photographer, $index); ?>
 					<br /><br />
-					<?php echo $fields['date']->getElement($item->date, $item->id);
+					<?php echo $fields['date']->getElement($item->date, $index);
 					?>
 				</td>
-				<td><?php echo $fields['description']->getElement($item->description, $item->id); ?></td>
+				<td><?php echo $fields['description']->getElement($item->description, $index); ?></td>
 			</tr>
 		<?php
 			$counter++;

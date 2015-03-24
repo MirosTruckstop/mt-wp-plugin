@@ -1,6 +1,6 @@
 <?php
 
-abstract class MT_Admin_Table_Common {
+abstract class MT_Admin_View_Common {
 
 	/**
 	 * Typ name (e.g. 'photographer')
@@ -59,6 +59,7 @@ abstract class MT_Admin_Table_Common {
 	}
 
 	public function setFields($fields) {
+		array_unshift($fields, (new MT_Admin_Field('id', '#', 'hidden')));
 		$this->fields = $fields;
 	}
 	
@@ -92,13 +93,32 @@ abstract class MT_Admin_Table_Common {
 <?php
 	}
 	
-	protected function update($data, array $conditionValue = NULL) {
-		if($this->model->update($data, $conditionValue) ) {
-			MT_Functions::box( 'save' );
-		} else {
-			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
+//	protected function update($data, array $conditionValue = NULL) {
+//		if($this->model->update($data, $conditionValue) ) {
+//			MT_Functions::box( 'save' );
+//		} else {
+//			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
+//		}
+//	}
+	
+	protected function updateOrInsertAll($data) {
+		foreach ($data as $item) {
+			$id = $item['id'];
+			unset($item['id']);
+			if ($id === '') {
+				if (!$this->model->insert($item)) {
+					return FALSE;
+				}
+			}
+			// If item has an ID, update the item
+			else {
+				if (!$this->model->update($item, array('id' => $id))) {
+					return FALSE;
+				}				
+			}
 		}
-	}	
+		return TRUE;
+	}
 
 	/**
 	 * Output table head row (Form: tr, td)
@@ -147,7 +167,7 @@ abstract class MT_Admin_Table_Common {
 		foreach ($leftJoin as $joinTable => $joinSelect) {
 			$query->joinLeft($joinTable, 'wp_mt_'.$this->model->name().'.'.$joinTable.'=wp_mt_'.$joinTable.'.id', $joinSelect);
 		}
-		return $query->getResult('ARRAY_N');
+		return $query->getResult('ARRAY_A');
 	}
 
 }

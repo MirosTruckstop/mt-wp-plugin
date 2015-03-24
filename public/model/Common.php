@@ -31,22 +31,13 @@ abstract class MT_Common {
      */
     public static function insert(array $data) {
         if(empty($data)) {
-            return false;
+            return FALSE;
         }
 
         global $wpdb;
         $wpdb->insert(self::getTableName(), $data);
         return $wpdb->insert_id;
     }
-	
-	public function insertAll(array $data) {
-		foreach ($data as $item) {
-			if(self::insert($item)) {
-				return false;
-			}
-		}
-		return true;
-	}
 	
 	public function isDeletable() {
 		return false;

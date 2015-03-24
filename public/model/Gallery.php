@@ -33,7 +33,7 @@ class MT_Gallery extends MT_Common {
 	public static function insert($data) {
 		$data['date'] = time();
 		$data['path'] = MT_Functions::nameToPath($data['name']);
-		parent::insert($data);
+		return parent::insert($data);
 	}
 	
 	/**

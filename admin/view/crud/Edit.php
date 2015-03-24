@@ -5,7 +5,7 @@
  * @category   MT
  * @package    Admin
  */
-class MT_View_Edit extends MT_Admin_Table_Common {
+class MT_View_Edit extends MT_Admin_View_Common {
 	
 	private $data;
 
@@ -31,14 +31,10 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	protected function outputHeadMessages() {
 		$data = stripslashes_deep($_POST['data']);
 		if(!empty($data)) {
-			if ($this->model->hasId()) {
-				parent::update($data[0]);
+			if (parent::updateOrInsertAll($data)) {
+				MT_Functions::box( 'save' );
 			} else {
-				if( $this->model->insertAll($data) ) {
-					MT_Functions::box( 'save' );
-				} else {
-					MT_Functions::box( 'exception', 'TODO: Fehler beim Einfügen');
-				}	
+				MT_Functions::box( 'exception', 'TODO: Fehler beim Einfügen');					
 			}
 		}
 		if($this->model->isDeletable()) {
@@ -74,23 +70,32 @@ class MT_View_Edit extends MT_Admin_Table_Common {
 	 * @return void
 	 */
 	protected function _outputTableBody() {
-		if (!isset($this->data)) {
-			$this->data = $this->getResult();			
-		}
-		for($i = 0; $i < count($this->data); $i++) {
-			$item = $this->data[$i];
-			for( $j = 0; $j < count( $this->fields ); $j++) {
-				$field = $this->fields[$j];
-				if (!($this->model->hasId()) && $field->disabled) {
-					continue;
-				}
-				echo '
-							<tr ' . ($j % 2 == 0? 'class="alternate"' : '') . '>
-								<td>' . $field->label . '</td>
-								<td>' . $field->getElement( ($this->model->hasId() ? $item[$j] : ''), $i) . '</td>
-							</tr>
-';
+		if (isset($this->data)) {
+			foreach ($this->data as $i => $item) {
+				$this->_outputItem($item, $i, TRUE);
 			}
+		} else if ($this->model->hasId()) {
+			foreach ($this->getResult() as $i => $item) {
+				$this->_outputItem($item, $i, TRUE);
+			}
+		} else {
+			$this->_outputItem(NULL, 0, FALSE);
+		}
+	}
+	
+	private function _outputItem($item, $i, $showContent) {
+		foreach ($this->fields as $index => $field) {
+			if ($field->name === 'id') {
+				echo $field->getElement($item[$field->name], $i);
+				continue;
+			}
+			else if (!($this->model->hasId()) && $field->disabled) {
+				continue;
+			}
+			echo '		<tr ' . ($index % 2 == 0? 'class="alternate"' : '') . '>
+							<td>' . $field->label . '</td>
+							<td>' . $field->getElement( ($showContent ? $item[$field->name] : ''), $i) . '</td>
+						</tr>';
 		}
 	}
 }
