@@ -152,7 +152,7 @@ function mt_add_shortcode_statistics() {
 	$tempCategoryId = 0;
 	$tempSubcategoryId = 0;
 
-	$query = (new MT_QueryBuilder('wp_mt_'))
+	$query = (new MT_QueryBuilder())
 		->from('photo')
 		->select('COUNT(wp_mt_photo.id) as numPhotos')
 		->joinInner('gallery', TRUE, array('id AS galleryId', 'name as galleryName'))

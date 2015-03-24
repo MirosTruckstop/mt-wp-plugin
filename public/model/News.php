@@ -3,18 +3,14 @@
 class MT_News extends MT_Common {
 	
 	public function __construct($id = NULL) {
-		parent::__construct(self::getTableName(), $id);
+		parent::__construct($id);
 	}
 	
-	public function __toString() {
+	public static function name() {
 		return 'news';
 	}
 	
-	public static function getTableName() {
-		return 'wp_mt_news';
-	}
-	
-	public function getName() {
+	public static function getName() {
 		return 'News';
 	}
 	

@@ -10,18 +10,14 @@ class MT_Photographer extends MT_Common {
 	public static $photographersPath = 'Fotograf/';
 	
 	public function __construct($id = NULL) {
-		parent::__construct(self::getTableName(), $id);
+		parent::__construct($id);
 	}
 	
-	public function __toString() {
+	public static function name() {
 		return 'photographer';
 	}
 	
-	public static function getTableName() {
-		return 'wp_mt_photographer';
-	}
-	
-	public function getName() {
+	public static function getName() {
 		return 'Fotografen';
 	}
 	
@@ -33,18 +29,5 @@ class MT_Photographer extends MT_Common {
 	public function isDeletable() {
 		return !empty($this->id);
 	}
-	
-	######## Check ########
-	
-	/**
-	 * Gibt true zurück, wenn mehr als ein Bild von dem Photographen
-     * exisitiert.
-	 *
-	 * @param	int		$id		Photographer's ID
-	 * @return	boolean				True, if photographer has more then one phot
-	 */
-	public function hasPhotos() {
-		return ($this->getNumPhotos > 0);
-	}	
 	
 }

@@ -24,7 +24,7 @@ class MT_Admin_DashboardWidget {
 	private function _testPhotoPaths() {
 		$error = false;
 
-		$query = (new MT_QueryBuilder('wp_mt_'))
+		$query = (new MT_QueryBuilder())
 			->from('photo', 'path')
 			->join('gallery', TRUE, 'name')
 			->limit(10);

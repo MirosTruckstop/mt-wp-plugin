@@ -85,7 +85,7 @@ abstract class MT_Functions {
 	 * @return	array			An associative array containing the determined
 	 * 							'sort', 'num'
 	 */
-	public static function getUserSettings($sort, $num) {
+	public static function getUserSettings($sort, $num, $page) {
 		// User ip
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
@@ -130,7 +130,8 @@ abstract class MT_Functions {
 
 		return array(
 			'sort'	=> $sort,
-			'num'	=> $num
+			'num'	=> $num,
+			'page'	=> $page
 		);
 	}
 

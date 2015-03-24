@@ -7,24 +7,20 @@
 class MT_Category extends MT_Common {
 	
 	public function __construct($id = NULL) {
-		parent::__construct(self::getTableName(), $id);
+		parent::__construct($id);
 	}
 
-	public function __toString() {
+	public static function name() {
 		return 'category';
 	}
 	
-	public static function getTableName() {
-		return 'wp_mt_category';
-	}
-
-	public function getName() {
-		return "Kategorien";
+	public static function getName() {
+		return 'Kategorien';
 	}
 
 	public static function insert($data) {
 		$data['path'] = MT_Functions::nameToPath($data['name']);
 		parent::insert($data);
-	}	
+	}
 
 }

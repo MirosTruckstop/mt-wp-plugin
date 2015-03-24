@@ -10,7 +10,7 @@ class MT_QueryBuilder {
 	private $orderBy = '';
 	private $limit = '';
 	
-	public function __construct($tablePraefix = '') {
+	public function __construct($tablePraefix = 'wp_mt_') {
 		$this->tablePraefix = $tablePraefix;
 		return $this;
 	}

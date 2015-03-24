@@ -18,26 +18,7 @@ class MT_View_Gallery {
 	 */
 	private $_numPhotos;
 
-	/**
-	 * Page number (GET)
-	 *
-	 * @var string
-	 */
-	 private $_userPage;
-
-	/**
-	 * Number of pictures per page (GET)
-	 *
-	 * @var string
-	 */
-	private $_userNum;
-
-	/**
-	 * Sort (GET)
-	 *
-	 * @var string
-	 */
-	private $_userSort;
+	private $userSettings;
 
 
 	/**
@@ -49,7 +30,7 @@ class MT_View_Gallery {
 	public function __construct($id) {
 
 		// Construct query
-		$query = (New MT_QueryBuilder('wp_mt_'))
+		$query = (New MT_QueryBuilder())
 			->from('gallery', array('id as galleryId', 'name as galleryName', 'description', 'hauptparkplatz'))
 			->join('category', TRUE, array('id AS categoryId', 'name AS categoryName'))
 			->joinLeft('subcategory', TRUE, 'name as subcategoryName')
@@ -60,16 +41,11 @@ class MT_View_Gallery {
 			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
 		}
 		
-		$userSettings = MT_Functions::getUserSettings( $_GET['sort'], $_GET['num'] );
-		$this->_userNum = $userSettings['num'];
-		$this->_userSort = $userSettings['sort'];
-
-		// Seitennummer
-		$this->_userPage = $_GET['page'];
+		$this->userSettings = MT_Functions::getUserSettings($_GET['sort'], $_GET['num'], $_GET['page']);
 
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
-		if( empty( $this->_userPage ) || $this->_userPage > MT_Photo::getNumPages($this->item->galleryId, $this->_userNum) ) {
-			$this->_userPage = 1;
+		if( empty( $this->userSettings['page'] ) || $this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num']) ) {
+			$this->userSettings[page] = 1;
 		}
 
 		// Anzahl der Bilder in der Galerie
@@ -142,17 +118,17 @@ class MT_View_Gallery {
 							<th>&nbsp;<?php echo _("Bilder"); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
 							<td>
 								<!--<input name="id" value="<?php //echo $this->path; ?>" type="hidden">-->
-								<input name="page" value="<?php echo $this->_userPage; ?>" type="hidden">
+								<input name="page" value="<?php echo $this->userSettings['page']; ?>" type="hidden">
 								<?php echo _("Bilder pro Seite"); ?>:&nbsp;
 								<select name="num" size="1">
-									<option value="5" <?php echo MT_Functions::selected( $this->_userNum, '5' ); ?>>5</option>
-									<option value="10" <?php echo MT_Functions::selected( $this->_userNum, '10' ); ?>>10</option>
-									<option value="15" <?php echo MT_Functions::selected( $this->_userNum, '15' ); ?>>15</option>
+									<option value="5" <?php echo MT_Functions::selected( $this->userSettings['num'], '5' ); ?>>5</option>
+									<option value="10" <?php echo MT_Functions::selected( $this->userSettings['num'], '10' ); ?>>10</option>
+									<option value="15" <?php echo MT_Functions::selected( $this->userSettings['num'], '15' ); ?>>15</option>
 								</select>
 								&nbsp;<?php echo _("Sortieren nach"); ?>:&nbsp;
 								<select name="sort" size="1">
-									<option value="date" <?php echo MT_Functions::selected( $this->_userSort, 'date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Neu - Alt"); ?></option>
-									<option value="-date" <?php echo MT_Functions::selected( $this->_userSort, '-date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Alt - Neu"); ?></option>
+									<option value="date" <?php echo MT_Functions::selected( $this->userSettings['sort'], 'date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Neu - Alt"); ?></option>
+									<option value="-date" <?php echo MT_Functions::selected( $this->userSettings['sort'], '-date'); ?>><?php echo _("Einstellungsdatum"); ?>: <?php echo _("Alt - Neu"); ?></option>
 								</select>
 								<input type="submit" value="OK" class="button">
 							</td>
@@ -162,7 +138,7 @@ class MT_View_Gallery {
 			</div>
 		<?php
 
-		MT_Functions::__outputPagination( $this->item->galleryId, $this->_userPage, $this->_userNum, $this->_userSort);
+		MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']);
 	}
 
 
@@ -172,30 +148,29 @@ class MT_View_Gallery {
 	 * @return void
 	 */
 	private function _outputContentPhotos() {
-		$query = (new MT_QueryBuilder('wp_mt_'))
+		$query = (new MT_QueryBuilder())
 			->from('photo', array('id as photoId', 'path', 'description', 'date'))
 			->joinInner('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
 			->whereEqual('gallery', $this->item->galleryId)
 			->whereEqual('`show`', '1')
-			->orderBy('date');
+			->orderBy('date')
+			->limitPage($this->userSettings['page'], $this->userSettings['num']);
 				
 		// Sortierung der Bild nach dem Datum
-		if( $this->_userSort === 'date' ) {
+		if($this->userSettings['sort'] === 'date') {
 			$query->orderBy('date DESC');
 		}
 				
-		// LIMIT: Zeige Bilder von, Anzahl Bilder
-		$query->limit($this->_userNum, ( $this->_userPage - 1 ) * $this->_userNum);
-		foreach ($query->getResult() as $row) {
+		foreach ($query->getResult() as $itme) {
 
-            $alt = $this->item->galleryName.' (' . $this->item->categoryName . ')'.MT_Functions::getIfNotEmpty($row->description, ': '.$row->description); // photo's alternate text
-			$this->_outputPhoto( $row->path,
+            $alt = $this->item->galleryName.' (' . $this->item->categoryName . ')'.MT_Functions::getIfNotEmpty($itme->description, ': '.$itme->description); // photo's alternate text
+			$this->_outputPhoto( $itme->path,
 						$this->__getPhotoKeywords($alt),
 						$alt,
-						$row->description,
-						$row->date,
-						$row->photographerId,
-						$row->photographerName
+						$itme->description,
+						$itme->date,
+						$itme->photographerId,
+						$itme->photographerName
 			);
 		}
 	}
@@ -254,7 +229,7 @@ class MT_View_Gallery {
 					</colgroup>
 					<tr>
 						<td></td>
-						<td><?php MT_Functions::__outputPagination( $this->item->galleryId, $this->_userPage, $this->_userNum, $this->_userSort ); ?></td>
+						<td><?php MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']; ?></td>
 						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php echo _("Nach oben"); ?></a></span></td>
 					</tr>
 		<?php

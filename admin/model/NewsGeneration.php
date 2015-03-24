@@ -25,16 +25,16 @@ class MT_Admin_NewsGeneration {
 	
 	public function getGeneratedNews() {
 		$news = array();
-		$query = new MT_QueryBuilder('wp_mt_');
+		$query = new MT_QueryBuilder();
 		$query->from('photo')
 			->select('wp_mt_gallery.name as galleryName')
 			->select('wp_mt_category.name as categoryName')
 			->select('wp_mt_subcategory.name as subcategoryName')
 			->select('COUNT(wp_mt_gallery.id) AS numPhotos')
-			->joinInner('gallery', 'wp_mt_gallery.id = wp_mt_photo.gallery', array('id', 'date'))
+			->joinInner('gallery', TRUE, array('id', 'date'))
 			->joinInner('category', 'wp_mt_category.id = wp_mt_gallery.category')
 			->joinLeftOuter('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory')
-			->where('wp_mt_photo.show = 1')
+			->whereEqual('wp_mt_photo.show', 1)
 			->where("wp_mt_photo.date >= " . $this->timestampLatestNews)
 			->groupBy('wp_mt_category.name, wp_mt_subcategory.name, wp_mt_gallery.name')
 			->orderBy('numPhotos DESC');

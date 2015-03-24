@@ -19,18 +19,14 @@ class MT_Gallery extends MT_Common {
 	static $__newTimestamp = 604800;
 	
 	public function __construct($id = NULL) {
-		parent::__construct(self::getTableName(), $id);
+		parent::__construct($id);
 	}
 	
-	public function __toString() {
+	public static function name() {
 		return 'gallery';
 	}
 	
-	public static function getTableName() {
-		return 'wp_mt_gallery';
-	}
-
-	public function getName() {
+	public static function getName() {
 		return 'Gallerien';
 	}
 
@@ -63,7 +59,7 @@ class MT_Gallery extends MT_Common {
 	 */
 	public static function __getAllGalleryPaths() {
 		if (empty(self::$__allGalleryPaths)) {
-			$query = new MT_QueryBuilder('wp_mt_');
+			$query = new MT_QueryBuilder();
 			$query->from('gallery', array('id, fullPath'));
 			foreach ($query->getResult() as $item) {
 				self::$__allGalleryPaths[$item->id] = $item->fullPath;				

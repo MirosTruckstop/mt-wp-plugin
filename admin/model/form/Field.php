@@ -132,13 +132,13 @@ class MT_Admin_Field {
 		$tempOptgroup = NULL;
 		
 		if (empty($this->cache)) {
-			$query = (new MT_QueryBuilder('wp_mt_'))
+			$query = (new MT_QueryBuilder())
 				->from('gallery', array( 'id' ))
 				->select('wp_mt_category.name as categoryName')
 				->select('wp_mt_subcategory.name as subcategoryName')
 				->select('wp_mt_gallery.name as galleryName')
-				->join('category', 'wp_mt_category.id = wp_mt_gallery.category')
-				->joinLeft('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory')
+				->join('category', TRUE)
+				->joinLeft('subcategory', TRUE)
 				->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name', 'wp_mt_gallery.name'));
 			//TODO IS CALLED EACH TIME
 			//echo $query;

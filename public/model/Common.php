@@ -5,19 +5,22 @@
 abstract class MT_Common {
 
 	protected $id;
+	public static $dbPreafix = 'wp_mt_';
 
-	public abstract function __toString();
-	public abstract static function getTableName();
+	public abstract static function name();
 
 	/**
      * Constructor for the database class to inject the table name
      *
      * @param String $tableName - The current table name
      */
-    public function __construct($tableName, $id) {
-        $this->tableName = $tableName;
+    public function __construct($id) {
 		$this->id = $id;
     }
+	
+	private static function getTableName() {
+		return self::$dbPreafix.static::name();
+	}
 	
     /**
      * Insert data into the current data
@@ -32,7 +35,7 @@ abstract class MT_Common {
         }
 
         global $wpdb;
-        $wpdb->insert(static::getTableName(), $data);
+        $wpdb->insert(self::getTableName(), $data);
         return $wpdb->insert_id;
     }
 	
@@ -52,8 +55,8 @@ abstract class MT_Common {
 	public function getOne($select = NULL, $outputType = 'OBJECT') {
 		if(!empty($this->id)) {
 			$query = (new MT_QueryBuilder())
-				->from($this->tableName, $select)
-				->whereEqual($this->tableName.'.id', $this->id);
+				->from(static::name(), $select)
+				->whereEqual(self::getTableName().'.id', $this->id);
 			return $query->getResultOne($outputType);		
 		}
 		return FALSE;
@@ -61,7 +64,7 @@ abstract class MT_Common {
 	
 	public static function getAll($select = '*', $orderBy = NULL) {
 		$query = (new MT_QueryBuilder())
-			->from(static::getTableName(), $select)
+			->from(static::name(), $select)
 			->orderBy($orderBy);
 		return $query->getResult();
 	}
@@ -91,7 +94,7 @@ abstract class MT_Common {
 
 	private static function _get_one_value($select, $whereCondition = NULL) {
 		$query = (new MT_QueryBuilder())
-			->from(static::getTableName())
+			->from(static::name())
 			->select($select)
 			->where($whereCondition);
 		$result = $query->getResult('ARRAY_N');
@@ -154,7 +157,7 @@ abstract class MT_Common {
 		}
 
 		global $wpdb;
-        return $wpdb->update(static::getTableName(), $data, $conditionValue);
+        return $wpdb->update(self::getTableName(), $data, $conditionValue);
     }
 
     /**
@@ -166,7 +169,7 @@ abstract class MT_Common {
      */
     public static function delete($whereCondition) {
         global $wpdb;
-		$wpdb->query('DELETE FROM '.static::getTableName(). ' WHERE '.$whereCondition);
+		$wpdb->query('DELETE FROM '.self::getTableName(). ' WHERE '.$whereCondition);
     }
 
 }

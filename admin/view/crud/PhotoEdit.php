@@ -2,13 +2,6 @@
 
 class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 
-	/**
-	 * Photo path
-	 *
-	 * @var string
-	 */
-	private $_photoPath = '../bilder/';
-
 
 	private $gallery;
 
@@ -49,7 +42,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 		}
 		
 		// Set query
-		$query = (new MT_QueryBuilder('wp_mt_'))
+		$query = (new MT_QueryBuilder())
 			->from('photo', array('id', 'path', 'date', 'gallery', 'description', 'photographer'))
 			->limitPage($this->page, $this->perPage);
 		if($this->gallery->hasId()) {
@@ -79,8 +72,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 				if (array_key_exists('checked', $data)) {
 					unset($data['checked']);
                             
-					$photoM = new MT_Photo($id);
-					$data['path'] = str_replace($this->_photoPath, '', $photoM->renameFile($data['gallery']));
+					$data['path'] = MT_Photo::renameFile($id, $data['path'], $data['gallery']);
                             
 					// Bilder einer Galerie
 					if (($this->gallery->hasId())) {
@@ -135,7 +127,7 @@ class MT_View_PhotoEdit extends MT_Admin_Table_Common {
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $item) {
-			$file =  $this->_photoPath . $item->path;
+			$file = MT_Photo::$__photoPath.$item->path;
 		?>
 			<tr <?php echo ($counter % 2 == 1? 'class="alternate"' : ''); ?>>
 				<td>

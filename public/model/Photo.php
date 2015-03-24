@@ -18,15 +18,11 @@ class MT_Photo extends MT_Common {
 
 	
 	public function __construct($id = NULL) {
-		parent::__construct(self::getTableName(), $id);
+		parent::__construct($id);
 	}
 
-	public function __toString() {
+	public static function name() {
 		return 'photo';
-	}
-	
-	public static function getTableName() {
-		return 'wp_mt_photo';
 	}
 	
 	public function isDeletable() {
@@ -42,7 +38,7 @@ class MT_Photo extends MT_Common {
 		if (!empty($galleryId)) {
 			$whereCondition = 'id = '.$galleryId.' AND';
 		}
-		return parent::get_aggregate('MAX', 'date', $whereCondition . "`show` = 1");
+		return parent::get_aggregate('MAX', 'date', $whereCondition."`show` = 1");
 	}
 	
 	/**
@@ -51,19 +47,14 @@ class MT_Photo extends MT_Common {
 	 * @param   int     $id     Photo id
 	 * @return  string          Photo path
 	*/
-	public function getPath() {
-		return parent::get_attribute('path');
-	}
+//	public static function getPath() {
+//		return parent::get_attribute('path');
+//	}
 	
-	private function getAbsolutePath() {
-		return self::$__photoPath . $this->getPath();
-	}
+//	private static function getAbsolutePath() {
+//		return self::$__photoPath . $this->getPath();
+//	}
 	
-	private function getFile() {
-		return new MT_Admin_ImageFile($this->getAbsolutePath());
-	}
-
-
 	/**
 	 * Check photo is in database
 	 *
@@ -74,27 +65,15 @@ class MT_Photo extends MT_Common {
 		return parent::get_attribute('id', 'path = `'.$path.'`');
 	}
 	
-	public static function delete() {
-/*		if(parent::hasId()) {
-			if($this->getFile()->delete()) {
-				// TODO
-			} else {
-				
-			}
-		}*/
-	}
-	
-	public function renameFile($galleryId) {
-		if(parent::hasId()) {
-			$file = $this->getFile();
-			$gallery = new MT_Gallery($galleryId);
-			$dirname = self::$__photoPath . $gallery->get_attribute('fullPath');
-			$basename = $gallery->get_attribute('path') . '_' . $this->getId();
+	// TODO: besser implementieren
+	public static function renameFile($photoId, $photoFile, $galleryId) {
+		$gallery = new MT_Gallery($galleryId);
+		$dirname = self::$__photoPath . $gallery->get_attribute('fullPath');
+		$basename = $gallery->get_attribute('path') . '_' . $photoId;
 			
-			$newFile = $dirname.$basename.'.'.$file->getExtension();
-			if (rename($file, $newFile)) {
-				return $newFile;
-			}
+		$newFile = $dirname.$basename.'.'.strtolower(pathinfo($photoFile, PATHINFO_EXTENSION));
+		if (rename($photoFile, $newFile)) {
+			return str_replace(self::$__photoPath, '', $newFile);
 		}
 		return FALSE;
 	}
@@ -107,11 +86,10 @@ class MT_Photo extends MT_Common {
 	 * @return	string				Number of pictures
 	 */
 	public static function getCount($galleryId = NULL) {
-		$whereCondition .= "`show` = 1";
-		if( isset( $galleryId ) ) {
-			$whereCondition .= " AND gallery = '" . $galleryId . "'";
+		if (isset($galleryId)) {
+			$whereCondition = " AND gallery = '" . $galleryId . "'";
 		}
-		return parent::get_aggregate('COUNT', 'id', $whereCondition);
+		return parent::get_aggregate('COUNT', 'id', '`show` = 1'.$whereCondition);
 	}
 	
 	public static function getCountNewPhotos() {

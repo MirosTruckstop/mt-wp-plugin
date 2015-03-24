@@ -55,9 +55,9 @@ class MT_View_Category {
 		$galerien_hauptparkplatz = '';		// Speicher Links zum Hauptparkplatz zwischen, um sie später auszugeben
 
 		// Construct query
-		$query = (new MT_QueryBuilder('wp_mt_'))
+		$query = (new MT_QueryBuilder())
 			->from('gallery', array('id AS galleryId', 'name AS galleryName', 'hauptparkplatz', 'updated'))
-			->joinLeft('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory', array('id AS subcategoryId', 'name AS subcategoryName'))
+			->joinLeft('subcategory', TRUE, array('id AS subcategoryId', 'name AS subcategoryName'))
 			->whereEqual('wp_mt_gallery.category', $this->item->id)
 			->orderBy(array('wp_mt_subcategory.id', 'wp_mt_gallery.name'));
 
@@ -144,15 +144,11 @@ class MT_View_Category {
 	 * @param	boolean	$isNew		If gallery is new
 	 * @return	void
 	 */
-	private function _outputListItem( $link, $name, $numPhotos, $isNew ) {
-  		if( $isNew ) {
-			$newPhotos = '<span class="new">' . _("Neue Bilder") . '</span>';
-		} else {
-			$newPhotos = NULL;
+	private function _outputListItem($link, $name, $numPhotos, $isNew) {
+  		if($isNew) {
+			$newPhotos = '<span class="new">Neue Bilder</span>';
 		}
-
-		echo '
-				<li><a href="' . $link . '">' . $name . '</a>&nbsp;<span class="style_grew">(' . $numPhotos . ')</span>'. $newPhotos . '</li>';
+		echo '<li><a href="' . $link . '">' . $name . '</a>&nbsp;<span class="style_grew">(' . $numPhotos . ')</span>'. $newPhotos . '</li>';
 	}
 }
 ?>

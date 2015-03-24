@@ -56,8 +56,7 @@ class MT_View_Photographer {
 	 *
 	 * @return void
 	 */
-	private function _outputContentPhotographer()
-	{
+	private function _outputContentPhotographer() {
 		?>
 			<table class="table_quer">
 			 <tr>
@@ -104,7 +103,7 @@ class MT_View_Photographer {
 			$tempCategoryID = 0;		// Save last category ID
 			$tempSubcategoryID = 0;		// Save last subcategory ID
 
-			$query = (new MT_QueryBuilder('wp_mt_'))
+			$query = (new MT_QueryBuilder())
 				->from('photo')
 				->select('COUNT(wp_mt_photo.id) as numPhotos')
 				->joinInner('gallery', TRUE, array('id AS galleryId', 'name as galleryName'))

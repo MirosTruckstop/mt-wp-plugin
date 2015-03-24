@@ -138,15 +138,15 @@ abstract class MT_Admin_Table_Common {
 			}
 		}
 		
-		$query = (new MT_QueryBuilder('wp_mt_'))
-			->from($this->model->__toString(), $select)
+		$query = (new MT_QueryBuilder())
+			->from($this->model->name(), $select)
 			->orderBy($this->order)
 			->limit($this->perPage);
 		if ($this->model->hasId()) {
-			$query->where('wp_mt_'.$this->model->__toString().'.id ='.$this->model->getId());
+			$query->where('wp_mt_'.$this->model->name().'.id ='.$this->model->getId());
 		}
 		foreach ($leftJoin as $joinTable => $joinSelect) {
-			$query->joinLeft($joinTable, 'wp_mt_'.$this->model->__toString().'.'.$joinTable.'=wp_mt_'.$joinTable.'.id', $joinSelect);
+			$query->joinLeft($joinTable, 'wp_mt_'.$this->model->name().'.'.$joinTable.'=wp_mt_'.$joinTable.'.id', $joinSelect);
 		}
 		return $query->getResult('ARRAY_N');
 	}
