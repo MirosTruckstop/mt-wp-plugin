@@ -81,11 +81,11 @@ class MT_Admin_Field {
 		
 		switch ($this->type) {
 			case 'string':
-				return '<input type="text" name="'.$arrayElement.'" size="50" maxlength="'.$this->maxLength.'" value="'.$value.'" '.$attribute .'>';
+				return $this->getInputField('text', $arrayElement, $value, 50);
 			case 'date':
-				return '<input type="text" name="'.$arrayElement.'" value="'.gmdate("d.m.Y H:i:s", $value).'">';
+				return $this->getInputField('text', $arrayElement, gmdate("d.m.Y H:i:s", $value));
 			case 'hidden':
-				return '<input type="hidden" name="'.$arrayElement.'" value="'.$value.'">';
+				return $this->getInputField('hidden', $arrayElement, $value);
 			case 'bool':
 				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';
 			case 'text':
@@ -93,7 +93,7 @@ class MT_Admin_Field {
 			case 'reference':
 				if($this->reference === 'gallery') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
-					<option value="0"></option>'
+					<option value=""></option>'
 				. $this->outputAllGalleries($value) .'
 				</select>';
 				}
@@ -106,6 +106,23 @@ class MT_Admin_Field {
 					return $value;
 				}		
 		}
+	}
+	
+	private function getInputField($type, $name, $value, $size = NULL) {
+		$attribute = '';
+		if (!empty($size)) {
+			$attribute .= ' size="'.$size.'"';
+		}
+		if (!empty($this->required)) {
+			$attribute .= ' required';
+		}
+		if (!empty($this->maxLength)) {
+			$attribute .= ' maxlength="'.$this->maxLength.'"';
+		}
+		if (!empty($this->cssClass)) {
+			$attribute .= ' class="'.$this->cssClass.'"';
+		}
+		return '<input type="'.$type.'" name="'.$name.'" value="'.$value.'"'.$attribute.'>';
 	}
 	
 	/**

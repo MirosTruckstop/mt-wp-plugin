@@ -1,9 +1,15 @@
 jQuery(function() {
-//	jQuery('.sort').sortable({
-//		cursor: 'move',
-//		axis:   'y',
-//		placeholder: 'tr-placeholder'
-//	});
+	jQuery('.sort').sortable({
+		cursor: 'move',
+		axis:   'y',
+		placeholder: 'tr-placeholder',
+		stop: function(event, table) {
+			//console.log(table.item);
+			jQuery('tbody .date').each(function( index ) {
+				jQuery(this).val(index);
+			});
+		}
+	});
 	
 	var availableDescriptions = [];
     jQuery('.description-autocomplete')

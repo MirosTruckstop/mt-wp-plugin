@@ -45,7 +45,7 @@ class MT_Photo extends MT_Common {
 		if (!empty($data['gallery'])) {
 			$data['path'] = MT_Photo::renameFile($conditionValue['id'], $data['path'], $data['gallery']);
 		}
-		if (!empty($data['date'])) {
+		if (!MT_Functions::isTimestampInStringForm($data['date'])) {
 			$data['date'] = strtotime($data['date']);
 			// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
 			if (!MT_Functions::isTimestampInStringForm($data['date']) ) {

@@ -21,8 +21,10 @@ abstract class MT_Admin_View_Common {
 	protected $order;
 	protected $fields;
 	protected $page;
-	private $title;
 	protected $query;
+	
+	private $title;
+	private $isSortActive = FALSE;
 
 	public function __construct($model, $cssClass = 'widefat') {
 		if ($model instanceof MT_Common) {
@@ -63,6 +65,10 @@ abstract class MT_Admin_View_Common {
 		$this->fields = $fields;
 	}
 	
+	public function setSortIsActive() {
+		$this->isSortActive = TRUE;
+	}
+	
 	protected abstract function outputHeadMessages();
 	protected abstract function _outputTableBody();
 	protected abstract function _outputTableNavBottom();
@@ -78,7 +84,7 @@ abstract class MT_Admin_View_Common {
 					<thead>
 						<?php $this->_outputTableHead(); ?>
 					</thead>
-					<tbody <?php echo ($this->model->name() == 'photo' ? 'class="sort"' : '') ;?>>
+					<tbody <?php echo ($this->isSortActive ? 'class="sort"' : '') ;?>>
 						<?php $this->_outputTableBody(); ?>
 					</tbody>
 					<tfoot>

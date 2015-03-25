@@ -28,6 +28,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 			new MT_Admin_Field(NULL, 'Beschreibung')			
 		));
 		parent::setPerPage(10);
+		parent::setSortIsActive();
 		
 		$this->gallery = new MT_Gallery($galleryId);
 		
@@ -48,7 +49,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 				->orderBy('date DESC');
 		} else {
 			$query->whereEqual('`show`', '0')
-				->orderBy('path ASC');
+				->orderBy('date DESC');
 		}
 		parent::setQuery($query);
 
@@ -69,6 +70,16 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 
 					// Neue Bilder
 					if (!($this->gallery->hasId())) {
+						$date = $data[$index]['date'];
+						// If date field is just the ordering number
+						if (strlen($date) <= 2) {
+							// Item with the lowest ordering integer (zero) should
+							// have the highest timestamp.
+							// 9: Ordering index from 0 to 0
+							// 5: A little distance between each item
+							$data[$index]['date'] = time() + (9-$date) * 5;
+						}
+						// Show picture
 						$data[$index]['show'] = 1;
 					}
 				} else {
@@ -116,7 +127,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 							->setReference('gallery')
 							->setRequired();
 		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, 'reference'))->setReference('photographer');
-		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date'))->setMaxLength(10);
+		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date'))->setMaxLength(10);
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
@@ -133,7 +144,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 				</td>
 				<td><a href="?title=add&typ=photo&id=<?php echo $index; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
 				<td>
-					<?php (empty($item->galleryId) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
+					<?php echo (empty($item->gallery) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
 					<?php echo $fields['gallery']->getElement($item->gallery, $index); ?>
 					<br /><br />
 					<?php echo $fields['photographer']->getElement($item->photographer, $index); ?>
