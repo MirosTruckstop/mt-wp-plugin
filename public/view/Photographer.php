@@ -64,7 +64,7 @@ class MT_View_Photographer implements MT_View_ICommon {
 			  <td><?php echo strftime(self::$_dateFormat, $this->item->date ); ?></td>
 			 </tr>
 		 		<?php
-			 	if( !empty( $this->item->amera ) ) {
+			 	if( !empty( $this->item->camera ) ) {
 					?>
 			 <tr>
 			  <th>Kamera:</th>

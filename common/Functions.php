@@ -7,7 +7,13 @@ abstract class MT_Functions {
 
 	public static function nameToPath($name) {
 		// First array: search, second array: replace
-		return str_replace(array(' ', '.'), array('_', ''), $name);
+		return str_replace(array(' ', '.'), array('_', ''), strtolower($name));
+	}
+	
+	public static function createDirIfNotExists($path) {
+		if (!file_exists($path)) {
+			mkdir($path);
+		}
 	}
 	
 	/**

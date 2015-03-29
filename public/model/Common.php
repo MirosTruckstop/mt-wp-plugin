@@ -161,6 +161,7 @@ abstract class MT_Common {
     public static function delete($whereCondition) {
         global $wpdb;
 		$wpdb->query('DELETE FROM '.self::getTableName(). ' WHERE '.$whereCondition);
+		return TRUE;
     }
 
 }

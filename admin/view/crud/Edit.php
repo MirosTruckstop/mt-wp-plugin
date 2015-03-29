@@ -19,7 +19,7 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	 */
 	public function __construct( $model, $cssClass = 'widefat') {
 		parent::__construct($model, $cssClass);
-		parent::setTitle($this->model->getName());
+		parent::setTitle($this->model->getName().' '.MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 		parent::setPerPage(1);
 	}
 	
@@ -38,17 +38,21 @@ class MT_View_Edit extends MT_Admin_View_Common {
 			}
 		}
 		if($this->model->isDeletable()) {
-			$this->_delete();
+			$this->_delete($_GET['action']);
 		}
 	}
 	
-	private function _delete() {
-		$action = $_GET['action'];
-		
-		if( $action === 'delete' ) {
-			MT_Functions::button( '?page=mt-'.$this->model->name().'&id='.$this->model->getId().'&action=delete', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
+	private function _delete($action) {
+		if($action === 'delete') {
+			MT_Functions::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=deleteY', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
+		} else if($action === 'deleteY') {
+			if ($this->model->deleteOne()) {
+				MT_Functions::box( 'delete' );
+			} else {
+				MT_Functions::box( 'notDelete' );
+			}	
 		} else {
-			MT_Functions::button( '?page=mt-add&model='.$this->model->name().'&id='.$this->model->getId().'&action=delete', 'Löschen', 'deleteButton' );
+			MT_Functions::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=delete', 'Löschen', 'deleteButton' );
 		}
 	}
 	
@@ -57,7 +61,7 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' ) {
+		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' || $this->model->name() == 'category' ) {
 			echo MT_Functions::submitButton();
 		}
 		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-'.$this->model->name());

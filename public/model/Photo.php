@@ -29,6 +29,16 @@ class MT_Photo extends MT_Common {
 		return !empty($this->id);
 	}
 	
+	public function deleteOne() {
+		if ($this->isDeletable()) {
+			$file = self::$__photoPath . parent::get_attribute('path');
+			if (unlink($file)) {
+				return parent::delete('id = '.$this->id);			
+			}
+		}
+		return FALSE;
+	}
+	
 	/**
 	 * Datum des zuletzt eingestellten Bildes
 	 *
@@ -36,7 +46,7 @@ class MT_Photo extends MT_Common {
 	 */
 	public static function getLatestPhotoDate($galleryId = NULL) {
 		if (!empty($galleryId)) {
-			$whereCondition = 'id = '.$galleryId.' AND';
+			$whereCondition = 'gallery = '.$galleryId.' AND';
 		}
 		return parent::get_aggregate('MAX', 'date', $whereCondition."`show` = 1");
 	}

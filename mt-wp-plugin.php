@@ -208,7 +208,7 @@ function mt_add_shortcode_news() {
 	foreach ($newsItems as $item) {
 		// News link
 		if( empty( $item->gallery ) ) {
-			$news_link = 'Home';
+			$news_link = '../';
 		} else {
 			$news_link = MT_Photo::$__photoPathAbs.$item->gallery;
 		}
@@ -291,12 +291,12 @@ function mt_admin_menu() {
 	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
 
     // Add top-level and submenu menu item
-    add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo-add', null, null, 5);
+    add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo-add', null, 'dashicons-palmtree', 5);
 	add_submenu_page('mt-photo-add', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
 	add_submenu_page('mt-photo-add', 'Photos verwalten', 'Photos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
 	add_submenu_page('mt-photo-add', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
 
-    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, null, 6);
+    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-portfolio', 6);
     add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
     add_submenu_page('mt-news', 'Kategorien', 'Kategorien', 'manage_options', 'mt-category', 'mt_page_categories');
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'manage_options', 'mt-subcategory', 'mt_page_subcategories');
@@ -428,7 +428,7 @@ function mt_page_news() {
 			(new MT_Admin_Field('title', 'Title'))->setRequired(),
 			(new MT_Admin_Field('text', 'Text'))->setRequired(),
 			(new MT_Admin_Field('date', 'Datum', 'date'))->setDisabled(),
-			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))->setReference('gallery')->setRequired()
+			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))->setReference('gallery')
 		));
 		$editView->outputContent();
 	} else {

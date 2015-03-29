@@ -27,7 +27,7 @@ class MT_Gallery extends MT_Common {
 	}
 	
 	public static function getName() {
-		return 'Gallerien';
+		return 'Galerien';
 	}
 
 	public static function insert($data) {

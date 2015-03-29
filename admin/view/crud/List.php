@@ -16,15 +16,12 @@ class MT_View_List extends MT_Admin_View_Common {
 	 */
 	public function __construct($model) {
 		parent::__construct($model);
-		parent::setTitle($this->model->getName().' ' . MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
+		parent::setTitle($this->model->getName().' '.MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 	}
 	
 	protected function outputHeadMessages() {
-        if ( $_GET['action'] === 'delete' ) {
-			$this->_delete( $_GET['id'] );
-        }		
 	}
-	
+
 	protected function _outputTableNavBottom() {
 	}
 
@@ -50,37 +47,5 @@ class MT_View_List extends MT_Admin_View_Common {
 			echo '</tr>';
 		}
 	}
-	
-	/**
-	 * Delete database entry.
-	 * 
-	 * @param int   $id Data id
-	 */
-	private function _delete( $id ) {
-            
-            $check = FALSE;
-            
-            /**
-             * TODO: Workaround
-             */
-			switch ($this->model->name()) {
-				case 'photo':
-					MT_Admin_Photo::__deletePhoto($id);
-					$check = TRUE;
-					break;
-				case 'photographer':
-					if ( !MT_Photographer::__hasPhotos($id) ) {
-						$check = TRUE;
-					}
-					break;
-			}
-            
-            if ($check) {
-                $this->_dbTable->delete( $this->_typ . '_id = ?', $id);
-                MT_Functions::box( 'delete' );
-            } else {
-                MT_Functions::box( 'notDelete' );
-            }
-	}	
 }
 ?>

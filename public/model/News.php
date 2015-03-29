@@ -23,6 +23,13 @@ class MT_News extends MT_Common {
 		return !empty($this->id);
 	}
 	
+	public function deleteOne() {
+		if ($this->isDeletable()) {
+			return parent::delete('id = '.$this->id);
+		}
+		return FALSE;
+	}
+	
 	######## Get ########
 	
 	/**

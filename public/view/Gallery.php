@@ -91,7 +91,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 			?>
 			<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
 			<p>In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!</p>
-			<p>Zurück zur Übersicht: <a href="../<?php echo MT_Functions::getIfNotEmpty( $this->item->subcategoryName, '../'); ?>"><?php echo $this->item->categoryName; ?></a></p>
+			<p>Zurück zur Übersicht: <a href="<?php echo self::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
 			<?php
 		}
 	}

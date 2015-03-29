@@ -18,7 +18,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 	 * 
 	 * @var string
 	 */
-	private $_linkOfThisSite = '?title=add-photo';
+	private $_linkOfThisSite = '?page=mt-photo-add';
         
 	public function __construct($galleryId = NULL) {
 		parent::__construct(new MT_Photo(), 'widefat');
