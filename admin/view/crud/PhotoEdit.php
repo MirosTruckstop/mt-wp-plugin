@@ -2,12 +2,7 @@
 
 class MT_View_PhotoEdit extends MT_Admin_View_Common {
 
-	/**
-	 * Workaround to fix pagination link!
-	 *
-	 * @var string
-	 */
-	private $_additionalLink = 'title=add-photo&id=';
+	private $gallery;
         
 	/**
 	 * Link to this site
@@ -18,29 +13,31 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 	 */
 	private $_linkOfThisSite = '?page=mt-photo-add';
         
-	public function __construct($galleryId = NULL, $page) {
-		parent::__construct(new MT_Gallery($galleryId), $page);
+	public function __construct($galleryId = NULL, $page = NULL) {
+		parent::__construct(new MT_Photo(), $page);
 		parent::setFields(array(
 			new MT_Admin_Field(NULL, 'Bild'),
 			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
 			new MT_Admin_Field(NULL, 'Beschreibung')			
 		));
 		parent::setPerPage(10);
-		parent::setSortIsActive();
+		
+		$this->gallery = new MT_Gallery($galleryId);
 		
 		// Set title
-		if ($this->model->hasId()) {
-			parent::setTitle('Galerie "'.$this->model->get_attribute('name').'"');
+		if ($this->gallery->hasId()) {
+			parent::setTitle('Galerie "'.$this->gallery->get_attribute('name').'"');
 		} else {
 			parent::setTitle('Bilder "Neue Bilder"');
+			parent::setSortIsActive();
 		}
 		
 		// Set query
 		$query = (new MT_QueryBuilder())
 			->from('photo', array('id', 'path', 'date', 'gallery', 'description', 'photographer'))
 			->limitPage($this->page, $this->perPage);
-		if($this->model->hasId()) {
-			$query->whereEqual('gallery', $this->model->getId())
+		if($this->gallery->hasId()) {
+			$query->whereEqual('gallery', $this->gallery->getId())
 				->whereEqual('`show`', '1')
 				->orderBy('date DESC');
 		} else {
@@ -65,7 +62,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 					unset($data[$index]['checked']);
 
 					// Neue Bilder
-					if (!($this->model->hasId())) {
+					if (!($this->gallery->hasId())) {
 						$date = $data[$index]['date'];
 						// If date field is just the ordering number
 						if (strlen($date) <= 2) {
@@ -85,16 +82,17 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 		}
 		
 		if(!empty($data)) {
-			if (parent::updateOrInsertAll($data)) {
+			try {
+				parent::updateOrInsertAll($data);
 				MT_Functions::box( 'save' );
-			} else {
-				MT_Functions::box( 'exception', 'TODO: Fehler beim Einfügen');					
+			} catch (Exception $e) {
+				MT_Functions::box( 'exception', $e->getMessage());
 			}
 		}
 	}
 	
 	protected function outputHeadMessages() {
-		if((!$this->model->hasId()) ) {
+		if((!$this->gallery->hasId()) ) {
 			echo '<p>Insgesamt wurden <b>'.MT_Photo::getCountNewPhotos().' neue Bilder</b> gefunden! (Letzte Suche: ' . date( 'd.m.Y - H:i', get_option( 'datum_letzte_suche') ) . ' | <a href="' . $this->_linkOfThisSite . '&action=search">Neue Suche</a>)</p>';
 		}
 	}
@@ -129,7 +127,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 				<td>
 					<?php
 					echo $fields['id']->getElement($item->id, $index);
-					echo $fields['checked']->getElement(!$this->model->hasId(), $index);
+					echo $fields['checked']->getElement(!$this->gallery->hasId(), $index);
 					echo $fields['path']->getElement($file, $index);
 					?>
 				</td>
@@ -148,6 +146,10 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 		<?php
 			$counter++;
 		}
+	}
+	
+	protected function getPagination() {
+		return MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
 	}
 }
 ?>

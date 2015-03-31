@@ -188,7 +188,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 	 */
 	private function _outputPhoto( $path, $keywords, $alt, $description, $date, $photographerId, $photographerName ) {
 		$schemaDateFormat   = 'Y-m-d';
-		$mtDateFormat       = 'd.m.Y - H:i';
+		$mtDateFormat       = 'd.m.Y - H:i:s';
 
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--                        <span itemprob="publisher">MiRo\'s Truckstop</span>-->

@@ -110,13 +110,13 @@ abstract class MT_Admin_View_Common {
 			unset($item['id']);
 			if ($id === '') {
 				if (!$this->model->insert($item)) {
-					return FALSE;
+					throw new Exception('Einfügen des Objekts fehlgeschlagen:'.$this->model);
 				}
 			}
 			// If item has an ID, update the item
 			else {
 				if (!$this->model->update($item, array('id' => $id))) {
-					return FALSE;
+					throw new Exception('Aktualisieren des Objekts fehlgeschlafen: id='.$id);
 				}				
 			}
 		}
@@ -175,7 +175,7 @@ abstract class MT_Admin_View_Common {
 	
 	private function getPagination() {
 		if (isset($this->page) && !isset($this->pagination)) {
-			$this->pagination = MT_Functions::__outputPagination($this->model->getId(), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->model->getId().'&mt');
+			$this->pagination = static::getPagination();
 		}
 		return $this->pagination;
 	}

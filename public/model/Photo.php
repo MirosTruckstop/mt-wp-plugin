@@ -51,7 +51,7 @@ class MT_Photo extends MT_Common {
 		return parent::get_aggregate('MAX', 'date', $whereCondition."`show` = 1");
 	}
 	
-	public function update(array $data, array $conditionValue = NULL) {
+    public function update(array $data, array $conditionValue = NULL) {
 		if (!empty($data['gallery'])) {
 			$data['path'] = MT_Photo::renameFile($conditionValue['id'], $data['path'], $data['gallery']);
 		}
