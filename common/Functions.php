@@ -268,7 +268,8 @@ abstract class MT_Functions {
 	 * @return	void
 	 */
 	private function _outputPaginationLink( $page, $num, $sort, $text, $additionalLink = 'NULL' ) {
-		echo '<a href="?' . $additionalLink . 'page=' . $page . '&num=' . $num . '&sort=' . $sort . '">' . $text . '</a>';
+		$url = explode(',', $_SERVER['REQUEST_URI']);
+		echo '<a href="'.$url[0].',' . $additionalLink . 'page=' . $page . '&num=' . $num . '&sort=' . $sort . '">' . $text . '</a>';
 	}
 	
 }

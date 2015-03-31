@@ -34,7 +34,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 		
 		// Set title
 		if ($this->gallery->hasId()) {
-			parent::setTitle('Bilder "'.$this->gallery->get_attribute('name').'"');
+			parent::setTitle('Galerie "'.$this->gallery->get_attribute('name').'"');
 		} else {
 			parent::setTitle('Bilder "Neue Bilder"');
 		}

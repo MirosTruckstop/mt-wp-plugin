@@ -27,7 +27,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 	 * @param	int	$id	Gallery id
 	 * [...]
 	 */
-	public function __construct($id) {
+	public function __construct($id, $page, $num, $sort) {
 
 		// Construct query
 		$query = (New MT_QueryBuilder())
@@ -41,10 +41,10 @@ class MT_View_Gallery implements MT_View_ICommon {
 			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
 		}
 		
-		$this->userSettings = MT_Functions::getUserSettings($_GET['sort'], $_GET['num'], $_GET['page']);
+		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
 
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
-		if( empty( $this->userSettings['page'] ) || $this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num']) ) {
+		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
 			$this->userSettings[page] = 1;
 		}
 

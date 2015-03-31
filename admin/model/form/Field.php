@@ -148,7 +148,7 @@ class MT_Admin_Field {
 	 * @param	string|null		$selectedGallery	Selected gallery
 	 * @return	void
 	 */
-	private function outputAllGalleries($selectedGallery = NULL) {	
+	public function outputAllGalleries($selectedGallery = NULL) {	
 		$resultString = '';
 		$tempOptgroup = NULL;
 		

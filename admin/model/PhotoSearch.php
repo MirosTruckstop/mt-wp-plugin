@@ -46,7 +46,7 @@ class MT_Admin_Model_PhotoSearch {
 				if (!isset($this->time)) {
 					$this->time = time();
 				} else {
-					$this->time += 5;
+					$this->time += 10;
 				}
 
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist

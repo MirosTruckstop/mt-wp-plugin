@@ -88,27 +88,31 @@ function mt_dashboard_widget_function() {
 
 // TODO: on init?
 $mtRewriteRuleIndex = '(bilder/galerie|bilder/kategorie|fotograf)/([0-9]{1,2})$';
+$mtRewriteRuleIndex2 = '(bilder/galerie)/([0-9]{1,2}),page=([0-9]{1,2})&num=([0-9]{1,2})&sort=(date|-date)$';
 
 add_action('wp_loaded','mt_flush_rules');
 function mt_flush_rules() {
 	global $mtRewriteRuleIndex;
-	$rules = get_option( 'rewrite_rules' );
-	if ( ! isset($rules[$mtRewriteRuleIndex]) ) {
+	global $mtRewriteRuleIndex2;
+	$rules = get_option('rewrite_rules');
+	if ( !isset($rules[$mtRewriteRuleIndex]) || !isset($rules[$mtRewriteRuleIndex2]) ) {
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules();
 	}
 }
 add_filter('rewrite_rules_array', 'mt_rewrite_rules_array');
 function mt_rewrite_rules_array($rules){
-	global $mtRewriteRuleIndex;	
+	global $mtRewriteRuleIndex;
+	global $mtRewriteRuleIndex2;
 	$newrules = array();
 	$newrules[$mtRewriteRuleIndex] = 'index.php?pagename=mt&mtView=$matches[1]&mtId=$matches[2]';
+	$newrules[$mtRewriteRuleIndex2] = 'index.php?pagename=mt&mtView=$matches[1]&mtId=$matches[2]&mtPage=$matches[3]&mtNum=$matches[4]&mtSort=$matches[5]';
 	return $newrules + $rules;
 }
 
 add_filter('query_vars','mt_query_vars');
 function mt_query_vars($vars){
-	array_push($vars, 'mtView', 'mtId');
+	array_push($vars, 'mtView', 'mtId', 'mtPage', 'mtNum', 'mtSort');
 	return $vars;
 }
 
@@ -291,12 +295,12 @@ function mt_admin_menu() {
 	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
 
     // Add top-level and submenu menu item
-    add_menu_page('MT Dashboard', 'MT Truckstop', 'manage_options', 'mt-photo-add', null, 'dashicons-palmtree', 5);
-	add_submenu_page('mt-photo-add', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
-	add_submenu_page('mt-photo-add', 'Photos verwalten', 'Photos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
-	add_submenu_page('mt-photo-add', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
+    add_menu_page('MT Bilder', 'MT Bilder', 'manage_options', 'mt-photo', null, 'dashicons-palmtree', 5);
+	add_submenu_page('mt-photo', 'Fotos verwalten', 'Fotos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
+	add_submenu_page('mt-photo', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
+	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
 
-    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-portfolio', 6);
+    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-hammer', 6);
     add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
     add_submenu_page('mt-news', 'Kategorien', 'Kategorien', 'manage_options', 'mt-category', 'mt_page_categories');
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'manage_options', 'mt-subcategory', 'mt_page_subcategories');
@@ -369,11 +373,21 @@ function mt_settings_page() {
 }
 
 function mt_page_photos() {
-	require_once(MT_DIR . '/admin/model/PhotoSearch.php');
 	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
 
-	$photoEditView = new MT_View_PhotoEdit($_GET['id']);
-	$photoEditView->outputContent();
+	$tmp = new MT_Admin_Field(NULL, NULL);
+	$id = $_GET['id'];
+	?>
+			<select name="selectGalerie" onchange="location = '?page=mt-photo&id=' + this.options[this.selectedIndex].value;">
+				<option value="">Galerie wählen ...</option>
+				<?php echo $tmp->outputAllGalleries($id); ?>
+			</select>
+	<?php
+	
+	if (!empty($id)) {
+		$photoEditView = new MT_View_PhotoEdit($id);
+		$photoEditView->outputContent();
+	}
 }
 
 function mt_page_photos_add() {
