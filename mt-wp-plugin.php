@@ -376,16 +376,17 @@ function mt_page_photos() {
 	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
 
 	$tmp = new MT_Admin_Field(NULL, NULL);
-	$id = $_GET['id'];
+	$id = $_GET['mtId'];
+	$page = (!empty($_GET['mtpage']) ? $_GET['mtpage'] : 1);
 	?>
-			<select name="selectGalerie" onchange="location = '?page=mt-photo&id=' + this.options[this.selectedIndex].value;">
+			<select name="selectGalerie" onchange="location = '?page=mt-photo&mtId=' + this.options[this.selectedIndex].value;">
 				<option value="">Galerie wählen ...</option>
 				<?php echo $tmp->outputAllGalleries($id); ?>
 			</select>
 	<?php
 	
 	if (!empty($id)) {
-		$photoEditView = new MT_View_PhotoEdit($id);
+		$photoEditView = new MT_View_PhotoEdit($id, $page);
 		$photoEditView->outputContent();
 	}
 }

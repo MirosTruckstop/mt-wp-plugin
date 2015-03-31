@@ -53,8 +53,7 @@ class MT_Admin_DashboardWidget {
 		$numTempFiles = MT_ManagementTemp::get_aggregate('COUNT', 'id', "date <= '" . $unToDate . "'");			
 		
 		if($numTempFiles > 0) {
-			echo '
-			<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('.$numTempFiles.')';
+			echo '<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('.$numTempFiles.')';
 
 			// Delete temp files
 			MT_ManagementTemp::delete('date <= '.$unToDate);

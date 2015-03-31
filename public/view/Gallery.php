@@ -19,6 +19,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 	private $_numPhotos;
 
 	private $userSettings;
+	private $pagination;
 
 
 	/**
@@ -50,6 +51,10 @@ class MT_View_Gallery implements MT_View_ICommon {
 
 		// Anzahl der Bilder in der Galerie
 		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
+		
+		// Pagination
+		$url = explode(',', $_SERVER['REQUEST_URI']);
+		$this->pagination =	MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
 	}
 
 	public function outputTitle() {
@@ -130,9 +135,8 @@ class MT_View_Gallery implements MT_View_ICommon {
 					</table>
 				</form>
 			</div>
+			<?php echo $this->pagination; ?>
 		<?php
-
-		MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']);
 	}
 
 
@@ -221,7 +225,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 					</colgroup>
 					<tr>
 						<td></td>
-						<td><?php MT_Functions::__outputPagination($this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort']); ?></td>
+						<td><?php echo $this->pagination; ?></td>
 						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)">Nach oben</a></span></td>
 					</tr>
 		<?php

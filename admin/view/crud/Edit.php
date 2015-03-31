@@ -17,8 +17,8 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	 * @param	string	$class	CSS table class
 	 * @return	void
 	 */
-	public function __construct( $model, $cssClass = 'widefat') {
-		parent::__construct($model, $cssClass);
+	public function __construct($model) {
+		parent::__construct($model);
 		parent::setTitle($this->model->getName().' '.MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 		parent::setPerPage(1);
 	}

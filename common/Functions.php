@@ -207,52 +207,44 @@ abstract class MT_Functions {
 	 * @return	void 
 	 */
 	public static function __outputPagination( $id, $page, $num, $sort, $additionalLink = NULL ) {
-		$photo = new MT_Photo();
-		// Anzahl der Seiten in der Galerie
-		if( isset( $id ) ) {
-			$anzahl_seiten = $photo->getNumPages($id, $num);
-		} else {
-			$anzahl_seiten = $photo->getNumPages('neue_bilder', $num);
-		}
+		$resultString = '<div id="seiten_leiste"><p>';
+		
+		$anzahl_seiten = MT_Photo::getNumPages($id, $num);
 
-		echo '
-				<div id="seiten_leiste">
-					<p>';
-	
 		// Eine Seite zurueck
-		if( $page != 1) {
-			self::_outputPaginationLink( $page - 1, $num, $sort, '« ' . _("Zurück"), $additionalLink);
+		if($page > 1) {
+			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« ' . _("Zurück"), $additionalLink);
 		} else {
-			echo '<span class="style_grew">« ' . _("Zurück") . '</span>';
+			$resultString .= '<span class="style_grew">« Zurück</span>';
 		}
-		echo '&nbsp;&nbsp;|&nbsp;&nbsp;<b>' . _("Seite") . ':</b>';
+		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>Seite</b>';
 	
-                $points = TRUE;
+        $points = TRUE;
                 
 		// Die einzelnen Seiten
-		for($page_naechste = 1; $page_naechste <= $anzahl_seiten; $page_naechste++) {
+		for($i = 1; $i <= $anzahl_seiten; $i++) {
 			//echo '&nbsp;&nbsp;';
-			if( $page_naechste == $page ) {
-				echo '&nbsp;&nbsp;<b>' . $page_naechste . '</b>';
-			} else if( abs($page_naechste - $page) < 10 || $page_naechste == 1 || $page_naechste == $anzahl_seiten ) {
-                                echo '&nbsp;&nbsp;';
-                                self::_outputPaginationLink( $page_naechste, $num, $sort, $page_naechste, $additionalLink );
-                                $points = TRUE;
+			if($i == $page) {
+				$resultString .= '&nbsp;&nbsp;<b>' . $i . '</b>';
+			} else if( abs($i - $page) < 10 || $i == 1 || $i == $anzahl_seiten ) {
+				$resultString .= '&nbsp;&nbsp;';
+				$resultString .= self::_outputPaginationLink($i, $num, $sort, $i, $additionalLink);
+				$points = TRUE;
 			} else if( $points ) {
-				echo '&nbsp;&nbsp;...';
+				$resultString .= '&nbsp;&nbsp;...';
 				$points = FALSE;
 			}
 		}
 	
 		// Eine Seite vor
-		echo "&nbsp;&nbsp;|&nbsp;&nbsp;";
-		if( $page != $anzahl_seiten ) {
-			self::_outputPaginationLink( $page + 1, $num, $sort, _("Weiter") . ' »', $additionalLink);
+		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
+		if( $page == $anzahl_seiten ) {
+			$resultString .= '<span class="style_grew">Weiter »</span>';
 		} else {
-			echo '<span class="style_grew">' . _("Weiter") . ' »</span>';
+			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, _("Weiter") . ' »', $additionalLink);
 		}
-		echo "</p>
-			</div>";
+		$resultString .= '</p></div>';
+		return $resultString;
 	}
 
 	/**
@@ -267,9 +259,8 @@ abstract class MT_Functions {
          * @param       string  $additionalLink String added before pagination link
 	 * @return	void
 	 */
-	private function _outputPaginationLink( $page, $num, $sort, $text, $additionalLink = 'NULL' ) {
-		$url = explode(',', $_SERVER['REQUEST_URI']);
-		echo '<a href="'.$url[0].',' . $additionalLink . 'page=' . $page . '&num=' . $num . '&sort=' . $sort . '">' . $text . '</a>';
+	private function _outputPaginationLink($page, $num, $sort, $text, $baseUrl) {
+		return '<a href="'.$baseUrl.'page='.$page.'&num='.$num.'&sort='.$sort.'">'.$text.'</a>';
 	}
 	
 }

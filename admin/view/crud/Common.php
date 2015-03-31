@@ -25,19 +25,14 @@ abstract class MT_Admin_View_Common {
 	
 	private $title;
 	private $isSortActive = FALSE;
+	private $pagination;
 
-	public function __construct($model, $cssClass = 'widefat') {
+	public function __construct($model, $page = NULL, $cssClass = 'widefat') {
 		if ($model instanceof MT_Common) {
 			$this->model = $model;
+			$this->page = $page;
 			$this->cssClass = $cssClass;
-			
-			// Pagination
-			$this->page = intval($_GET['page']);
-			if( empty( $this->page ) ) {
-				$this->page = 1;
-			}
-		}
-		else {
+		} else {
 			throw new Exception("\$model is not of type MT_Common", NULL, NULL);
 		}
 	}
@@ -78,6 +73,7 @@ abstract class MT_Admin_View_Common {
 		<div class="wrap">
 			<h2><?php echo $this->title; ?></h2>
 			<?php echo $this->outputHeadMessages(); ?>
+			<?php echo $this->getPagination(); ?>
 			<!--<div class="tablenav top"></div>-->
 			<form name="<?php echo $this->model->name(); ?>" action="" method="post">
 				<table class="<?php echo $this->cssClass; ?>">
@@ -92,6 +88,7 @@ abstract class MT_Admin_View_Common {
 					</tfoot>
 				</table>
 			<div class="tablenav bottom">
+				<?php echo $this->getPagination(); ?>
 				<?php $this->_outputTableNavBottom(); ?>
 			</div>			
 			</form>
@@ -174,6 +171,13 @@ abstract class MT_Admin_View_Common {
 			$query->joinLeft($joinTable, 'wp_mt_'.$this->model->name().'.'.$joinTable.'=wp_mt_'.$joinTable.'.id', $joinSelect);
 		}
 		return $query->getResult('ARRAY_A');
+	}
+	
+	private function getPagination() {
+		if (isset($this->page) && !isset($this->pagination)) {
+			$this->pagination = MT_Functions::__outputPagination($this->model->getId(), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->model->getId().'&mt');
+		}
+		return $this->pagination;
 	}
 
 }
