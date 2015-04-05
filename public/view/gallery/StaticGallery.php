@@ -41,7 +41,6 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		}
 		
 		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
-
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
 //		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
 //			$this->userSettings[page] = 1;
@@ -52,7 +51,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		
 		// Pagination
 		$url = explode(',', $_SERVER['REQUEST_URI']);
-		$this->pagination =	MT_Functions::__outputPagination( $this->item->galleryId, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
+		$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
 	}
 
 	public function outputTitle() {
@@ -64,16 +63,15 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 	}
 
 	public function checkWidescreen() {
-		return !empty( $this->_numPhotos );
+		return ($this->_numPhotos > 0);
 	}
-
 
 	public function outputBreadcrumb() {
 		$categoryLink = self::$_categoryPath . $this->item->categoryId;
 			echo '
                                     <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
                                         <a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->categoryName . '</span></a>&nbsp;>'
-                                     . MT_Functions::getIfNotEmpty( $this->item->subcategoryName, '<a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->subcategoryName . '</span></a>&nbsp;>' ) . '
+                                     . MT_Functions::getIfNotEmpty($this->item->subcategoryName, '&nbsp;<a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->subcategoryName . '</span></a>&nbsp;>' ) . '
                                         <a href="" itemprop="url"><span itemprop="title">' . $this->item->galleryName . '</span></a>
                                     </div>';
 	}
@@ -120,9 +118,6 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 	 * @return void
 	 */
 	private function _outputContentHeader() {
-		// Auswahlleiste
-//		$url = explode(',', $_SERVER['REQUEST_URI']);
-//		$url = url[0].','
 		?>
 			<div id="auswahl_leiste">
 				<form action="" method="get">
