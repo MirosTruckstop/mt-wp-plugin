@@ -60,29 +60,6 @@ abstract class MT_Common {
 		return $query->getResult();
 	}
 
-    /**
-     * Get all from the selected table
-     *
-     * @param  String $orderBy - Order by column name
-     *
-     * @return Table result
-     */
-/*    public function get( $select = '*', $orderBy = NULL, $limit = NULL, $selectBelongsTo = NULL ) {
-		$query = new MT_QueryBuilder();
-		$query->from($this->tableName, $select);
-		if(!empty($this->belongsTo)) {
-			$query->joinLeft('wp_mt_'.$this->belongsTo, $this->tableName.'.'.$this->belongsTo.'=wp_mt_'.$this->belongsTo.'.id', $selectBelongsTo);
-		}
-		if(!empty($this->id)) {
-			$query->where($this->tableName.'.id = ' . $this->id);
-		}
-		$query->orderBy($orderBy);
-		$query->limit($limit);
-		
-		//echo $query;
-        return $query->getResult($this->output_type);
-    }*/
-
 	private static function _get_one_value($select, $whereCondition = NULL) {
 		$query = (new MT_QueryBuilder())
 			->from(static::name())

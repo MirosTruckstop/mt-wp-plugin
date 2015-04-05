@@ -47,18 +47,18 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		parent::setTitle($this->item->galleryName);
 		parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
 		parent::setWidescreen($this->_numPhotos > 0);
-	}
 
-	public function outputBreadcrumb() {
+		// Breadcrumb
 		$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
-			echo '
-                                    <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
-                                        <a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->categoryName . '</span></a>&nbsp;>'
-                                     . MT_Functions::getIfNotEmpty($this->item->subcategoryName, '&nbsp;<a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->subcategoryName . '</span></a>&nbsp;>' ) . '
-                                        <a href="" itemprop="url"><span itemprop="title">' . $this->item->galleryName . '</span></a>
-                                    </div>';
+		$breadcrumb = array(
+			$categoryLink => $this->item->categoryName
+		);
+		if (!empty($this->item->subcategoryName)) {
+			$breadcrumb[$categoryLink . '#'] = $this->item->subcategoryName;
+		}
+		$breadcrumb[''] = $this->item->galleryName;
+		parent::setBreadcrumb($breadcrumb);
 	}
-
 
 	public function outputContent() {
 		$query = (new MT_QueryBuilder())

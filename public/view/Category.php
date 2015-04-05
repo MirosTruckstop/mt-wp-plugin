@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_Category implements MT_View_ICommon {
+class MT_View_Category extends MT_View_Common {
 
 	/**
 	 * Gallery path
@@ -23,14 +23,9 @@ class MT_View_Category implements MT_View_ICommon {
 		if (empty($this->item)) {
 			throw new Exception('Diese Kategorie existiert nicht');
 		}
-	}
-
-	public function outputTitle() {
-		echo $this->item->name;
-	}
-  
-	public function outputDescription() {
-		echo "Übersicht über alle Fotogalerien der Kategorie " . $this->outputTitle();
+		
+		parent::setTitle($this->item->name);
+		parent::setDescription('Übersicht über alle Fotogalerien der Kategorie '.$this->item->name);
 	}
 
 	public function outputContent() {

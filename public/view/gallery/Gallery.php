@@ -1,29 +1,11 @@
 <?php
 
-abstract class MT_View_Gallery implements MT_View_ICommon {
+abstract class MT_View_Gallery extends MT_View_Common {
 
-	private $title;
-	private $description;
 	private $checkWidescreen;
-	
-	public function outputTitle() {
-		echo $this->title;
-	}
-	
-    public function outputDescription() {
-		echo $this->description;
-	}
 	
 	public function checkWidescreen() {
 		return $this->checkWidescreen;
-	}
-
-	public function setTitle($value) {
-		$this->title = $value;
-	}
-	
-    public function setDescription($value) {
-		$this->description = $value;
 	}
 	
 	public function setWidescreen($value) {
@@ -73,22 +55,22 @@ abstract class MT_View_Gallery implements MT_View_ICommon {
 		$descriptionHtml = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $description. ' ');
 		
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
-<!--                        <span itemprob="publisher">MiRo\'s Truckstop</span>-->
-                            <span itemprop="keywords">' . $keywords . '</span>
-			    <p><img alt="' . $alt . '" src="/bilder/' . $path . '" itemprop="contentURL"><br>
+<!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
+				<span itemprop="keywords">'.$keywords.'</span>
+			    <p><img alt="'.$alt.'" src="/bilder/'.$path.'" itemprop="contentURL"><br>
 			    '.$photographerString.'
-                            <b>' . _("Eingestellt am") . ':</b>&nbsp;<meta itemprop="datePublished" content="' . date( $schemaDateFormat, $date ) . '">' . date( $mtDateFormat, $date ) . '</p>
-			    <p><span itemprop="description">' . $descriptionHtml . '</span></p>
-                        </div>';
+				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.date($schemaDateFormat, $date).'">'.date($mtDateFormat, $date).'</p>
+			    <p><span itemprop="description">'.$descriptionHtml.'</span></p>
+			</div>';
 	}
         
-        /**
-         * Removes special chars etc and return a clear keyword string
-         * 
-         * @param   string $keywordsString  String with keywords
-         * @return  string                  Keyword string
-         */
-        private function __getPhotoKeywords( $keywordsString ) {
-			return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
-        }	
+	/**
+	 * Removes special chars etc and return a clear keyword string
+	 * 
+	 * @param   string $keywordsString  String with keywords
+	 * @return  string                  Keyword string
+	 */
+	private function __getPhotoKeywords( $keywordsString ) {
+		return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
+	}	
 }
