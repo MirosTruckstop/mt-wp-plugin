@@ -128,9 +128,9 @@ class MT_Photo extends MT_Common {
 	 * @param	string	$num	Number
 	 * @return	string			Number of pages
 	 */
-	public static function getNumPages($galleryId, $num) {
-		return ceil(self::getCount($galleryId) / $num ); // ceil liefert die nächste ganze Zahl (Aufrunden)
-	}
+//	public static function getNumPages($galleryId, $num) {
+//		return ceil(self::getCount($galleryId) / $num ); // ceil liefert die nächste ganze Zahl (Aufrunden)
+//	}
 	
 	/**
 	 * Gibt die Anzahl der Bilder eines Fotografen zurück

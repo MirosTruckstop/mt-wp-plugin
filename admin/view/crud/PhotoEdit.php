@@ -69,8 +69,8 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 							// Item with the lowest ordering integer (zero) should
 							// have the highest timestamp.
 							// 9: Ordering index from 0 to 0
-							// 5: A little distance between each item
-							$data[$index]['date'] = time() + (9-$date) * 5;
+							// 10: A little distance between each item
+							$data[$index]['date'] = time() + (9-$date) * 10;
 						}
 						// Show picture
 						$data[$index]['show'] = 1;
@@ -116,7 +116,7 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 							->setReference('gallery')
 							->setRequired();
 		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, 'reference'))->setReference('photographer');
-		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date'))->setMaxLength(10);
+		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date'))->setMaxLength(19);
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 
 		$counter = 0;			// Nummeriert die 8 Bilder

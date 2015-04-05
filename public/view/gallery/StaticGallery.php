@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_Gallery implements MT_View_ICommon {
+class MT_View_StaticGallery extends MT_View_Gallery {
 
 	private $item;
 	
@@ -18,8 +18,6 @@ class MT_View_Gallery implements MT_View_ICommon {
 	 */
 	private $_numPhotos;
 
-	private $userSettings;
-	private $pagination;
 
 
 	/**
@@ -45,9 +43,9 @@ class MT_View_Gallery implements MT_View_ICommon {
 		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
 
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
-		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
-			$this->userSettings[page] = 1;
-		}
+//		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
+//			$this->userSettings[page] = 1;
+//		}
 
 		// Anzahl der Bilder in der Galerie
 		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
@@ -62,7 +60,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 	}
 
     public function outputDescription() {
-		echo "Fotogalerie " . $this->item->galleryName . " in der Kategorie " . $this->item->categoryName;
+		echo 'Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName;
 	}
 
 	public function checkWidescreen() {
@@ -82,6 +80,20 @@ class MT_View_Gallery implements MT_View_ICommon {
 
 
 	public function outputContent() {
+		$query = (new MT_QueryBuilder())
+			->from('photo', array('id as photoId', 'path', 'description', 'date'))
+			->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
+			->whereEqual('gallery', $this->item->galleryId)
+			->whereEqual('`show`', '1')
+			->orderBy('date')
+			->limitPage($this->userSettings['page'], $this->userSettings['num']);
+				
+		// Sortierung der Bild nach dem Datum
+		if($this->userSettings['sort'] === 'date') {
+			$query->orderBy('date DESC');
+		}
+
+		
 		// ggf. Galeriebeschreibung
 		if (!empty( $this->item->description)) {
 			echo '<p>' . $this->item->description . '</p>';
@@ -89,7 +101,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 			
 		if ($this->_numPhotos > 0) {
 			$this->_outputContentHeader();
-			$this->_outputContentPhotos();
+			$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')');
 			$this->_outputContentFooter();
 		} else {
 			// Falls sich in der Galerie noch keine Bilder befinden
@@ -109,6 +121,8 @@ class MT_View_Gallery implements MT_View_ICommon {
 	 */
 	private function _outputContentHeader() {
 		// Auswahlleiste
+//		$url = explode(',', $_SERVER['REQUEST_URI']);
+//		$url = url[0].','
 		?>
 			<div id="auswahl_leiste">
 				<form action="" method="get">
@@ -116,8 +130,7 @@ class MT_View_Gallery implements MT_View_ICommon {
 						<tr>
 							<th>&nbsp;<?php echo _("Bilder"); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
 							<td>
-								<!--<input name="id" value="<?php //echo $this->path; ?>" type="hidden">-->
-								<input name="page" value="<?php echo $this->userSettings['page']; ?>" type="hidden">
+								<input name=",page" value="<?php echo $this->userSettings['page']; ?>" type="hidden">
 								<?php echo _("Bilder pro Seite"); ?>:&nbsp;
 								<select name="num" size="1">
 									<option value="5" <?php echo MT_Functions::selected( $this->userSettings['num'], '5' ); ?>>5</option>
@@ -139,76 +152,6 @@ class MT_View_Gallery implements MT_View_ICommon {
 		<?php
 	}
 
-
-	/**
-	 * Output galleries photos
-	 *
-	 * @return void
-	 */
-	private function _outputContentPhotos() {
-		$query = (new MT_QueryBuilder())
-			->from('photo', array('id as photoId', 'path', 'description', 'date'))
-			->joinInner('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
-			->whereEqual('gallery', $this->item->galleryId)
-			->whereEqual('`show`', '1')
-			->orderBy('date')
-			->limitPage($this->userSettings['page'], $this->userSettings['num']);
-				
-		// Sortierung der Bild nach dem Datum
-		if($this->userSettings['sort'] === 'date') {
-			$query->orderBy('date DESC');
-		}
-				
-		foreach ($query->getResult() as $itme) {
-
-            $alt = $this->item->galleryName.' (' . $this->item->categoryName . ')'.MT_Functions::getIfNotEmpty($itme->description, ': '.$itme->description); // photo's alternate text
-			$this->_outputPhoto( $itme->path,
-						$this->__getPhotoKeywords($alt),
-						$alt,
-						$itme->description,
-						$itme->date,
-						$itme->photographerId,
-						$itme->photographerName
-			);
-		}
-	}
-
-
-	/**
-	 * Ouput photo (Form: paragraph)
-	 *
-	 * @param	string $path             	Photo's path
-	 * @param	string $keywords              	Photo's keywords as string
-	 * @param	string $alt              	Photo's alternate text
-	 * @param	string $description      	Photo's description
-	 * @param	string $date             	Photo's date as timestamp
-	 * @param	string $photographerId   	Photographer's id
-	 * @param	string $photographerName	Photographer's name
-	 * @return	void
-	 */
-	private function _outputPhoto( $path, $keywords, $alt, $description, $date, $photographerId, $photographerName ) {
-		$schemaDateFormat   = 'Y-m-d';
-		$mtDateFormat       = 'd.m.Y - H:i:s';
-
-		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
-<!--                        <span itemprob="publisher">MiRo\'s Truckstop</span>-->
-                            <span itemprop="keywords">' . $keywords . '</span>
-			    <p><img alt="' . $alt . '" src="/bilder/' . $path . '" itemprop="contentURL"><br>
-			    <b>' . _("Fotograf") . ':</b>&nbsp;<a href="/fotograf/' . $photographerId . '" rel="author"><span itemprop="author" itemp>' . $photographerName . '</span></a>&nbsp;|&nbsp;
-                            <b>' . _("Eingestellt am") . ':</b>&nbsp;<meta itemprop="datePublished" content="' . date( $schemaDateFormat, $date ) . '">' . date( $mtDateFormat, $date ) . '</p>
-			    <p><span itemprop="description">' . $description . '</span></p>
-                        </div>';
-	}
-        
-        /**
-         * Removes special chars etc and return a clear keyword string
-         * 
-         * @param   string $keywordsString  String with keywords
-         * @return  string                  Keyword string
-         */
-        private function __getPhotoKeywords( $keywordsString ) {
-			return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
-        }
 
 	/**
 	 * Output pagination, link to Hauptparkplatz, etc. (Form: table)

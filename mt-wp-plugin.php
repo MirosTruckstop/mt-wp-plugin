@@ -89,13 +89,15 @@ function mt_dashboard_widget_function() {
 // TODO: on init?
 $mtRewriteRuleIndex = '(bilder/galerie|bilder/kategorie|fotograf)/([0-9]{1,2})$';
 $mtRewriteRuleIndex2 = '(bilder/galerie)/([0-9]{1,2}),page=([0-9]{1,2})&num=([0-9]{1,2})&sort=(date|-date)$';
+$mtRewriteRuleIndex3 = '(bilder/tag)/([^/]+)$';
 
 add_action('wp_loaded','mt_flush_rules');
 function mt_flush_rules() {
 	global $mtRewriteRuleIndex;
 	global $mtRewriteRuleIndex2;
+	global $mtRewriteRuleIndex3;
 	$rules = get_option('rewrite_rules');
-	if ( !isset($rules[$mtRewriteRuleIndex]) || !isset($rules[$mtRewriteRuleIndex2]) ) {
+	if ( !isset($rules[$mtRewriteRuleIndex]) || !isset($rules[$mtRewriteRuleIndex2]) || !isset($rules[$mtRewriteRuleIndex3]) ) {
 		global $wp_rewrite;
 		$wp_rewrite->flush_rules();
 	}
@@ -104,21 +106,35 @@ add_filter('rewrite_rules_array', 'mt_rewrite_rules_array');
 function mt_rewrite_rules_array($rules){
 	global $mtRewriteRuleIndex;
 	global $mtRewriteRuleIndex2;
+	global $mtRewriteRuleIndex3;
 	$newrules = array();
 	$newrules[$mtRewriteRuleIndex] = 'index.php?pagename=mt&mtView=$matches[1]&mtId=$matches[2]';
 	$newrules[$mtRewriteRuleIndex2] = 'index.php?pagename=mt&mtView=$matches[1]&mtId=$matches[2]&mtPage=$matches[3]&mtNum=$matches[4]&mtSort=$matches[5]';
+	$newrules[$mtRewriteRuleIndex3] = 'index.php?pagename=mt&mtView=$matches[1]&mtTag=#$matches[2]';
 	return $newrules + $rules;
 }
 
 add_filter('query_vars','mt_query_vars');
 function mt_query_vars($vars){
-	array_push($vars, 'mtView', 'mtId', 'mtPage', 'mtNum', 'mtSort');
+	array_push($vars, 'mtView', 'mtId', 'mtTag', 'mtPage', 'mtNum', 'mtSort');
 	return $vars;
 }
 
 /*
  * 
  */
+add_shortcode('mt_photo', 'mt_photo');
+function mt_photo($atts) {
+    $a = shortcode_atts( array(
+        'id' => '',
+		'width' => '200'
+    ), $atts);	
+	
+	$photo = new MT_Photo($a['id']);
+	$item = $photo->getOne(array('id', 'path'), 'ARRAY_A');
+	return '<img width="'.$a['width'].'" src="bilder/'.$item['path'].'">';
+}
+
 add_shortcode('total_number_of_photos', 'mt_add_shortcode_numPhotos');
 function mt_add_shortcode_numPhotos() {
 	return (new MT_Photo)->getCount();
@@ -197,6 +213,16 @@ function mt_add_shortcode_statistics() {
 			 </tr>';
 	}
 	$returnString .= '</table>';
+	return $returnString;
+}
+
+add_shortcode('mt_recent_post', 'mt_add_shortcode_recent_post');
+function mt_add_shortcode_recent_post() {
+	$recent_posts = wp_get_recent_posts();
+	$returnString = '';
+	foreach( $recent_posts as $recent ){
+		$returnString .= '<h3>'.$recent["post_title"].'</h3>'.$recent["post_content"].'<div class="postDate">Verfasst am: '.$recent["post_modified"].'</div>';
+	}	
 	return $returnString;
 }
 
@@ -295,12 +321,12 @@ function mt_admin_menu() {
 	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
 
     // Add top-level and submenu menu item
-    add_menu_page('MT Bilder', 'MT Bilder', 'manage_options', 'mt-photo', null, 'dashicons-palmtree', 5);
+    add_menu_page('MT Bilder', 'MT Bilder', 'manage_options', 'mt-photo', null, 'dashicons-palmtree', 3);
 	add_submenu_page('mt-photo', 'Fotos verwalten', 'Fotos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
 	add_submenu_page('mt-photo', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
 	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
 
-    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-hammer', 6);
+    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-hammer', 4);
     add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
     add_submenu_page('mt-news', 'Kategorien', 'Kategorien', 'manage_options', 'mt-category', 'mt_page_categories');
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'manage_options', 'mt-subcategory', 'mt_page_subcategories');

@@ -98,7 +98,8 @@ class MT_Admin_Field {
 				</select>';
 				}
 				else if($this->reference === 'photographer') {
-					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>'
+					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>
+					<option value="0"></option>'						
 				. $this->outputAllPhotographers($value) .'
 				</select>';
 				}

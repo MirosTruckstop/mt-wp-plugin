@@ -203,17 +203,17 @@ abstract class MT_Functions {
 	 * @param	string		$page           Page number
 	 * @param	string		$num            Number of pictures per page
 	 * @param	string		$sort           Sortation
-         * @param       string          $additionalLink String added before pagination link
+	 * @param	string          $baseUrl String added before pagination link
 	 * @return	void 
 	 */
-	public static function __outputPagination( $id, $page, $num, $sort, $additionalLink = NULL ) {
+	public static function __outputPagination($totalNumberOfItem, $page, $num, $sort, $baseUrl = NULL) {
 		$resultString = '<div id="seiten_leiste"><p>';
 		
-		$anzahl_seiten = MT_Photo::getNumPages($id, $num);
+		$anzahl_seiten = ceil($totalNumberOfItem / $num );
 
 		// Eine Seite zurueck
 		if($page > 1) {
-			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« ' . _("Zurück"), $additionalLink);
+			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« ' . _("Zurück"), $baseUrl);
 		} else {
 			$resultString .= '<span class="style_grew">« Zurück</span>';
 		}
@@ -228,7 +228,7 @@ abstract class MT_Functions {
 				$resultString .= '&nbsp;&nbsp;<b>' . $i . '</b>';
 			} else if( abs($i - $page) < 10 || $i == 1 || $i == $anzahl_seiten ) {
 				$resultString .= '&nbsp;&nbsp;';
-				$resultString .= self::_outputPaginationLink($i, $num, $sort, $i, $additionalLink);
+				$resultString .= self::_outputPaginationLink($i, $num, $sort, $i, $baseUrl);
 				$points = TRUE;
 			} else if( $points ) {
 				$resultString .= '&nbsp;&nbsp;...';
@@ -241,7 +241,7 @@ abstract class MT_Functions {
 		if( $page == $anzahl_seiten ) {
 			$resultString .= '<span class="style_grew">Weiter »</span>';
 		} else {
-			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, _("Weiter") . ' »', $additionalLink);
+			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, _("Weiter") . ' »', $baseUrl);
 		}
 		$resultString .= '</p></div>';
 		return $resultString;
