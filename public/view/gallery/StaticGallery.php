@@ -3,13 +3,6 @@
 class MT_View_StaticGallery extends MT_View_Gallery {
 
 	private $item;
-	
-	/**
-	 * Category path
-	 *
-	 * @var string
-	 */
-	public static $_categoryPath = '../kategorie/';
 
 	/**
 	 * Number of photos in gallery
@@ -17,8 +10,6 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 	 * @var int
 	 */
 	private $_numPhotos;
-
-
 
 	/**
 	 * [...]
@@ -30,7 +21,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 
 		// Construct query
 		$query = (New MT_QueryBuilder())
-			->from('gallery', array('id as galleryId', 'name as galleryName', 'description', 'hauptparkplatz'))
+			->from('gallery', array('id as galleryId', 'name as galleryName', 'description'))
 			->join('category', TRUE, array('id AS categoryId', 'name AS categoryName'))
 			->joinLeft('subcategory', TRUE, 'name as subcategoryName')
 			->whereEqual('wp_mt_gallery.id', $id);
@@ -52,22 +43,14 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		// Pagination
 		$url = explode(',', $_SERVER['REQUEST_URI']);
 		$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
-	}
 
-	public function outputTitle() {
-		echo $this->item->galleryName;
-	}
-
-    public function outputDescription() {
-		echo 'Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName;
-	}
-
-	public function checkWidescreen() {
-		return ($this->_numPhotos > 0);
+		parent::setTitle($this->item->galleryName);
+		parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
+		parent::setWidescreen($this->_numPhotos > 0);
 	}
 
 	public function outputBreadcrumb() {
-		$categoryLink = self::$_categoryPath . $this->item->categoryId;
+		$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
 			echo '
                                     <div itemscope itemtype="http://data-vocabulary.org/Breadcrumb">
                                         <a href="' . $categoryLink . '" itemprop="url"><span itemprop="title">' . $this->item->categoryName . '</span></a>&nbsp;>'
@@ -90,7 +73,6 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		if($this->userSettings['sort'] === 'date') {
 			$query->orderBy('date DESC');
 		}
-
 		
 		// ggf. Galeriebeschreibung
 		if (!empty( $this->item->description)) {
@@ -106,7 +88,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 			?>
 			<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
 			<p>In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!</p>
-			<p>Zurück zur Übersicht: <a href="<?php echo self::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
+			<p>Zurück zur Übersicht: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
 			<?php
 		}
 	}
@@ -166,16 +148,6 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 						<td><?php echo $this->pagination; ?></td>
 						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)">Nach oben</a></span></td>
 					</tr>
-		<?php
-		// Verlinkung der Galerie mit dem Hauptparkplatz
-		if( !empty( $this->item->hauptparkplatz ) ) {
-			?>
-					<tr>
-						<td colspan="3"><center><a href="http://rosensturm.de/<?php echo $this->item->hauptparkplatz; ?>.html" target="_blank"><?php $this->item->galleryName; ?> auf dem Hauptparkplatz</a></center></td>
-					</tr>
-			<?php
-		}
-		?>
 				</table>
 				<h2>Nutzung der Bilder</h2>
 <p>Alle Bilder auf dieser Seite unterliegen dem Copyright des jeweiligen Fotografens. Es ist nicht gestattet die Bilder 

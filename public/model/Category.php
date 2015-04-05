@@ -6,6 +6,13 @@
  */
 class MT_Category extends MT_Common {
 	
+	/**
+	 * Category path
+	 *
+	 * @var string
+	 */
+	public static $_categoryPath = '../kategorie/';
+
 	public function __construct($id = NULL) {
 		parent::__construct($id);
 	}

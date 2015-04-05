@@ -2,7 +2,33 @@
 
 abstract class MT_View_Gallery implements MT_View_ICommon {
 
-//	public abstract function __construct($id, $page, $num, $sort);
+	private $title;
+	private $description;
+	private $checkWidescreen;
+	
+	public function outputTitle() {
+		echo $this->title;
+	}
+	
+    public function outputDescription() {
+		echo $this->description;
+	}
+	
+	public function checkWidescreen() {
+		return $this->checkWidescreen;
+	}
+
+	public function setTitle($value) {
+		$this->title = $value;
+	}
+	
+    public function setDescription($value) {
+		$this->description = $value;
+	}
+	
+	public function setWidescreen($value) {
+		$this->checkWidescreen = $value;
+	}
 	
 	/**
 	 * Output galleries photos
@@ -10,8 +36,6 @@ abstract class MT_View_Gallery implements MT_View_ICommon {
 	 * @return void
 	 */
 	protected function _outputContentPhotos($query, $altPreafix) {
-
-				
 		foreach ($query->getResult() as $item) {
             $alt = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
 			$this->_outputPhoto( $item->path,

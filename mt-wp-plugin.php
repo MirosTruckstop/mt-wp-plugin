@@ -332,6 +332,7 @@ function mt_admin_menu() {
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'manage_options', 'mt-subcategory', 'mt_page_subcategories');
     add_submenu_page('mt-news', 'Galerien', 'Galerien', 'manage_options', 'mt-gallery', 'mt_page_galleries');
 	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'manage_options', 'mt-photographer', 'mt_page_photographers');
+	add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'manage_options', 'mt-thumbnail', 'mt_page_thumbnails');
 }
 
 // mt_settings_page() displays the page content for the Test settings submenu
@@ -575,6 +576,12 @@ function mt_page_photographers() {
 		$listView->setOrder('name');
 		$listView->outputContent();
 	}
+}
+
+function mt_page_thumbnails() {
+//	require_once(MT_DIR . '/admin/model/PhotoResize.php');
+//	$photoResize = new MT_Admin_Model_PhotoResize();
+//	$photoResize->resizeAllImages(200, 200, 90);
 }
 
 ?>

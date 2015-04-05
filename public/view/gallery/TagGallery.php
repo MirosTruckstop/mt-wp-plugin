@@ -6,18 +6,10 @@ class MT_View_TagGallery extends MT_View_Gallery {
 	
 	public function __construct($tag) {
 		$this->tag = $tag;
-	}
-	
-	public function outputTitle() {
-		echo 'Bilder mit Tag '.$this->tag;
-	}
-	
-    public function outputDescription() {
-		echo 'Fotogalerie für den Tag: '.$this->tag;
-	}	
-	
-	public function checkWidescreen() {
-		return TRUE;
+		
+		parent::setTitle('Bilder mit Tag '.$this->tag);
+		parent::setDescription('Fotogalerie für den Tag: '.$this->tag);
+		parent::setWidescreen(true);
 	}
 	
 	public function outputContent() {
@@ -26,8 +18,7 @@ class MT_View_TagGallery extends MT_View_Gallery {
 			->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
 			->whereEqual('`show`', '1')
 			->where("`description` LIKE '%".$this->tag."%'")
-			->orderBy('date')
-			->limitPage($this->userSettings['page'], $this->userSettings['num']);
+			->orderBy('date');
 		
 		$this->_outputContentPhotos($query, $this->tag);
 	}
