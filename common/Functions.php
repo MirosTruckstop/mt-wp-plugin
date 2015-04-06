@@ -50,7 +50,7 @@ abstract class MT_Functions {
 		else if( $typ === 'delete' ) {
 			$id = 'green';
 			$text = 'Daten wurden erfolgreich gelöscht!';
-                } 
+		} 
 		else if( $typ === 'notDelete' ) {
 			$id = 'red';
 			$text = 'Daten konnten nicht gelöscht werden!';

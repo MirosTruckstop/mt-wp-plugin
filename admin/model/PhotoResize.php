@@ -2,8 +2,6 @@
 
 class MT_Admin_Model_PhotoResize {
 
-	public static $thumbnailPath = '../thumb/'; 
-	
 /*	public function resizeAllImages($maxWidth, $maxHeight, $quality) {
 		$photo = new MT_Photo();
 		$i = 0;
@@ -28,7 +26,6 @@ class MT_Admin_Model_PhotoResize {
 	 * @return boolean $result    Success: true
 	 */
 	private function resizeImage($file, $name, $maxWidth, $maxHeight, $quality = 75) {
-
 		$fileSize = getimagesize( $file );
 		$width = $fileSize[0];
 		$height = $fileSize[1];

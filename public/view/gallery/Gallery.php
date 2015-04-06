@@ -28,13 +28,7 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	/**
 	 * Ouput photo (Form: paragraph)
 	 *
-	 * @param	string $path             	Photo's path
-	 * @param	string $keywords              	Photo's keywords as string
-	 * @param	string $alt              	Photo's alternate text
-	 * @param	string $description      	Photo's description
-	 * @param	string $date             	Photo's date as timestamp
-	 * @param	string $photographerId   	Photographer's id
-	 * @param	string $photographerName	Photographer's name
+	 * @param	array $item
 	 * @return	void
 	 */
 	private function _outputPhoto(array $item) {
@@ -48,7 +42,6 @@ abstract class MT_View_Gallery extends MT_View_Common {
 		$schemaDateFormat   = 'Y-m-d';
 		$mtDateFormat       = 'd.m.Y - H:i:s';
 
-		
 		$descriptionHtml = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
 		$descriptionHtml = str_replace('tag/#', 'tag/', $descriptionHtml);
 		

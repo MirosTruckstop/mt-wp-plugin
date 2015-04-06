@@ -2,6 +2,8 @@
 
 class MT_Photo extends MT_Common {
 
+	public static $thumbnailPath = '../thumb/'; 	
+	
 	/**
 	 * Photo path
 	 *
@@ -29,6 +31,21 @@ class MT_Photo extends MT_Common {
 		return !empty($this->id);
 	}
 	
+//	public static function delete() {
+//		$path = parent::get_attribute('path');
+//		if (parent::delete('id = '.$this->getId())) {
+//			$photoDeleted = unlink(self::$__photoPath.$path);
+//			$thumbDeleted = unlink(self::$thumbnailPath.$path);
+//			if ($photoDeleted && $thumbDeleted) {
+//				return TRUE;
+//			} else {
+//				throw new Exception('Foto: '.$path.', ');
+//			}
+//		}
+//		return FALSE;
+//	}
+	
+
 	public function deleteOne() {
 		if ($this->isDeletable()) {
 			$file = self::$__photoPath . parent::get_attribute('path');
