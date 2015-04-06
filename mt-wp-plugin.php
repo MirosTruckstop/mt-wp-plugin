@@ -48,13 +48,13 @@ function mt_register_activation() {
 add_action('admin_enqueue_scripts', 'mt_admin_enqueue_scripts' );
 function mt_admin_enqueue_scripts() {
 	// Add css file
-    wp_enqueue_style( 'mt-style', plugins_url('admin/css/admin.css', __FILE__));
+    wp_enqueue_style('mt-style', plugins_url('admin/css/admin.css', __FILE__));
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js');
 	wp_enqueue_script('mt-script', plugins_url('admin/js/admin.js', __FILE__ ));
 }
 
-/**
+/*
  * Add a widget to the dashboard.
  *
  * This function is hooked into the 'wp_dashboard_setup' action below.

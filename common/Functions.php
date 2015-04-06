@@ -60,17 +60,6 @@ abstract class MT_Functions {
 	}
 
 	/**
-	 * Returns link to Hauptparkplatz
-	 *
-	 * @param	string	$link	Link number
-	 * @param	string	$name	Link name
-	 * @return	string			Link
-	 */
-	public static function getLinkToHauptparkplatz($link, $name) {
-		return '<a href="http://www.rosensturm.de/'.$link.'.html" target="_blank">'.$name .'</a>';
-	}
-
-	/**
 	 * Gibt $string zurück, falls $var nicht leer ist.
 	 *
 	 * @param	string		$var		Variable
@@ -213,7 +202,7 @@ abstract class MT_Functions {
 
 		// Eine Seite zurueck
 		if($page > 1) {
-			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« ' . _("Zurück"), $baseUrl);
+			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« Zurück', $baseUrl);
 		} else {
 			$resultString .= '<span class="style_grew">« Zurück</span>';
 		}

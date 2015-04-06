@@ -14,10 +14,11 @@ class MT_View_TagGallery extends MT_View_Gallery {
 	
 	public function outputContent() {
 		$query = (new MT_QueryBuilder())
-			->from('photo', array('id as photoId', 'path', 'description', 'date'))
-			->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
+			->from('photo', array('id AS photoId', 'path', 'description', 'date'))
+			->join('gallery', TRUE, array('id AS galleryId', 'name AS galleryName'))
+			->joinLeft('photographer', TRUE, array('id AS photographerId', 'name AS photographerName'))
 			->whereEqual('`show`', '1')
-			->where("`description` LIKE '%".$this->tag."%'")
+			->where("wp_mt_photo.description LIKE '%".$this->tag."%'")
 			->orderBy('date');
 		
 		$this->_outputContentPhotos($query, $this->tag);

@@ -18,19 +18,12 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	 * @return void
 	 */
 	protected function _outputContentPhotos($query, $altPreafix) {
-		foreach ($query->getResult() as $item) {
-            $alt = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
-			$this->_outputPhoto( $item->path,
-				$this->__getPhotoKeywords($alt),
-				$alt,
-				$item->description,
-				$item->date,
-				$item->photographerId,
-				$item->photographerName
-			);
+		foreach ($query->getResult('ARRAY_A') as $item) {
+			$item['alt'] = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
+			$item['keywords'] = $this->__getPhotoKeywords($item['alt']);
+			$this->_outputPhoto($item);
 		}
 	}
-
 
 	/**
 	 * Ouput photo (Form: paragraph)
@@ -44,22 +37,28 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	 * @param	string $photographerName	Photographer's name
 	 * @return	void
 	 */
-	private function _outputPhoto( $path, $keywords, $alt, $description, $date, $photographerId, $photographerName ) {
-		if (!empty($photographerName)) {
-			$photographerString = '<b>Fotograf:</b>&nbsp;<a href="/fotograf/' . $photographerId . '" rel="author"><span itemprop="author" itemp>' . $photographerName . '</span></a>&nbsp;|&nbsp';
+	private function _outputPhoto(array $item) {
+		if (!empty($item['photographerName'])) {
+			$photographerString = '<b>Fotograf:</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>&nbsp;|&nbsp';
 		}
+		if (!empty($item['galleryName'])) {
+			$galleryString = '<b>Galerie:</b>&nbsp;<a href="/bilder/galerie/'.$item['galleryId'].'">'.$item['galleryName'].'</a>&nbsp;|&nbsp;';
+		}
+		
 		$schemaDateFormat   = 'Y-m-d';
 		$mtDateFormat       = 'd.m.Y - H:i:s';
 
 		
-		$descriptionHtml = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $description. ' ');
+		$descriptionHtml = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
+		$descriptionHtml = str_replace('tag/#', 'tag/', $descriptionHtml);
 		
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
-				<span itemprop="keywords">'.$keywords.'</span>
-			    <p><img alt="'.$alt.'" src="/bilder/'.$path.'" itemprop="contentURL"><br>
+				<span itemprop="keywords">'.$item['keywords'].'</span>
+			    <p><img alt="'.$item['alt'].'" src="/bilder/'.$item['path'].'" itemprop="contentURL"><br>
+				'.$galleryString.'
 			    '.$photographerString.'
-				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.date($schemaDateFormat, $date).'">'.date($mtDateFormat, $date).'</p>
+				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.date($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']).'</p>
 			    <p><span itemprop="description">'.$descriptionHtml.'</span></p>
 			</div>';
 	}
