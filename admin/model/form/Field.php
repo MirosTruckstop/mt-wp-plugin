@@ -62,7 +62,7 @@ class MT_Admin_Field {
 	
 	public function getString($value) {
 		if ($this->type === 'date') {
-			return gmdate("m.d.Y, H:i", $value);
+			return date('m.d.Y, H:i', $value);
 		}
 		else {
 			return ''.$value;
@@ -83,7 +83,7 @@ class MT_Admin_Field {
 			case 'string':
 				return $this->getInputField('text', $arrayElement, $value, 50);
 			case 'date':
-				return $this->getInputField('text', $arrayElement, gmdate("d.m.Y H:i:s", $value));
+				return $this->getInputField('text', $arrayElement, date('d.m.Y H:i:s', $value));
 			case 'hidden':
 				return $this->getInputField('hidden', $arrayElement, $value);
 			case 'bool':

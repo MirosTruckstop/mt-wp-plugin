@@ -55,7 +55,7 @@ abstract class MT_View_Gallery extends MT_View_Common {
 			    <p><img alt="'.$item['alt'].'" src="/bilder/'.$item['path'].'" itemprop="contentURL"><br>
 				'.$galleryString.'
 			    '.$photographerString.'
-				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.date($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']).'</p>
+				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']).'</p>
 			    <p><span itemprop="description">'.$descriptionHtml.'</span></p>
 			</div>';
 	}

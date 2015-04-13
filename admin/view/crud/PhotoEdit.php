@@ -134,7 +134,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 				</td>
 				<td><a href="?title=add&typ=photo&id=<?php echo $index; ?>"><img src="<?php echo $file; ?>" width="200px"></a></td>
 				<td>
-					<?php echo (empty($item->gallery) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
+					<?php //echo (empty($item->gallery) ? '<p><b>Achtung: Es wurde automatisch keine Galerie gefunden!<br>Bitte wählen sie eine aus:</b></p>' : ''); ?>
 					<?php echo $fields['gallery']->getElement($item->gallery, $index); ?>
 					<br /><br />
 					<?php echo $fields['photographer']->getElement($item->photographer, $index); ?>

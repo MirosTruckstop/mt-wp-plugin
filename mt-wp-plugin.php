@@ -6,6 +6,11 @@ Author: Xennis
 Version: 0.1
  */
 
+/*
+ * Set timezone
+ */
+date_default_timezone_set('Europe/Berlin');
+
 /**
  * Plugin directory 
  */
