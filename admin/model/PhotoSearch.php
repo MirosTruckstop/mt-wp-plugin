@@ -18,7 +18,7 @@ class MT_Admin_Model_PhotoSearch {
 	 *
 	 * @var array
 	 */
-	public static $__photoExtensions = array( "jpg", "jpeg", "png" );
+	public static $__photoExtensions = array('jpg', 'jpeg');
 	
 	/**
 	 * Search new photos on webspace
