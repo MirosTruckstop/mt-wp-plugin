@@ -36,27 +36,32 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	 * @return	void
 	 */
 	private function _outputPhoto(array $item) {
-		if (!empty($item['photographerName'])) {
-			$photographerString = '<b>Fotograf:</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>&nbsp;|&nbsp';
-		}
 		if (!empty($item['galleryName'])) {
 			$galleryString = '<b>Galerie:</b>&nbsp;<a href="/bilder/galerie/'.$item['galleryId'].'">'.$item['galleryName'].'</a>&nbsp;|&nbsp;';
 		}
-		
-		$schemaDateFormat   = 'Y-m-d';
-		$mtDateFormat       = 'd.m.Y - H:i:s';
-
-		$descriptionHtml = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
-		$descriptionHtml = str_replace('tag/#', 'tag/', $descriptionHtml);
+		if (!empty($item['photographerName'])) {
+			$photographerString = '<b>Fotograf:</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>';
+		}
+		// All images from the old website have a timestamp lower then 10000
+		// since they don't really have one
+		if ($item['date'] >= 10000) {
+			$schemaDateFormat = 'Y-m-d';
+			$mtDateFormat = 'd.m.Y - H:i:s';
+			$dateString = '&nbsp;|&nbsp<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
+		}
+		if (!empty($item['description'])) {
+			$descriptionString = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
+			$descriptionString = str_replace('tag/#', 'tag/', $descriptionString);
+		}
 		
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
 				<span itemprop="keywords">'.$item['keywords'].'</span>
 			    <p><img alt="'.$item['alt'].'" src="/bilder/'.$item['path'].'" itemprop="contentURL"><br>
-				'.$galleryString.'
-			    '.$photographerString.'
-				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']).'</p>
-			    <p><span itemprop="description">'.$descriptionHtml.'</span></p>
+				'.$galleryString
+			    .$photographerString
+				.$dateString.'</p>
+			    <p><span itemprop="description">'.$descriptionString.'</span></p>
 			</div>';
 	}
 	

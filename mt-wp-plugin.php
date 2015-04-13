@@ -584,6 +584,20 @@ function mt_page_photographers() {
 }
 
 function mt_page_thumbnails() {
+//	$query = (new MT_QueryBuilder())
+//			->from('photo')
+//			->orderBy('date');
+//	$result = $query->getResult();
+//	$date = 1000;
+//	$photo = new MT_Photo();
+//	foreach ($result as $index => $item) {
+//		echo $index.$photo->date.'<br>';
+//		$photo->update(array(
+//			'date' => $date + $index * 10
+//		), array(
+//			'id' => $item->id
+//		));
+//	}
 //	require_once(MT_DIR . '/admin/model/PhotoResize.php');
 //	$photoResize = new MT_Admin_Model_PhotoResize();
 //	$photoResize->resizeAllImages(250, 150, 90);
