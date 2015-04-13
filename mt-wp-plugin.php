@@ -413,7 +413,7 @@ function mt_page_photos() {
 	<?php
 	
 	if (!empty($id)) {
-		$photoEditView = new MT_View_PhotoEdit($id, $page);
+		$photoEditView = new MT_Admin_View_PhotoEdit($id, $page);
 		$photoEditView->outputContent();
 	}
 }
@@ -428,7 +428,7 @@ function mt_page_photos_add() {
 		// Datum der letzten Suche speichern
 		update_option('datum_letzte_suche', time());
 	}
-	$photoEditView = new MT_View_PhotoEdit();
+	$photoEditView = new MT_Admin_View_PhotoEdit();
 	$photoEditView->outputContent();
 	
 }

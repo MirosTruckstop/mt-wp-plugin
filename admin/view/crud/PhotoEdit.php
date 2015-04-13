@@ -1,6 +1,6 @@
 <?php
 
-class MT_View_PhotoEdit extends MT_Admin_View_Common {
+class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 	public static $secondsBetweenPhotos = 10;
 	
