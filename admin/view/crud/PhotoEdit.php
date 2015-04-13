@@ -59,11 +59,11 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	private function _updatePhotos($data) {
 		if(!empty($data)) {
 			foreach ($data as $index => $item) {
-				// Nur wenn Checkbox aktiviert ist, wird Foto aktualisert
+				// Update photo only, if checkbox is activated
 				if (array_key_exists('checked', $item)) {
 					unset($data[$index]['checked']);
 
-					// Neue Bilder
+					// New photos
 					if (!($this->gallery->hasId())) {
 						$date = $data[$index]['date'];
 						// If date field is just the ordering number
@@ -71,7 +71,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 							// Item with the lowest ordering integer (zero) should
 							// have the highest timestamp.
 							// 9: Ordering index from 0 to 9
-							$data[$index]['date'] = time() + (9-$date) * self::$secondsBetweenPhotos;
+							$data[$index]['date'] = time() + ($this->perPage - 1 - $date) * self::$secondsBetweenPhotos;
 						}
 						// Show picture
 						$data[$index]['show'] = 1;
