@@ -2,6 +2,8 @@
 
 class MT_View_PhotoEdit extends MT_Admin_View_Common {
 
+	public static $secondsBetweenPhotos = 10;
+	
 	private $gallery;
         
 	/**
@@ -68,9 +70,8 @@ class MT_View_PhotoEdit extends MT_Admin_View_Common {
 						if (strlen($date) <= 2) {
 							// Item with the lowest ordering integer (zero) should
 							// have the highest timestamp.
-							// 9: Ordering index from 0 to 0
-							// 10: A little distance between each item
-							$data[$index]['date'] = time() + (9-$date) * 10;
+							// 9: Ordering index from 0 to 9
+							$data[$index]['date'] = time() + (9-$date) * self::$secondsBetweenPhotos;
 						}
 						// Show picture
 						$data[$index]['show'] = 1;

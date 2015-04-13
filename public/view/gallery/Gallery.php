@@ -17,11 +17,15 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	 *
 	 * @return void
 	 */
-	protected function _outputContentPhotos($query, $altPreafix) {
+	protected function _outputContentPhotos($query, $altPreafix, $isThumbView = FALSE) {
 		foreach ($query->getResult('ARRAY_A') as $item) {
 			$item['alt'] = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
 			$item['keywords'] = $this->__getPhotoKeywords($item['alt']);
-			$this->_outputPhoto($item);
+			if ($isThumbView) {
+				$this->_outputThumb($item);
+			} else {
+				$this->_outputPhoto($item);
+			}
 		}
 	}
 
@@ -54,6 +58,10 @@ abstract class MT_View_Gallery extends MT_View_Common {
 				<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.date($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']).'</p>
 			    <p><span itemprop="description">'.$descriptionHtml.'</span></p>
 			</div>';
+	}
+	
+	private function _outputThumb(array $item) {
+		echo '<img alt="'.$item['alt'].'" src="/thumb/'.$item['path'].'">';
 	}
         
 	/**

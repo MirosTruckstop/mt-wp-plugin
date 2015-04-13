@@ -67,9 +67,6 @@ class MT_View_Category extends MT_View_Common {
   				echo '<ul>';
   			}
 
-			if (!empty($row['subcategoryName'])) {
-				$row['galleryName'] = str_replace($row['subcategoryName'].' ', '', $row['galleryName']);
-			}
 			// Ausgabe der Galerien
 			$this->_outputListItem(self::$_galleryPath.$row['galleryId'], $row['galleryName'], MT_Photo::getCount($row['galleryId']), $tmpGallery->checkGalleryIsNew());
 

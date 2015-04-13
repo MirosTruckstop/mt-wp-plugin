@@ -581,7 +581,7 @@ function mt_page_photographers() {
 function mt_page_thumbnails() {
 //	require_once(MT_DIR . '/admin/model/PhotoResize.php');
 //	$photoResize = new MT_Admin_Model_PhotoResize();
-//	$photoResize->resizeAllImages(200, 200, 90);
+//	$photoResize->resizeAllImages(250, 150, 90);
 }
 
 ?>
