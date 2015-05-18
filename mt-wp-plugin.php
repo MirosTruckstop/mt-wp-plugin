@@ -305,7 +305,7 @@ function mt_add_shortcode_photographers() {
 	$photo = new MT_Photo();
 	
 	$items = MT_Photographer::getAll(array('id', 'name'), 'name');
-	foreach ($items as &$item) {
+	foreach ($items as $item) {
 		$returnString .= '<li><a href="'.MT_Photographer::$photographersPath.$item->id.'">'.$item->name.'</a>&nbsp;<span class="style_grew">('.$photo->getNumPhotos($item->id).')</span></li>';				
 	}
 	$returnString .= '</ul>';
