@@ -326,18 +326,18 @@ function mt_admin_menu() {
 	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
 
     // Add top-level and submenu menu item
-    add_menu_page('MT Bilder', 'MT Bilder', 'manage_options', 'mt-photo', null, 'dashicons-palmtree', 3);
-	add_submenu_page('mt-photo', 'Fotos verwalten', 'Fotos verwalten', 'manage_options', 'mt-photo', 'mt_page_photos');
-	add_submenu_page('mt-photo', 'Fotos hinzufügen', 'Fotos hinzufügen', 'manage_options', 'mt-photo-add', 'mt_page_photos_add');
-	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'manage_options', 'mt-news-generate', 'mt_page_news_generate');
+    add_menu_page('MT Bilder', 'MT Bilder', 'edit_others_pages', 'mt-photo', null, 'dashicons-palmtree', 3);
+	add_submenu_page('mt-photo', 'Fotos verwalten', 'Fotos verwalten', 'edit_others_pages', 'mt-photo', 'mt_page_photos');
+	add_submenu_page('mt-photo', 'Fotos hinzufügen', 'Fotos hinzufügen', 'edit_others_pages', 'mt-photo-add', 'mt_page_photos_add');
+	add_submenu_page('mt-photo', 'News generieren', 'News generieren', 'edit_others_pages', 'mt-news-generate', 'mt_page_news_generate');
 
-    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'manage_options', 'mt-news', null, 'dashicons-hammer', 4);
-    add_submenu_page('mt-news', 'News', 'News', 'manage_options', 'mt-news', 'mt_page_news');
-    add_submenu_page('mt-news', 'Kategorien', 'Kategorien', 'manage_options', 'mt-category', 'mt_page_categories');
-    add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'manage_options', 'mt-subcategory', 'mt_page_subcategories');
-    add_submenu_page('mt-news', 'Galerien', 'Galerien', 'manage_options', 'mt-gallery', 'mt_page_galleries');
-	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'manage_options', 'mt-photographer', 'mt_page_photographers');
-	add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'manage_options', 'mt-thumbnail', 'mt_page_thumbnails');
+    add_menu_page('MT Verwaltung', 'MT Verwaltung', 'edit_others_pages', 'mt-news', null, 'dashicons-hammer', 4);
+    add_submenu_page('mt-news', 'News', 'News', 'edit_others_pages', 'mt-news', 'mt_page_news');
+    add_submenu_page('mt-news', 'Kategorien', 'Kategorien', 'edit_others_pages', 'mt-category', 'mt_page_categories');
+    add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'edit_others_pages', 'mt-subcategory', 'mt_page_subcategories');
+    add_submenu_page('mt-news', 'Galerien', 'Galerien', 'edit_others_pages', 'mt-gallery', 'mt_page_galleries');
+	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'edit_others_pages', 'mt-photographer', 'mt_page_photographers');
+	//add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'edit_others_pages', 'mt-thumbnail', 'mt_page_thumbnails');
 }
 
 function mt_page_photos() {
