@@ -34,7 +34,7 @@ class MT_Admin_Model_PhotoSearch {
 		$fp = opendir( $dir );
 		while($basename = readdir($fp)) {
 			// Folder	
-			if( is_dir($dir.'/'.$basename) && $basename != "." && $basename != "..") {
+			if( is_dir($dir.'/'.$basename) && $basename != '.' && $basename != '..') {
 				//echo '<b>Ordner: '.$dir.'/'.$file.'</b><br>';
 				self::search($dir.'/'.$basename);
 			}

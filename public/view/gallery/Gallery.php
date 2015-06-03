@@ -37,17 +37,17 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	 */
 	private function _outputPhoto(array $item) {
 		if (!empty($item['galleryName'])) {
-			$galleryString = '<b>Galerie:</b>&nbsp;<a href="/bilder/galerie/'.$item['galleryId'].'">'.$item['galleryName'].'</a>&nbsp;|&nbsp;';
+			$galleryString = '<b>'.__('Galerie', 'mt-wp-plugin').':</b>&nbsp;<a href="/bilder/galerie/'.$item['galleryId'].'">'.$item['galleryName'].'</a>&nbsp;|&nbsp;';
 		}
 		if (!empty($item['photographerName'])) {
-			$photographerString = '<b>Fotograf:</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>';
+			$photographerString = '<b>'.__('Fotograf', 'mt-wp-plugin').':</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>';
 		}
 		// All images from the old website have a timestamp lower then 10000
 		// since they don't really have one
 		if ($item['date'] >= 10000) {
 			$schemaDateFormat = 'Y-m-d';
 			$mtDateFormat = 'd.m.Y - H:i:s';
-			$dateString = '&nbsp;|&nbsp<b>Eingestellt am:</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
+			$dateString = '&nbsp;|&nbsp<b>'.__('Eingestellt am', 'mt-wp-plugin').':</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
 		}
 		if (!empty($item['description'])) {
 			$descriptionString = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');

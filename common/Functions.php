@@ -143,7 +143,6 @@ abstract class MT_Functions {
 	 */
 	public static function button( $link, $text, $typ = 'button' ) {
 		echo '<a class="button" href="' . $link . '">' . $text . '</a>';
-//		echo '<a class="button" href="' . $link . '"><button type="' . $typ . '">' . $text . '</button></a>';
 	}
 	
 	public static function addButton($link) {
@@ -185,8 +184,8 @@ abstract class MT_Functions {
 
 	/**
 	 * Output pagination
-         * 
-         * Note: $additionalLink is a workaround to fix links in admin area.
+	 * 
+	 * Note: $additionalLink is a workaround to fix links in admin area.
 	 *
 	 * @param	string|null	$id		Galleries ID
 	 * @param	string		$page           Page number
@@ -202,11 +201,11 @@ abstract class MT_Functions {
 
 		// Eine Seite zurueck
 		if($page > 1) {
-			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« Zurück', $baseUrl);
+			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« '.__('Zurück', 'mt-wp-plugin'), $baseUrl);
 		} else {
-			$resultString .= '<span class="style_grew">« Zurück</span>';
+			$resultString .= '<span class="style_grew">« '.__('Zurück', 'mt-wp-plugin').'</span>';
 		}
-		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>Seite</b>';
+		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>'.__('Seite', 'mt-wp-plugin').'</b>';
 	
         $points = TRUE;
                 
@@ -228,9 +227,9 @@ abstract class MT_Functions {
 		// Eine Seite vor
 		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
 		if( $page == $anzahl_seiten ) {
-			$resultString .= '<span class="style_grew">Weiter »</span>';
+			$resultString .= '<span class="style_grew">'.__('Weiter', 'mt-wp-plugin').' »</span>';
 		} else {
-			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, _("Weiter") . ' »', $baseUrl);
+			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, __('Weiter', 'mt-wp-plugin') . ' »', $baseUrl);
 		}
 		$resultString .= '</p></div>';
 		return $resultString;

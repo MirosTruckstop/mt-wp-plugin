@@ -7,8 +7,8 @@ class MT_View_TagGallery extends MT_View_Gallery {
 	public function __construct($tag) {
 		$this->tag = $tag;
 		
-		parent::setTitle('Bilder mit Tag '.$this->tag);
-		parent::setDescription('Fotogalerie für den Tag: '.$this->tag);
+		parent::setTitle(__('Bilder mit Tag', 'mt-wp-plugin').' '.$this->tag);
+		parent::setDescription(__('Fotogalerie für den Tag', 'mt-wp-plugin').': '.$this->tag);
 		parent::setWidescreen(true);
 	}
 	

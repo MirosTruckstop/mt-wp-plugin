@@ -21,11 +21,11 @@ class MT_View_Category extends MT_View_Common {
 		$this->item = (new MT_Category($id))->getOne(array('id', 'name', 'description'));
 		
 		if (empty($this->item)) {
-			throw new Exception('Diese Kategorie existiert nicht');
+			throw new Exception(__('Diese Kategorie existiert nicht', 'mt-wp-plugin'));
 		}
 		
 		parent::setTitle($this->item->name);
-		parent::setDescription('Übersicht über alle Fotogalerien der Kategorie '.$this->item->name);
+		parent::setDescription(__('Übersicht über alle Fotogalerien der Kategorie', 'mt-wp-plugin').' '.$this->item->name);
 	}
 
 	public function outputContent() {
@@ -93,7 +93,7 @@ class MT_View_Category extends MT_View_Common {
 	 */
 	private function _outputListItem($link, $name, $numPhotos, $isNew) {
   		if($isNew) {
-			$newPhotos = '<span class="new">Neue Bilder</span>';
+			$newPhotos = '<span class="new">'.__('Neue Bilder', 'mt-wp-plugin').'</span>';
 		}
 		echo '<li><a href="' . $link . '">' . $name . '</a>&nbsp;<span class="style_grew">(' . $numPhotos . ')</span>'. $newPhotos . '</li>';
 	}

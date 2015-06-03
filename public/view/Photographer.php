@@ -21,14 +21,14 @@ class MT_View_Photographer extends MT_View_Common {
 		$this->item = (new MT_Photographer($id))->getOne();
 		
 		if (empty($this->item)) {
-			throw new Exception('Die ausgewählte Fotograf existiert nicht.');
+			throw new Exception(__('Die ausgewählte Fotograf existiert nicht.', 'mt-wp-plugin'));
 		}
 
 		$this->_numPhotos = MT_Photo::getNumPhotos($this->item->id);
 		parent::setTitle($this->item->name);
-		parent::setDescription('Übersicht über den Fotografen '.$this->item->name);
+		parent::setDescription(__('Übersicht über den Fotografen', 'mt-wp-plugin').' '.$this->item->name);
 		parent::setBreadcrumb(array(
-			'../fotografen' => 'Fotografen',
+			'../fotografen' => __('Fotografen', 'mt-wp-plugin'),
 			'' => $this->item->name
 		));
 	}
@@ -53,7 +53,7 @@ class MT_View_Photographer extends MT_View_Common {
 			  <td><?php echo $this->item->name; ?></td>
 			 </tr>
 			 <tr>
-			  <th>Truckstop-Fotograf seit:</th>
+			  <th><?php _e('Truckstop-Fotograf seit', 'mt'); ?>:</th>
 			  <td><?php echo strftime(self::$_dateFormat, $this->item->date ); ?></td>
 			 </tr>
 		 	<?php if( !empty( $this->item->camera ) ) { ?>
@@ -63,7 +63,7 @@ class MT_View_Photographer extends MT_View_Common {
 			 </tr>
 			 <?php } ?>
 			 <tr>
-			  <th>Anzahl der Fotos:</th>
+			  <th><?php _e('Anzahl der Fotos', 'mt'); ?>:</th>
 			  <td><?php echo $this->_numPhotos; ?></td>
 			 </tr>
 			</table>
@@ -77,11 +77,11 @@ class MT_View_Photographer extends MT_View_Common {
 	 */
 	private function _outputContentPhotographerPhotos() {
 		?>
-			<h2>Bilder</h2>
+			<h2><?php _e('Bilder', 'mt'); ?></h2>
 			<table class="table_hoch_2">
 			 <tr>
-			  <th>Galerie</th>
-			  <th>Anzahl der Fotos</th>
+			  <th><?php _e('Galerie', 'mt'); ?></th>
+			  <th><?php _e('Anzahl der Fotos', 'mt'); ?></th>
 			 </tr>
 		<?php
 		$tempCategoryID = 0;		// Save last category ID
@@ -99,7 +99,7 @@ class MT_View_Photographer extends MT_View_Common {
 			->orderBy(array('categoryName', 'subcategoryName', 'galleryName'));
 		foreach ($query->getResult() as $row) {	
 					
-			// Bereich
+			// Category
 			if( $row->categoryId != $tempCategoryID ) {
 				$tempCategoryID = $row->categoryId;
 			?>
@@ -110,7 +110,7 @@ class MT_View_Photographer extends MT_View_Common {
 			<?php
 			}
 
-			// Kategorie
+			// Subcategory
 			if( $row->subcategoryId != $tempSubcategoryID ) {
 				$tempSubcategoryID = $row->subcategoryId;
 				?>
@@ -121,7 +121,7 @@ class MT_View_Photographer extends MT_View_Common {
  				<?php
 			}
 						
-			// Galerie
+			// Gallery
 			?>
 			 <tr>
 				 <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="<?php echo MT_Photo::$__photoPathAbs; ?><?php echo $row->galleryId; ?>"><?php echo $row->galleryName; ?></a></td>

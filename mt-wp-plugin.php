@@ -4,6 +4,7 @@ Plugin Name: MT Plugin
 Description: Wordpress plugin for MiRo's Truckstop
 Author: Xennis
 Version: 0.1
+Text Domain: mt-wp-plugin
  */
 
 /*
@@ -45,6 +46,11 @@ function mt_register_activation() {
 	MT_Config_Db::__setup_database_tables();
 	
 	add_option('datum_letzte_suche', 0, NULL, FALSE);
+}
+
+add_action('plugins_loaded', 'mt_load_plugin_textdomain');
+function mt_load_plugin_textdomain() {
+	load_plugin_textdomain('mt-wp-plugin', false, MT_DIR.'/languages/');
 }
 
 /*
@@ -173,8 +179,8 @@ function mt_add_shortcode_statistics() {
 	$returnString = '
 			<table class="horizontalLeft">
 			 <tr>
-			  <th>Galerie</th>
-			  <th>Anzahl der Bilder</th>
+			  <th>'.__('Galerie', 'mt-wp-plugin').'</th>
+			  <th>'.__('Anzahl der Bilder', 'mt-wp-plugin').'</th>
 			 </tr>	
 	';
 	$tempCategoryId = 0;
@@ -319,12 +325,6 @@ function mt_add_shortcode_photographers() {
 add_action('admin_menu', 'mt_admin_menu');
 function mt_admin_menu() {
 
-    // Add a new submenu under Settings:
-    //add_options_page(__('Test Settings','menu-test'), __('Test Settings','menu-test'), 'manage_options', 'testsettings', 'mt_settings_page');
-
-    // Add a new submenu under Tools:
-	//add_management_page( __('Test Tools','menu-test'), __('Test Tools','menu-test'), 'manage_options', 'testtools', 'mt_tools_page');
-
     // Add top-level and submenu menu item
     add_menu_page('MT Bilder', 'MT Bilder', 'edit_others_pages', 'mt-photo', null, 'dashicons-palmtree', 3);
 	add_submenu_page('mt-photo', 'Fotos verwalten', 'Fotos verwalten', 'edit_others_pages', 'mt-photo', 'mt_page_photos');
@@ -348,7 +348,7 @@ function mt_page_photos() {
 	$page = (!empty($_GET['mtpage']) ? $_GET['mtpage'] : 1);
 	?>
 			<select name="selectGalerie" onchange="location = '?page=mt-photo&mtId=' + this.options[this.selectedIndex].value;">
-				<option value="">Galerie wählen ...</option>
+				<option value=""><?php _e('Galerie wählen', 'mt-wp-plugin'); ?> ...</option>
 				<?php echo $tmp->outputAllGalleries($id); ?>
 			</select>
 	<?php
@@ -385,7 +385,7 @@ function mt_page_news_generate() {
 		?>
 		<div class="wrap">
 			<h2>News <?php echo MT_Functions::addButton('?page=mt-'.MT_News::name().'&type=edit'); ?></h2>
-		<p>Es gibt keine neuen Bilder, sodass keine News generiert werden können!</p>
+		<p><?php _e('Es gibt keine neuen Bilder, sodass keine News generiert werden können!', 'mt-wp-plugin'); ?></p>
 		</div>
 		<?php
 	} else {
