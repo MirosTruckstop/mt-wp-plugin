@@ -21,14 +21,14 @@ class MT_View_Photographer extends MT_View_Common {
 		$this->item = (new MT_Photographer($id))->getOne();
 		
 		if (empty($this->item)) {
-			throw new Exception(__('Die ausgewählte Fotograf existiert nicht.', 'mt-wp-plugin'));
+			throw new Exception(__('Die ausgewählte Fotograf existiert nicht.', MT_NAME));
 		}
 
 		$this->_numPhotos = MT_Photo::getNumPhotos($this->item->id);
 		parent::setTitle($this->item->name);
-		parent::setDescription(__('Übersicht über den Fotografen', 'mt-wp-plugin').' '.$this->item->name);
+		parent::setDescription(__('Übersicht über den Fotografen', MT_NAME).' '.$this->item->name);
 		parent::setBreadcrumb(array(
-			'../fotografen' => __('Fotografen', 'mt-wp-plugin'),
+			'../fotografen' => __('Fotografen', MT_NAME),
 			'' => $this->item->name
 		));
 	}

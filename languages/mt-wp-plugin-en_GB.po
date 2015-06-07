@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-06-03 20:23+0100\n"
-"PO-Revision-Date: 2015-06-03 20:45+0100\n"
+"POT-Creation-Date: 2015-06-07 19:25+0100\n"
+"PO-Revision-Date: 2015-06-07 19:25+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -26,65 +26,20 @@ msgstr "Page"
 
 #: common/Functions.php:230 common/Functions.php:232
 msgid "Weiter"
-msgstr "News"
+msgstr "Next"
 
-#: mt-wp-plugin.php:181 public/view/Photographer.php:83
+#: mt-wp-plugin.php:187 public/view/Photographer.php:83
 #: public/view/gallery/Gallery.php:40
 msgid "Galerie"
 msgstr "Gallery"
 
-#: mt-wp-plugin.php:182
+#: mt-wp-plugin.php:188
 msgid "Anzahl der Bilder"
 msgstr "Number of photos"
 
-#: mt-wp-plugin.php:328 public/view/Photographer.php:80
-#: public/view/gallery/StaticGallery.php:109
-msgid "Bilder"
-msgstr "Photos"
-
-#: mt-wp-plugin.php:329
-msgid "Fotos verwalten"
-msgstr "Manage photos"
-
-#: mt-wp-plugin.php:330
-msgid "Fotos hinzufügen"
-msgstr "Add photos"
-
-#: mt-wp-plugin.php:331
-msgid "News generieren"
-msgstr "Generate news"
-
-#: mt-wp-plugin.php:333
-msgid "Verwaltung"
-msgstr "Managment"
-
-#: mt-wp-plugin.php:334
-msgid "News"
-msgstr "News"
-
-#: mt-wp-plugin.php:335
-msgid "Kategorien"
-msgstr "Categories"
-
-#: mt-wp-plugin.php:336
-msgid "Unterkategorien"
-msgstr "Subcategories"
-
-#: mt-wp-plugin.php:337 mt-wp-plugin.php:338
-msgid "Galerien"
-msgstr "Galleries"
-
-#: mt-wp-plugin.php:350
+#: mt-wp-plugin.php:356
 msgid "Galerie wählen"
 msgstr "Choose gallery"
-
-#: mt-wp-plugin.php:387
-msgid "Es gibt keine neuen Bilder, sodass keine News generiert werden können!"
-msgstr ""
-
-#: mt-wp-plugin.php:393
-msgid "Title"
-msgstr ""
 
 #: public/view/Category.php:24
 msgid "Diese Kategorie existiert nicht"
@@ -108,7 +63,7 @@ msgstr ""
 
 #: public/view/Photographer.php:29
 msgid "Übersicht über den Fotografen"
-msgstr ""
+msgstr "Overview on the photographer"
 
 #: public/view/Photographer.php:31
 msgid "Fotografen"
@@ -116,11 +71,15 @@ msgstr "Photographers"
 
 #: public/view/Photographer.php:56
 msgid "Truckstop-Fotograf seit"
-msgstr ""
+msgstr "Truckstop photographer since"
 
 #: public/view/Photographer.php:66 public/view/Photographer.php:84
 msgid "Anzahl der Fotos"
-msgstr ""
+msgstr "Amount of photos"
+
+#: public/view/Photographer.php:80 public/view/gallery/StaticGallery.php:109
+msgid "Bilder"
+msgstr "Photos"
 
 #: public/view/gallery/Gallery.php:43
 msgid "Fotograf"
@@ -128,21 +87,21 @@ msgstr "Photographer"
 
 #: public/view/gallery/Gallery.php:50
 msgid "Eingestellt am"
-msgstr ""
+msgstr "Published on"
 
 #: public/view/gallery/StaticGallery.php:91
 msgid ""
 "In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal "
 "vorbei!"
-msgstr ""
+msgstr "This gallery is empty.  Check it out later."
 
 #: public/view/gallery/StaticGallery.php:92
 msgid "Zurück zur Übersicht"
-msgstr ""
+msgstr "Back to overview"
 
 #: public/view/gallery/StaticGallery.php:111
 msgid "Bilder pro Seite"
-msgstr ""
+msgstr "Photos per page"
 
 #: public/view/gallery/StaticGallery.php:117
 msgid "Sortieren nach"
@@ -150,15 +109,15 @@ msgstr "Sort by"
 
 #: public/view/gallery/StaticGallery.php:119
 msgid "Einstellungsdatum: Neu - Alt"
-msgstr ""
+msgstr "date: new - old"
 
 #: public/view/gallery/StaticGallery.php:120
 msgid "Einstellungsdatum: Alt - Neu"
-msgstr ""
+msgstr "date: old - new"
 
 #: public/view/gallery/StaticGallery.php:147
 msgid "Nach oben"
-msgstr ""
+msgstr "Back to top"
 
 #: public/view/gallery/StaticGallery.php:150
 msgid "Nutzung der Bilder"
@@ -173,8 +132,32 @@ msgstr ""
 
 #: public/view/gallery/TagGallery.php:10
 msgid "Bilder mit Tag"
-msgstr ""
+msgstr "Photos with tag"
 
 #: public/view/gallery/TagGallery.php:11
 msgid "Fotogalerie für den Tag"
-msgstr ""
+msgstr "Photo gallery for the tag"
+
+#~ msgid "Fotos verwalten"
+#~ msgstr "Manage photos"
+
+#~ msgid "Fotos hinzufügen"
+#~ msgstr "Add photos"
+
+#~ msgid "News generieren"
+#~ msgstr "Generate news"
+
+#~ msgid "Verwaltung"
+#~ msgstr "Managment"
+
+#~ msgid "News"
+#~ msgstr "News"
+
+#~ msgid "Kategorien"
+#~ msgstr "Categories"
+
+#~ msgid "Unterkategorien"
+#~ msgstr "Subcategories"
+
+#~ msgid "Galerien"
+#~ msgstr "Galleries"

@@ -1,11 +1,12 @@
 <?php
 /*
 Plugin Name: MT Plugin
+Plugin URI: http://github.com/MirosTruckstop/mt_wp_plugin
 Description: Wordpress plugin for MiRo's Truckstop
-Author: Xennis
 Version: 0.1
+Author: Xennis
 Text Domain: mt-wp-plugin
- */
+*/
 
 /*
  * Set timezone
@@ -13,9 +14,13 @@ Text Domain: mt-wp-plugin
 date_default_timezone_set('Europe/Berlin');
 
 /**
+ * Plugin name
+ */
+define('MT_NAME', dirname(plugin_basename( __FILE__ )));
+/**
  * Plugin directory 
  */
-define('MT_DIR', WP_PLUGIN_DIR . "/" . plugin_basename(dirname(__FILE__)));
+define('MT_DIR', WP_PLUGIN_DIR.'/'.MT_NAME);
 
 /*
  * Require scripts
@@ -50,7 +55,7 @@ function mt_register_activation() {
 
 add_action('plugins_loaded', 'mt_load_plugin_textdomain');
 function mt_load_plugin_textdomain() {
-	load_plugin_textdomain('mt-wp-plugin', false, MT_DIR.'/languages/');
+	load_plugin_textdomain(MT_NAME, false, MT_NAME.'/languages/');
 }
 
 /*
@@ -179,8 +184,8 @@ function mt_add_shortcode_statistics() {
 	$returnString = '
 			<table class="horizontalLeft">
 			 <tr>
-			  <th>'.__('Galerie', 'mt-wp-plugin').'</th>
-			  <th>'.__('Anzahl der Bilder', 'mt-wp-plugin').'</th>
+			  <th>'.__('Galerie', MT_NAME).'</th>
+			  <th>'.__('Anzahl der Bilder', MT_NAME).'</th>
 			 </tr>	
 	';
 	$tempCategoryId = 0;
@@ -348,7 +353,7 @@ function mt_page_photos() {
 	$page = (!empty($_GET['mtpage']) ? $_GET['mtpage'] : 1);
 	?>
 			<select name="selectGalerie" onchange="location = '?page=mt-photo&mtId=' + this.options[this.selectedIndex].value;">
-				<option value=""><?php _e('Galerie wählen', 'mt-wp-plugin'); ?> ...</option>
+				<option value=""><?php _e('Galerie wählen', MT_NAME); ?> ...</option>
 				<?php echo $tmp->outputAllGalleries($id); ?>
 			</select>
 	<?php
@@ -385,7 +390,7 @@ function mt_page_news_generate() {
 		?>
 		<div class="wrap">
 			<h2>News <?php echo MT_Functions::addButton('?page=mt-'.MT_News::name().'&type=edit'); ?></h2>
-		<p><?php _e('Es gibt keine neuen Bilder, sodass keine News generiert werden können!', 'mt-wp-plugin'); ?></p>
+		<p>Es gibt keine neuen Bilder, sodass keine News generiert werden können!</p>
 		</div>
 		<?php
 	} else {

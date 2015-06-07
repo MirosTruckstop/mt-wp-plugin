@@ -88,8 +88,8 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 			// Falls sich in der Galerie noch keine Bilder befinden
 			?>
 			<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
-			<p><?php _e('In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!', 'mt-wp-plugin'); ?></p>
-			<p><?php _e('Zurück zur Übersicht', 'mt-wp-plugin'); ?>: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
+			<p><?php _e('In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!', MT_NAME); ?></p>
+			<p><?php _e('Zurück zur Übersicht', MT_NAME); ?>: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
 			<?php
 		}
 	}
@@ -106,18 +106,18 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 			<div id="auswahl_leiste">
 				<table width="100%" cellSpacing="0" cellPadding="2">
 					<tr>
-						<th>&nbsp;<?php _e('Bilder', 'mt-wp-plugin'); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
+						<th>&nbsp;<?php _e('Bilder', MT_NAME); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
 						<td>
-							<?php _e('Bilder pro Seite', 'mt-wp-plugin'); ?>:&nbsp;
+							<?php _e('Bilder pro Seite', MT_NAME); ?>:&nbsp;
 							<select name="num" size="1" onchange="<?php echo $location; ?>">
 								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '5'); ?>>5</option>
 								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '10'); ?>>10</option>
 								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>
 							</select>
-							&nbsp;<?php _e('Sortieren nach', 'mt-wp-plugin'); ?>:&nbsp;
+							&nbsp;<?php _e('Sortieren nach', MT_NAME); ?>:&nbsp;
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Einstellungsdatum: Neu - Alt', 'mt-wp-plugin'); ?></option>
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Einstellungsdatum: Alt - Neu', 'mt-wp-plugin'); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Einstellungsdatum: Neu - Alt', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Einstellungsdatum: Alt - Neu', MT_NAME); ?></option>
 							</select>
 						</td>
 					</tr>
@@ -144,12 +144,12 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 					<tr>
 						<td></td>
 						<td><?php echo $this->pagination; ?></td>
-						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php _e('Nach oben', 'mt-wp-plugin'); ?></a></span></td>
+						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php _e('Nach oben', MT_NAME); ?></a></span></td>
 					</tr>
 				</table>
-				<h2><?php _e('Nutzung der Bilder', 'mt-wp-plugin'); ?></h2>
+				<h2><?php _e('Nutzung der Bilder', MT_NAME); ?></h2>
 <p><?php _e('Alle Bilder auf dieser Seite unterliegen dem Copyright des jeweiligen Fotografens. Es ist nicht gestattet die Bilder 
-im Internet, etc. zu veröffentlichen.', 'mt-wp-plugin'); ?></p>
+im Internet, etc. zu veröffentlichen.', MT_NAME); ?></p>
 		<?php
 	}
 }

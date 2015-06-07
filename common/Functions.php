@@ -201,11 +201,11 @@ abstract class MT_Functions {
 
 		// Eine Seite zurueck
 		if($page > 1) {
-			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« '.__('Zurück', 'mt-wp-plugin'), $baseUrl);
+			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« '.__('Zurück', MT_NAME), $baseUrl);
 		} else {
-			$resultString .= '<span class="style_grew">« '.__('Zurück', 'mt-wp-plugin').'</span>';
+			$resultString .= '<span class="style_grew">« '.__('Zurück', MT_NAME).'</span>';
 		}
-		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>'.__('Seite', 'mt-wp-plugin').'</b>';
+		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>'.__('Seite', MT_NAME).'</b>';
 	
         $points = TRUE;
                 
@@ -227,9 +227,9 @@ abstract class MT_Functions {
 		// Eine Seite vor
 		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
 		if( $page == $anzahl_seiten ) {
-			$resultString .= '<span class="style_grew">'.__('Weiter', 'mt-wp-plugin').' »</span>';
+			$resultString .= '<span class="style_grew">'.__('Weiter', MT_NAME).' »</span>';
 		} else {
-			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, __('Weiter', 'mt-wp-plugin') . ' »', $baseUrl);
+			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, __('Weiter', MT_NAME) . ' »', $baseUrl);
 		}
 		$resultString .= '</p></div>';
 		return $resultString;

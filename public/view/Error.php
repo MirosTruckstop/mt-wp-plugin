@@ -7,8 +7,8 @@ class MT_View_Error extends MT_View_Common {
 	public function __construct($message) {
 		$this->message = $message;
 		
-		parent::setTitle(__('Fehler', 'mt-wp-plugin'));
-		parent::setDescription(__('Fehler', 'mt-wp-plugin'));
+		parent::setTitle(__('Fehler', MT_NAME));
+		parent::setDescription(__('Fehler', MT_NAME));
 	}
 
 	public function outputContent() {
