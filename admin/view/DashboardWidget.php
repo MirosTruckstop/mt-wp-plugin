@@ -22,22 +22,31 @@ class MT_Admin_DashboardWidget {
 	 * @return void
 	 */
 	private function _testPhotoPaths() {
-		$error = false;
+		$errorMessage = '';
+		$errorCounter = 0;
 
 		$query = (new MT_QueryBuilder())
 			->from('photo', 'path')
-			->join('gallery', TRUE, 'name')
-			->limit(10);
-		foreach ($query->getResult('ARRAY_A') as $row) {				
-			$file = MT_Photo::$__photoPath . $row['path'];
-						
+			->join('gallery', TRUE, 'name');
+		foreach ($query->getResult() as $item) {				
+			$file = MT_Photo::$__photoPath . $item->path;
+			
 			if( !file_exists( $file ) ) {
-				$error = true;
-				echo '<p class="style_red">Fehler! Bild <a href="' . $file . '" target="_blank">' . $file . '</a> in der Galerie "' . $row['name'] . '" wurde nicht gefunden!</p>';
+				$errorCounter++;
+				$errorMessage .= '<li>Fehler: <a href="'.$file.'" target="_blank">'.$file.'</a> aus der Galerie "'.$item->name.'" wurde nicht gefunden!</li>';
+			}
+			
+			// Only display the first 10 errors
+			if ($errorCounter >= 10) {
+				break;
 			}
 		}
-		if(!$error) {
-			echo '<p class="style_green">Alles OK! Alle Bilder wurden gefunden!</p>';
+		
+		// Output
+		if($errorCounter > 0) {
+			echo '<ol>'.$errorMessage.'</ol>';
+		} else {
+			echo '<p>Alles OK! Alle Bilder wurden gefunden!</p>';
 		}
 	}
 

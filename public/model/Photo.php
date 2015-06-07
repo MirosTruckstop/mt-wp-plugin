@@ -5,11 +5,11 @@ class MT_Photo extends MT_Common {
 	public static $thumbnailPath = '../thumb/'; 	
 	
 	/**
-	 * Photo path
+	 * Relative (from administration view) photo path
 	 *
 	 * @var string
 	 */
-	public static $__photoPath = '../bilder/';	
+	public static $__photoPath = '../../bilder/';	
 	
 	/**
 	 * Photo path
