@@ -510,7 +510,6 @@ function mt_page_photographers() {
 		$editView = new MT_View_Edit( new MT_Photographer($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),
-			(new MT_Admin_Field('camera', 'Kamera')),
 			(new MT_Admin_Field('date', 'Datum', 'date'))->setDisabled()
 		));
 		$editView->outputContent();

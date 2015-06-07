@@ -53,17 +53,11 @@ class MT_View_Photographer extends MT_View_Common {
 			  <td><?php echo $this->item->name; ?></td>
 			 </tr>
 			 <tr>
-			  <th><?php _e('Truckstop-Fotograf seit', 'mt'); ?>:</th>
+			  <th><?php _e('Truckstop-Fotograf seit', MT_NAME); ?>:</th>
 			  <td><?php echo strftime(self::$_dateFormat, $this->item->date ); ?></td>
 			 </tr>
-		 	<?php if( !empty( $this->item->camera ) ) { ?>
 			 <tr>
-			  <th>Kamera:</th>
-			  <td><?php echo $this->item->camera; ?></td>
-			 </tr>
-			 <?php } ?>
-			 <tr>
-			  <th><?php _e('Anzahl der Fotos', 'mt'); ?>:</th>
+			  <th><?php _e('Anzahl der Fotos', MT_NAME); ?>:</th>
 			  <td><?php echo $this->_numPhotos; ?></td>
 			 </tr>
 			</table>
@@ -77,11 +71,11 @@ class MT_View_Photographer extends MT_View_Common {
 	 */
 	private function _outputContentPhotographerPhotos() {
 		?>
-			<h2><?php _e('Bilder', 'mt'); ?></h2>
+			<h2><?php _e('Bilder', MT_NAME); ?></h2>
 			<table class="table_hoch_2">
 			 <tr>
-			  <th><?php _e('Galerie', 'mt'); ?></th>
-			  <th><?php _e('Anzahl der Fotos', 'mt'); ?></th>
+			  <th><?php _e('Galerie', MT_NAME); ?></th>
+			  <th><?php _e('Anzahl der Fotos', MT_NAME); ?></th>
 			 </tr>
 		<?php
 		$tempCategoryID = 0;		// Save last category ID

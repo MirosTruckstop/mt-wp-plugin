@@ -62,7 +62,6 @@ abstract class MT_Config_Db {
 		self::createTable('photographer', "
 			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(40) NOT NULL,
-			`camera` varchar(20) NOT NULL,
 			`date` int(10) unsigned NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `name` (`name`)
