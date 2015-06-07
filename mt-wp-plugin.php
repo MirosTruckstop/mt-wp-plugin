@@ -11,7 +11,7 @@ Text Domain: mt-wp-plugin
 /*
  * Set timezone
  */
-date_default_timezone_set('Europe/Berlin');
+date_default_timezone_set(get_option('timezone_string'));
 
 /**
  * Plugin name
