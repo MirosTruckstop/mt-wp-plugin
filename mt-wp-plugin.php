@@ -524,7 +524,6 @@ function mt_page_photographers() {
 }
 
 function mt_page_thumbnails() {
-	echo "Hey";
 //	$query = (new MT_QueryBuilder())
 //			->from('photo')
 //			->orderBy('date');
@@ -541,7 +540,7 @@ function mt_page_thumbnails() {
 //	}
 //	require_once(MT_DIR . '/admin/model/PhotoResize.php');
 //	$photoResize = new MT_Admin_Model_PhotoResize();
-//	$photoResize->resizeAllImages(250, 150, 90);
+//	$photoResize->resizeAllImages();
 }
 
 ?>
