@@ -29,7 +29,7 @@ class MT_Admin_DashboardWidget {
 			->from('photo', 'path')
 			->join('gallery', TRUE, 'name');
 		foreach ($query->getResult() as $item) {				
-			$file = MT_Photo::$__photoPath . $item->path;
+			$file = MT_Photo::PHOTO_PATH.$item->path;
 			
 			if( !file_exists( $file ) ) {
 				$errorCounter++;

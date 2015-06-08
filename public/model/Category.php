@@ -27,7 +27,7 @@ class MT_Category extends MT_Common {
 
 	public static function insert($data) {
 		$data['path'] = MT_Functions::nameToPath($data['name']);
-		MT_Functions::createDirIfNotExists(MT_Photo::$__photoPath.$data['path']);
+		MT_Functions::createDirIfNotExists(MT_Photo::PHOTO_PATH.$data['path']);
 		return parent::insert($data);
 	}
 

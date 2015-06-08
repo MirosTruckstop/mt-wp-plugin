@@ -9,16 +9,16 @@ class MT_Admin_Model_PhotoSearch {
 
 	private $time;
 	
-	public function __construct() {
-		return $this;
-	}
-	
 	/**
 	 * Supported photo extensions
 	 *
 	 * @var array
 	 */
-	public static $__photoExtensions = array('jpg', 'jpeg');
+	private static $__photoExtensions = array('jpg', 'jpeg');
+	
+	public function __construct() {
+		return $this;
+	}
 	
 	/**
 	 * Search new photos on webspace
@@ -40,13 +40,13 @@ class MT_Admin_Model_PhotoSearch {
 			}
 
 			if(self::isPhoto($dir.'/'.$basename)) {
-				$dbDirname = str_replace(MT_Photo::$__photoPath, '', $dir).'/';
+				$dbDirname = str_replace(MT_Photo::PHOTO_PATH, '', $dir).'/';
 				$dbFile = $dbDirname.$basename;
 		
 				if (!isset($this->time)) {
 					$this->time = time();
 				} else {
-					$this->time += MT_Admin_View_PhotoEdit::$secondsBetweenPhotos;
+					$this->time += MT_Admin_View_PhotoEdit::SECONDS_BETWEEN_PHOTOS;
 				}
 
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist

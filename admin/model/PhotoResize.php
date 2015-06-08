@@ -5,9 +5,13 @@ class MT_Admin_Model_PhotoResize {
 /*	public function resizeAllImages($maxWidth, $maxHeight, $quality) {
 		$photo = new MT_Photo();
 		$i = 0;
+		$min = 0;
+		$max = 100;
 		foreach ($photo->getAll() as $item) {
-			if ($i >= 300 && $i<400) {
-				echo $this->resizeImage(MT_Photo::$__photoPath.$item->path, MT_Admin_Model_PhotoResize::$thumbnailPath.$item->path, $maxWidth, $maxHeight, $quality);
+			if ($i >= $min && $i<$max) {
+				echo $this->resizeImage(MT_Photo::PHOTO_PATH.$item->path, MT_Photo::THUMBNAIL_PATH.$item->path, $maxWidth, $maxHeight, $quality);
+			} else if($i >= $max) {
+				break;
 			}
 			$i++;
 		}

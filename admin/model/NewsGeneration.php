@@ -55,9 +55,12 @@ class MT_Admin_NewsGeneration {
 			$title .= ' > ' . $subcategoryName;
 		}
 		$title .= ': ';
-		if($galleryDate  >= $this->timestampLatestNews) {				// Neue Galerie
+		// New gallery
+		if($galleryDate  >= $this->timestampLatestNews) {				
 			$title .= "Neue Galerie '" . $galleryName . "'";
-		} else {														// "Nur" neue Fotos
+		}
+		// New photos only
+		else {
 			if($numPhotos != 1) {
 				$title .= 'Neue Bilder';
 			} else {

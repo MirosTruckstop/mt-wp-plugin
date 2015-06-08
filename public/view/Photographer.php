@@ -118,7 +118,7 @@ class MT_View_Photographer extends MT_View_Common {
 			// Gallery
 			?>
 			 <tr>
-				 <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="<?php echo MT_Photo::$__photoPathAbs; ?><?php echo $row->galleryId; ?>"><?php echo $row->galleryName; ?></a></td>
+				 <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="<?php echo MT_Photo::GALLERY_PATH_ABS; ?><?php echo $row->galleryId; ?>"><?php echo $row->galleryName; ?></a></td>
 			  <td><?php echo $row->numPhotos; ?></td>
 			 </tr>
  			<?php

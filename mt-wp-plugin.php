@@ -224,7 +224,7 @@ function mt_add_shortcode_statistics() {
 		// Gallery
 		$returnString .= '
 			 <tr>
-			  <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="'.MT_Photo::$__photoPathAbs.$row->galleryId.'">'.$row->galleryName.'</a></td>
+			  <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="'.MT_Photo::GALLERY_PATH_ABS.$row->galleryId.'">'.$row->galleryName.'</a></td>
 			  <td>'.$row->numPhotos.'</td>
 			 </tr>';
 	}
@@ -256,7 +256,7 @@ function mt_add_shortcode_news() {
 		if( empty( $item->gallery ) ) {
 			$news_link = '../';
 		} else {
-			$news_link = MT_Photo::$__photoPathAbs.$item->gallery;
+			$news_link = MT_Photo::GALLERY_PATH_ABS.$item->gallery;
 		}
 
 		// Year
@@ -342,7 +342,7 @@ function mt_admin_menu() {
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'edit_others_pages', 'mt-subcategory', 'mt_page_subcategories');
     add_submenu_page('mt-news', 'Galerien', 'Galerien', 'edit_others_pages', 'mt-gallery', 'mt_page_galleries');
 	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'edit_others_pages', 'mt-photographer', 'mt_page_photographers');
-	//add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'edit_others_pages', 'mt-thumbnail', 'mt_page_thumbnails');
+	//add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'manage_options', 'mt-thumbnail', 'mt_page_thumbnails');
 }
 
 function mt_page_photos() {
@@ -524,6 +524,7 @@ function mt_page_photographers() {
 }
 
 function mt_page_thumbnails() {
+	echo "Hey";
 //	$query = (new MT_QueryBuilder())
 //			->from('photo')
 //			->orderBy('date');

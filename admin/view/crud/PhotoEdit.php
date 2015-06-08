@@ -2,7 +2,11 @@
 
 class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
-	public static $secondsBetweenPhotos = 10;
+	/**
+	 * When photos get uploaded, they get the current date as timestamp. But
+	 * between two phots there should be a distance of some seconds.
+	 */
+	const SECONDS_BETWEEN_PHOTOS = 10;
 	
 	private $gallery;
         
@@ -71,7 +75,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 							// Item with the lowest ordering integer (zero) should
 							// have the highest timestamp.
 							// 9: Ordering index from 0 to 9
-							$data[$index]['date'] = time() + ($this->perPage - 1 - $date) * self::$secondsBetweenPhotos;
+							$data[$index]['date'] = time() + ($this->perPage - 1 - $date) * self::SECONDS_BETWEEN_PHOTOS;
 						}
 						// Show picture
 						$data[$index]['show'] = 1;
@@ -122,7 +126,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $index => $item) {
-			$file = MT_Photo::$__photoPath.$item->path;
+			$file = MT_Photo::PHOTO_PATH.$item->path;
 		?>
 			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>
