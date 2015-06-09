@@ -154,7 +154,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	}
 	
 	protected function getPagination() {
-		return MT_Functions::__outputPagination($this->gallery->getId(), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
+		return MT_Functions::__outputPagination(MT_Photo::getCount($this->gallery->getId()), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
 	}
 }
 ?>
