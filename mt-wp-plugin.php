@@ -224,7 +224,7 @@ function mt_add_shortcode_statistics() {
 		// Gallery
 		$returnString .= '
 			 <tr>
-			  <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="'.MT_Photo::GALLERY_PATH_ABS.$row->galleryId.'">'.$row->galleryName.'</a></td>
+			  <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="'.MT_Photo::GALLERY_PATH_ABS.'/'.$row->galleryId.'">'.$row->galleryName.'</a></td>
 			  <td>'.$row->numPhotos.'</td>
 			 </tr>';
 	}
@@ -256,7 +256,7 @@ function mt_add_shortcode_news() {
 		if( empty( $item->gallery ) ) {
 			$news_link = '../';
 		} else {
-			$news_link = MT_Photo::GALLERY_PATH_ABS.$item->gallery;
+			$news_link = MT_Photo::GALLERY_PATH_ABS.'/'.$item->gallery;
 		}
 
 		// Year
@@ -370,7 +370,7 @@ function mt_page_photos_add() {
 
 	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
 	if(MT_Photo::getCountNewPhotos() < 10 or $_GET['action'] === 'search') {
-		(new MT_Admin_Model_PhotoSearch())->search('../bilder');
+		(new MT_Admin_Model_PhotoSearch())->search();
 		// Datum der letzten Suche speichern
 		update_option('datum_letzte_suche', time());
 	}

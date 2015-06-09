@@ -21,26 +21,30 @@ class MT_Admin_Model_PhotoSearch {
 	}
 	
 	/**
-	 * Search new photos on webspace
+	 * Searchs new photos in the given directory and stores them.
 	 *
-	 * @param	string	$dir		Directory
-	 * @param	string	$startTime	Start time
-	 * @return	void
+	 * @param	string|undefined $dir Directory
+	 * @return	void|boolean False, if $dir is not a directory
 	 */
-	public function search($dir) { 
+	public function search($dir = MT_Photo::PHOTO_PATH) { 
 		if (!is_dir($dir)) {
 			return FALSE;
 		}
-		$fp = opendir( $dir );
-		while($basename = readdir($fp)) {
-			// Folder	
-			if( is_dir($dir.'/'.$basename) && $basename != '.' && $basename != '..') {
-				//echo '<b>Ordner: '.$dir.'/'.$file.'</b><br>';
-				self::search($dir.'/'.$basename);
+		$directoryHandle = opendir( $dir );
+		while(false !== ($basename = readdir($directoryHandle))) {
+			$path = $dir.'/'.$basename;
+			
+			// Skip "." and ".." files and the thumbnail folder
+			if($basename == '.' || $basename == '..' || $path == MT_Photo::THUMBNAIL_PATH) {
+				continue;
 			}
-
-			if(self::isPhoto($dir.'/'.$basename)) {
-				$dbDirname = str_replace(MT_Photo::PHOTO_PATH, '', $dir).'/';
+			// Folder	
+			else if(is_dir($path)) {
+				$this->search($path);
+			}
+			// Photo file
+			else if($this->isPhoto($path)) {
+				$dbDirname = str_replace(MT_Photo::PHOTO_PATH.'/', '', $dir).'/';
 				$dbFile = $dbDirname.$basename;
 		
 				if (!isset($this->time)) {
@@ -61,10 +65,10 @@ class MT_Admin_Model_PhotoSearch {
 				}	
 			}
 		}
-		closedir($fp);
+		closedir($directoryHandle);
 	}
 	
-	private static function isPhoto($file) {
+	private function isPhoto($file) {
 		$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 		return is_file($file) && in_array($fileExtension, self::$__photoExtensions);
 	}

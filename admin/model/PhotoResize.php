@@ -43,7 +43,7 @@ class MT_Admin_Model_PhotoResize {
 	 * @param  int     $quality   From 1 to 100 (best)
 	 * @return boolean $result    Success: true
 	 */
-	private function resizeImage($file, $name, $maxWidth = self::MAX_WIDTH, self::MAX_HEIGHT, $quality = self::QUALITY) {
+	private function resizeImage($file, $name, $maxWidth = self::MAX_WIDTH, $maxHeight = self::MAX_HEIGHT, $quality = self::QUALITY) {
 		//echo $file.'<br>';
 		$fileSize = getimagesize( $file );
 		$width = $fileSize[0];

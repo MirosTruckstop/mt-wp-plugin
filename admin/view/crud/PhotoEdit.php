@@ -126,7 +126,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $index => $item) {
-			$file = MT_Photo::PHOTO_PATH.$item->path;
+			$file = MT_Photo::PHOTO_PATH.'/'.$item->path;
 		?>
 			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>

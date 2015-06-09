@@ -7,21 +7,21 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @var string
 	 */
-	const PHOTO_PATH = '../../bilder/';
+	const PHOTO_PATH = '../../bilder';
 
 	/**
 	 * Relative (from administration view) path to photo thumbnail folder.
 	 * 
 	 * @var string 
 	 */
-	const THUMBNAIL_PATH = '../../bilder/thumb/';
+	const THUMBNAIL_PATH = '../../bilder/thumb';
 	
 	/**
 	 * Photo path
 	 *
 	 * @var string
 	 */
-	const GALLERY_PATH_ABS = '/bilder/galerie/';
+	const GALLERY_PATH_ABS = '/bilder/galerie';
 
 	
 	public function __construct($id = NULL) {
@@ -53,7 +53,7 @@ class MT_Photo extends MT_Common {
 
 	public function deleteOne() {
 		if ($this->isDeletable()) {
-			$file = self::PHOTO_PATH . parent::get_attribute('path');
+			$file = self::PHOTO_PATH.'/'.parent::get_attribute('path');
 			if (unlink($file)) {
 				return parent::delete('id = '.$this->id);			
 			}
@@ -108,18 +108,18 @@ class MT_Photo extends MT_Common {
 	 * @return	boolean
 	 */
 	public static function checkPhotoIsInDb($path) {
-		return parent::get_attribute('id', 'path = `'.$path.'`');
+		return parent::get_attribute('id', "path = '".$path."'");
 	}
 	
 	// TODO: besser implementieren
 	private static function renameFile($photoId, $photoFile, $galleryId) {
 		$gallery = new MT_Gallery($galleryId);
-		$dirname = self::PHOTO_PATH . $gallery->get_attribute('fullPath');
+		$dirname = self::PHOTO_PATH.'/'.$gallery->get_attribute('fullPath');
 		$basename = $gallery->get_attribute('path') . '_' . $photoId;
 			
 		$newFile = $dirname.$basename.'.'.strtolower(pathinfo($photoFile, PATHINFO_EXTENSION));
 		if (rename($photoFile, $newFile)) {
-			return str_replace(self::PHOTO_PATH, '', $newFile);
+			return str_replace(self::PHOTO_PATH.'/', '', $newFile);
 		}
 		return FALSE;
 	}
