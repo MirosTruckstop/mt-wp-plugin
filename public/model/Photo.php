@@ -76,6 +76,8 @@ class MT_Photo extends MT_Common {
     public function update(array $data, array $conditionValue = NULL) {
 		if (!empty($data['gallery'])) {
 			$data['path'] = $this->renameFile($conditionValue['id'], $data['path'], $data['gallery']);
+		} else {
+			unset($data['path']);
 		}
 		if (!MT_Functions::isTimestampInStringForm($data['date'])) {
 			$data['date'] = strtotime($data['date']);
