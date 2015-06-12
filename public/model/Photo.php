@@ -74,6 +74,7 @@ class MT_Photo extends MT_Common {
 	}
 	
     public function update(array $data, array $conditionValue = NULL) {
+		// TODO: create thumb
 		if (!empty($data['gallery'])) {
 			$data['path'] = MT_Photo::renameFile($conditionValue['id'], $data['path'], $data['gallery']);
 		}

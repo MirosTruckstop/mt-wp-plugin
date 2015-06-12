@@ -31,6 +31,10 @@ class MT_Admin_Model_PhotoResize {
 			$i++;
 		}
 	}*/
+	
+	public function createThumbnail($dbPath) {
+		$this->resizeImage($dbPath, MT_Photo::THUMBNAIL_PATH.''.$dbPath, self::MAX_WIDTH, self::MAX_HEIGHT, self::QUALITY);
+	}
 
 	/**
 	 * Change the size of a image. The function is used to compare
@@ -43,7 +47,7 @@ class MT_Admin_Model_PhotoResize {
 	 * @param  int     $quality   From 1 to 100 (best)
 	 * @return boolean $result    Success: true
 	 */
-	private function resizeImage($file, $name, $maxWidth = self::MAX_WIDTH, $maxHeight = self::MAX_HEIGHT, $quality = self::QUALITY) {
+	private function resizeImage($file, $name, $maxWidth, $maxHeight, $quality) {
 		//echo $file.'<br>';
 		$fileSize = getimagesize( $file );
 		$width = $fileSize[0];
