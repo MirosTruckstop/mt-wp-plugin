@@ -213,7 +213,6 @@ function mt_page_thumbnails() {
 //			'id' => $item->id
 //		));
 //	}
-//	require_once(MT_DIR . '/admin/model/PhotoResize.php');
-//	$photoResize = new MT_Admin_Model_PhotoResize();
-//	$photoResize->resizeAllImages();
+//	require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
+//	MT_Admin_Model_ThumbnailCreator;
 }

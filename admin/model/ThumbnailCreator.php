@@ -1,6 +1,6 @@
 <?php
 
-class MT_Admin_Model_PhotoResize {
+class MT_Admin_Model_ThumbnailCreator {
 	
 	/**
 	 * Maximal width of a thumbnail
@@ -32,13 +32,20 @@ class MT_Admin_Model_PhotoResize {
 		}
 	}*/
 	
-	public function createThumbnail($dbPath) {
-		$this->resizeImage($dbPath, MT_Photo::THUMBNAIL_PATH.''.$dbPath, self::MAX_WIDTH, self::MAX_HEIGHT, self::QUALITY);
+	/**
+	 * Creates a thumbnail of the given photo $photoPath.
+	 * 
+	 * @param type $photoPath
+	 * @param type $thumbnailPath
+	 * @return boolean True, if create was successful
+	 */
+	public static function create($photoPath, $thumbnailPath) {
+		return self::resizeImage($photoPath, $thumbnailPath, self::MAX_WIDTH, self::MAX_HEIGHT, self::QUALITY);
 	}
 
 	/**
-	 * Change the size of a image. The function is used to compare
-	 * GD Library, ImageMagick and GraphicsMagick. 
+	 * Change the size of the given image $file and stores it as $name. It uses
+	 * imagecopyresampled (GD Library).
 	 *
 	 * @param  string  $file     Image path
 	 * @param  string  $name      Name of the new image
@@ -47,7 +54,7 @@ class MT_Admin_Model_PhotoResize {
 	 * @param  int     $quality   From 1 to 100 (best)
 	 * @return boolean $result    Success: true
 	 */
-	private function resizeImage($file, $name, $maxWidth, $maxHeight, $quality) {
+	private static function resizeImage($file, $name, $maxWidth, $maxHeight, $quality) {
 		//echo $file.'<br>';
 		$fileSize = getimagesize( $file );
 		$width = $fileSize[0];

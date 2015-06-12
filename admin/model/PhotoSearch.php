@@ -44,7 +44,12 @@ class MT_Admin_Model_PhotoSearch {
 			}
 			// Photo file
 			else if($this->isPhoto($path)) {
-				$dbDirname = str_replace(MT_Photo::PHOTO_PATH.'/', '', $dir).'/';
+				// Store the photo path without PHOTO_PATH in the database
+				if ($dir == MT_Photo::PHOTO_PATH) {
+					$dbDirname = '';				
+				} else {
+					$dbDirname = str_replace(MT_Photo::PHOTO_PATH.'/', '', $dir).'/';					
+				}
 				$dbFile = $dbDirname.$basename;
 		
 				if (!isset($this->time)) {

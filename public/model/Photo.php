@@ -74,9 +74,8 @@ class MT_Photo extends MT_Common {
 	}
 	
     public function update(array $data, array $conditionValue = NULL) {
-		// TODO: create thumb
 		if (!empty($data['gallery'])) {
-			$data['path'] = MT_Photo::renameFile($conditionValue['id'], $data['path'], $data['gallery']);
+			$data['path'] = $this->renameFile($conditionValue['id'], $data['path'], $data['gallery']);
 		}
 		if (!MT_Functions::isTimestampInStringForm($data['date'])) {
 			$data['date'] = strtotime($data['date']);
@@ -89,20 +88,6 @@ class MT_Photo extends MT_Common {
 	}
 	
 	/**
-	 * Get photo path.
-	 * 
-	 * @param   int     $id     Photo id
-	 * @return  string          Photo path
-	*/
-//	public static function getPath() {
-//		return parent::get_attribute('path');
-//	}
-	
-//	private static function getAbsolutePath() {
-//		return self::$__photoPath . $this->getPath();
-//	}
-	
-	/**
 	 * Check photo is in database
 	 *
 	 * @param	string		$path	Photo's  database path
@@ -112,17 +97,68 @@ class MT_Photo extends MT_Common {
 		return parent::get_attribute('id', "path = '".$path."'");
 	}
 	
-	// TODO: besser implementieren
-	private static function renameFile($photoId, $photoFile, $galleryId) {
+	/**
+	 * Reanmes a photo and it's thumbnail.
+	 * 
+	 * @param type $photoId
+	 * @param string $oldFile
+	 * @param type $galleryId
+	 * @return string|false, new path if rename of the photo and it's thumbnail
+	 *	was successful. False otherwise.
+	 * @throws Exception If $oldFile is not a file or rename failed
+	 */
+	private function renameFile($photoId, $oldFile, $galleryId) {
+		if (!is_file($oldFile)) {
+			throw new Exception('Rename failed: "'.$oldFile.'" is not a file');
+		}
+		
 		$gallery = new MT_Gallery($galleryId);
 		$dirname = self::PHOTO_PATH.'/'.$gallery->get_attribute('fullPath');
 		$basename = $gallery->get_attribute('path') . '_' . $photoId;
 			
-		$newFile = $dirname.$basename.'.'.strtolower(pathinfo($photoFile, PATHINFO_EXTENSION));
-		if (rename($photoFile, $newFile)) {
-			return str_replace(self::PHOTO_PATH.'/', '', $newFile);
+		$newFile = $dirname.$basename.'.'.strtolower(pathinfo($oldFile, PATHINFO_EXTENSION));
+		if (rename($oldFile, $newFile)) {
+			if ($this->createOrRenameThumbnail($oldFile, $newFile)) {
+				return str_replace(self::PHOTO_PATH.'/', '', $newFile);	
+			}	
+		} else {
+			throw new Exception('Rename failed: Could not move "'.$oldFile.'" to "'.$newFile.'"');
 		}
-		return FALSE;
+	}
+	
+	/**
+	 * Checks if a thumbnail for $oldFile already exists. If that is the case
+	 * this thumnail gets moved to the new path according to $newFile.
+	 * Otherwise a thumbnail gets creted according to the path $newFile.
+	 * 
+	 * @param type $oldFile Old photo path
+	 * @param type $newFile New photo path
+	 * @return boolean True, if rename/create was successful
+	 * @throws Exception If rename/create failed
+	 */
+	private function createOrRenameThumbnail($oldFile, $newFile) {
+		$oldThumbnail = str_replace(self::PHOTO_PATH, self::THUMBNAIL_PATH, $oldFile);
+		$newThumbnail = str_replace(self::PHOTO_PATH, self::THUMBNAIL_PATH, $newFile);	
+		
+		// Thumbnail already exists
+		if (file_exists($oldThumbnail)) {
+			// Move thumbnail
+			if (rename($oldThumbnail, $newThumbnail)) {
+				return true;
+			} else {
+				throw new Exception('Could not rename thumbnail "'.$oldThumbnail.'" to "'.$newThumbnail.'"');
+			}
+		}
+		// Thumbnail does not exists
+		else {
+			// Create thumbnail
+			require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
+			if (MT_Admin_Model_ThumbnailCreator::create($newFile, $newThumbnail)) {
+				return true;
+			} else {
+				throw new Exception('Could not create thumbnail "'.$newThumbnail.'" for the file "'.$newFile.'"');				
+			}
+		}
 	}
 	
 	/**
