@@ -67,7 +67,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 				if (array_key_exists('checked', $item)) {
 					unset($data[$index]['checked']);
 
-					// New photos
+					// New photo
 					if (!($this->gallery->hasId())) {
 						$date = $data[$index]['date'];
 						// If date field is just the ordering number
@@ -79,6 +79,13 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 						}
 						// Show picture
 						$data[$index]['show'] = 1;
+					}
+					// Photo in a gallery
+					else {
+						// If the ID of the gallery did not change
+						if ($data[$index]['gallery'] == $this->gallery->getId()) {
+							unset($data[$index]['gallery']);
+						}
 					}
 				} else {
 					unset($data[$index]);
