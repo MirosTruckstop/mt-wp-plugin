@@ -178,7 +178,7 @@ abstract class MT_Functions {
 	 * @return	boolean			True, if it is a timestamp
 	 */
 	public static function isTimestampInStringForm( $timestamp ) {
-		return ( strlen($timestamp) == 10 && $timestamp == strval(intval($timestamp)) );
+		return $timestamp == strval(intval($timestamp));
 	}
 	
 
