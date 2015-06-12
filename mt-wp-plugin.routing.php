@@ -1,7 +1,7 @@
 <?php
 // TODO: on init?
 $mtRewriteRuleIndex = '(bilder/galerie|bilder/kategorie|fotograf)/([0-9]{1,2})$';
-$mtRewriteRuleIndex2 = '(bilder/galerie)/([0-9]{1,2}),page=([0-9]{1,2})&num=([0-9]{1,2})&sort=(date|-date)$';
+$mtRewriteRuleIndex2 = '(bilder/galerie)/([0-9]{1,2}),page=([0-9]{1,2})&num=([0-9]{1,3})&sort=(date|-date)$';
 $mtRewriteRuleIndex3 = '(bilder/tag)/([^/]+)$';
 
 add_action('wp_loaded','mt_flush_rules');

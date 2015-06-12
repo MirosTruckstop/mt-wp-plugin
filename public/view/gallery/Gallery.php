@@ -4,6 +4,8 @@ abstract class MT_View_Gallery extends MT_View_Common {
 
 	private $checkWidescreen;
 	
+	const PHOTO_PATH = '/bilder';
+	
 	public function checkWidescreen() {
 		return $this->checkWidescreen;
 	}
@@ -14,8 +16,11 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	
 	/**
 	 * Output galleries photos
-	 *
-	 * @return void
+	 * 
+	 * @param Object.MT_QueryBuilder $query Query
+	 * @param string $altPreafix
+	 * @param boolean $isThumbView True, if photos should be displayed only as
+	 *	thumbnail
 	 */
 	protected function _outputContentPhotos($query, $altPreafix, $isThumbView = FALSE) {
 		foreach ($query->getResult('ARRAY_A') as $item) {
@@ -57,7 +62,7 @@ abstract class MT_View_Gallery extends MT_View_Common {
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
 				<span itemprop="keywords">'.$item['keywords'].'</span>
-			    <p><img alt="'.$item['alt'].'" src="/bilder/'.$item['path'].'" itemprop="contentURL"><br>
+			    <p><img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/'.$item['path'].'" itemprop="contentURL"><br>
 				'.$galleryString
 			    .$photographerString
 				.$dateString.'</p>
@@ -66,7 +71,7 @@ abstract class MT_View_Gallery extends MT_View_Common {
 	}
 	
 	private function _outputThumb(array $item) {
-		echo '<img alt="'.$item['alt'].'" src="/thumb/'.$item['path'].'">';
+		echo '<img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/thumb/'.$item['path'].'">';
 	}
         
 	/**

@@ -100,7 +100,7 @@ abstract class MT_Functions {
 		}
 
 		// Ist die Anzahl der Bilder pro Seite noch nicht gesetzt
-		if($num != 5 && $num != 10 && $num != 15) {
+		if($num != 5 && $num != 10 && $num != 15 && $num != 200) {
 			// Falls vorhanden, wähle den gespeicherten Wert
 			if( !empty( $numDb ) ) {
 				$num = $numDb;

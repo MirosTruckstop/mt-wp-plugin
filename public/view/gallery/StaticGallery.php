@@ -82,7 +82,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 			
 		if ($this->_numPhotos > 0) {
 			$this->_outputContentHeader();
-			$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')');
+			$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
 			$this->_outputContentFooter();
 		} else {
 			// Falls sich in der Galerie noch keine Bilder befinden
@@ -113,6 +113,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '5'); ?>>5</option>
 								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '10'); ?>>10</option>
 								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>
+								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '200'); ?>>200</option>								
 							</select>
 							&nbsp;<?php _e('Sortieren nach', MT_NAME); ?>:&nbsp;
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
