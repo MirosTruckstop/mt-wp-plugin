@@ -131,10 +131,11 @@ class MT_Admin_Field {
 	 * 
 	 * @param string $value Value of the option
 	 * @param string $name Name of the option
+	 * @param string $select Empty or 'selected' string
 	 * @return string <option> tag
 	 */
-	private function getSelectOption($value, $name) {
-		return '<option value="'.$value.'">'.$name.'</option>';
+	private function getSelectOption($value, $name, $select = '') {
+		return '<option value="'.$value.'" '.$select.'>'.$name.'</option>';
 	}	
 	
 	/**
@@ -149,7 +150,7 @@ class MT_Admin_Field {
 			$this->cache = MT_Photographer::getAll(array('id', 'name'), 'name');
 		}
 		foreach ($this->cache as $item) {
-			$resultString .= '<option value="'.$item->id.'" '.MT_Functions::selected($selectedPhotographer, $item->id).'>'.$item->name.'</option>';
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedPhotographer, $item->id));
 		}
 		return $resultString;
 	}
@@ -185,12 +186,9 @@ class MT_Admin_Field {
 				if( isset( $tempOptgroup ) ) {
 					$resultString .= '</optgroup>';
 				}
-				$resultString .= '
-				<optgroup label="' . $optgroup .'">';
+				$resultString .= '<optgroup label="'.$optgroup.'">';
 			}
-			$resultString .= '
-					<option value="'.$row['id'].'"'.($row['id'] == $selectedGallery ? ' selected' : '').'>'.$row['galleryName'].'</option>
-			';
+			$resultString .= $this->getSelectOption($row['id'], $row['galleryName'], ($row['id'] == $selectedGallery ? ' selected' : ''));
 		}
 		$resultString .= '</optgroup>';
 		return $resultString;
