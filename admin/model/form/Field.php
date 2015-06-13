@@ -127,6 +127,17 @@ class MT_Admin_Field {
 	}
 	
 	/**
+	 * Returns an <option> tag
+	 * 
+	 * @param string $value Value of the option
+	 * @param string $name Name of the option
+	 * @return string <option> tag
+	 */
+	private function getSelectOption($value, $name) {
+		return '<option value="'.$value.'">'.$name.'</option>';
+	}	
+	
+	/**
 	 * Output all photographers (Form: <option>)
 	 *
 	 * @param	string	$selectedPhotographer	Selected photographer
@@ -185,4 +196,22 @@ class MT_Admin_Field {
 		return $resultString;
 	}
 	
+	/**
+	 * Output all categories and subcategories (Form: <option>)
+	 *
+	 * @return	void
+	 */
+	public function outputAllCategories() {
+		$resultString = '';
+		$query = (new MT_QueryBuilder())
+				->from('category', array('id', 'name'))
+				->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name'))
+				->joinLeftOuter('subcategory', 'wp_mt_subcategory.category = wp_mt_category.id', array('id AS subcategoryId', 'name AS subcategoryName'));
+		$result = $query->getResult();
+		
+		foreach ($result as $item) {
+			$resultString .= $this->getSelectOption($item->id.'_'.$item->sub, $item->name.MT_Functions::getIfNotEmpty($item->subcategoryName, ' > '.$item->subcategoryName));
+		}
+		return $resultString;
+	}
 }
