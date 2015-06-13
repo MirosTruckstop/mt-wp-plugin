@@ -26,9 +26,7 @@ abstract class MT_Config_Db {
 			`description` text NOT NULL,
 			`path` varchar(40) NOT NULL,
 			`fullPath` varchar(100) NOT NULL,
-			`hauptparkplatz` tinyint(2) unsigned NOT NULL DEFAULT '0',
 			`date` int(10) unsigned NOT NULL,
-			`updated` int(10) unsigned NOT NULL,
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `fullPath` (`fullPath`)		
 		");	
