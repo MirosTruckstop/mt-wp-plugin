@@ -117,8 +117,8 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 							</select>
 							&nbsp;<?php _e('Sortieren nach', MT_NAME); ?>:&nbsp;
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Einstellungsdatum: Neu - Alt', MT_NAME); ?></option>
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Einstellungsdatum: Alt - Neu', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Datum: Neu - Alt', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Datum: Alt - Neu', MT_NAME); ?></option>
 							</select>
 						</td>
 					</tr>

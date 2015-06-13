@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: \n"
-"POT-Creation-Date: 2015-06-07 19:25+0100\n"
-"PO-Revision-Date: 2015-06-07 19:25+0100\n"
+"POT-Creation-Date: 2015-06-13 02:29+0100\n"
+"PO-Revision-Date: 2015-06-13 02:32+0100\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: en_GB\n"
@@ -28,18 +28,18 @@ msgstr "Page"
 msgid "Weiter"
 msgstr "Next"
 
-#: mt-wp-plugin.php:187 public/view/Photographer.php:83
-#: public/view/gallery/Gallery.php:40
+#: mt-wp-plugin.pages.php:31
+msgid "Galerie wählen"
+msgstr "Choose gallery"
+
+#: mt-wp-plugin.shortcodes.php:50 public/view/Photographer.php:77
+#: public/view/gallery/Gallery.php:45
 msgid "Galerie"
 msgstr "Gallery"
 
-#: mt-wp-plugin.php:188
+#: mt-wp-plugin.shortcodes.php:51
 msgid "Anzahl der Bilder"
 msgstr "Number of photos"
-
-#: mt-wp-plugin.php:356
-msgid "Galerie wählen"
-msgstr "Choose gallery"
 
 #: public/view/Category.php:24
 msgid "Diese Kategorie existiert nicht"
@@ -52,10 +52,6 @@ msgstr ""
 #: public/view/Category.php:96
 msgid "Neue Bilder"
 msgstr "New photos"
-
-#: public/view/Error.php:10 public/view/Error.php:11
-msgid "Fehler"
-msgstr "Error"
 
 #: public/view/Photographer.php:24
 msgid "Die ausgewählte Fotograf existiert nicht."
@@ -73,19 +69,19 @@ msgstr "Photographers"
 msgid "Truckstop-Fotograf seit"
 msgstr "Truckstop photographer since"
 
-#: public/view/Photographer.php:66 public/view/Photographer.php:84
+#: public/view/Photographer.php:60 public/view/Photographer.php:78
 msgid "Anzahl der Fotos"
 msgstr "Amount of photos"
 
-#: public/view/Photographer.php:80 public/view/gallery/StaticGallery.php:109
+#: public/view/Photographer.php:74 public/view/gallery/StaticGallery.php:109
 msgid "Bilder"
 msgstr "Photos"
 
-#: public/view/gallery/Gallery.php:43
+#: public/view/gallery/Gallery.php:48
 msgid "Fotograf"
 msgstr "Photographer"
 
-#: public/view/gallery/Gallery.php:50
+#: public/view/gallery/Gallery.php:55
 msgid "Eingestellt am"
 msgstr "Published on"
 
@@ -103,27 +99,27 @@ msgstr "Back to overview"
 msgid "Bilder pro Seite"
 msgstr "Photos per page"
 
-#: public/view/gallery/StaticGallery.php:117
+#: public/view/gallery/StaticGallery.php:118
 msgid "Sortieren nach"
 msgstr "Sort by"
 
-#: public/view/gallery/StaticGallery.php:119
-msgid "Einstellungsdatum: Neu - Alt"
+#: public/view/gallery/StaticGallery.php:120
+msgid "Datum: Neu - Alt"
 msgstr "date: new - old"
 
-#: public/view/gallery/StaticGallery.php:120
-msgid "Einstellungsdatum: Alt - Neu"
-msgstr "date: old - new"
+#: public/view/gallery/StaticGallery.php:121
+msgid "Datum: Alt - Neu"
+msgstr "date: old -new"
 
-#: public/view/gallery/StaticGallery.php:147
+#: public/view/gallery/StaticGallery.php:148
 msgid "Nach oben"
 msgstr "Back to top"
 
-#: public/view/gallery/StaticGallery.php:150
+#: public/view/gallery/StaticGallery.php:151
 msgid "Nutzung der Bilder"
 msgstr "Usage of the photos"
 
-#: public/view/gallery/StaticGallery.php:151
+#: public/view/gallery/StaticGallery.php:152
 msgid ""
 "Alle Bilder auf dieser Seite unterliegen dem Copyright des jeweiligen "
 "Fotografens. Es ist nicht gestattet die Bilder \n"
@@ -137,27 +133,3 @@ msgstr "Photos with tag"
 #: public/view/gallery/TagGallery.php:11
 msgid "Fotogalerie für den Tag"
 msgstr "Photo gallery for the tag"
-
-#~ msgid "Fotos verwalten"
-#~ msgstr "Manage photos"
-
-#~ msgid "Fotos hinzufügen"
-#~ msgstr "Add photos"
-
-#~ msgid "News generieren"
-#~ msgstr "Generate news"
-
-#~ msgid "Verwaltung"
-#~ msgstr "Managment"
-
-#~ msgid "News"
-#~ msgstr "News"
-
-#~ msgid "Kategorien"
-#~ msgstr "Categories"
-
-#~ msgid "Unterkategorien"
-#~ msgstr "Subcategories"
-
-#~ msgid "Galerien"
-#~ msgstr "Galleries"
