@@ -1,14 +1,22 @@
+@color-grey-light: #cccccc;
+@color-yellow: #ffff99;
+@color-yellow-light: #ffffcc;
+
 /* -------------- Table ------------------------------------------------------*/
 tr.tr-sort:hover {
-	background-color: #ffffcc;
+	background-color: @color-yellow-light;
 }
-tr.tr-sort:active {
-	background-color: #ffff99;
-	border: 1px solid grey;
-}
-tr.tr-placeholder td {
-	line-height: 200px;
-	background-color: #cccccc;
+
+.sort {
+	tr.tr-sort:active {
+		background-color: @color-yellow;
+		border: 1px solid grey;
+	}
+	
+	tr.tr-placeholder td {
+		line-height: 200px;
+		background-color: @color-grey-light
+	}
 }
 
 /* -------------- Box --------------------------------------------------------*/
