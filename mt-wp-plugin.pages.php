@@ -75,8 +75,8 @@ function mt_page_news_generate() {
 				->setRequired()
 				->setMaxLength(100),
 			(new MT_Admin_Field('text', 'Text', 'text'))->setRequired(),
-			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))
-				->setReference('gallery')
+			(new MT_Admin_Field('gallery', 'Galerie'))
+				->setStaticReference('gallery')
 				->setRequired()
 		));
 		$editView->setData($newsData);
@@ -91,7 +91,7 @@ function mt_page_news() {
 			(new MT_Admin_Field('title', 'Title'))->setRequired(),
 			(new MT_Admin_Field('text', 'Text'))->setRequired(),
 			(new MT_Admin_Field('date', 'Datum', 'date'))->setDisabled(),
-			(new MT_Admin_Field('gallery', 'Galerie', 'reference'))->setReference('gallery')
+			(new MT_Admin_Field('gallery', 'Galerie'))->setStaticReference('gallery')
 		));
 		$editView->outputContent();
 	} else {
@@ -214,5 +214,5 @@ function mt_page_thumbnails() {
 //		));
 //	}
 //	require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
-//	MT_Admin_Model_ThumbnailCreator;
+//	(new MT_Admin_Model_ThumbnailCreator)->resize();
 }

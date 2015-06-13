@@ -2,17 +2,41 @@
 
 class MT_Admin_Field {
 	
+	const TYPE_STATIC_REFERENCE = 'staticReference';
+	
 	public $name;
 	public $label;
 	private $type;
 	private $required = false;
 	public $disabled = false;
 	private $maxLength;
+
+	/**
+	 * Reference, i.e. name of a database table without praefix
+	 * 
+	 * @var string
+	 */
 	private $reference;
+	/**
+	 * Referenced field, i.e. a column in @$reference@
+	 * 
+	 * @var string 
+	 */
 	public $referencedField;
+	
+	private $staticReference;
 	private $cache;
 	private $cssClass;
 	
+	/**
+	 * Create a (input) field.
+	 * 
+	 * @param string $name Name of the field
+	 * @param string $label Label of the field
+	 * @param string $type Type of the field: string|date|hidden|bool|text|reference|staticReference
+	 * @param null|string $cssClass
+	 * @return MT_Admin_Field
+	 */
 	public function __construct($name, $label, $type = 'string', $cssClass = NULL) {
 		$this->name = $name;
 		$this->label = $label;
@@ -21,18 +45,44 @@ class MT_Admin_Field {
 		return $this;
 	}
 	
+	/**
+	 * Sets the referance to another database table. Can be used for field type
+	 * "reference".
+	 * 
+	 * @param string $reference Reference, i.e. name of a database table without praefix
+	 * @param null|string $referencedField Referenced field in this table
+	 * @return MT_Admin_Field
+	 */
 	public function setReference($reference, $referencedField = 'id') {
 		$this->reference = $reference;
 		$this->referencedField = $referencedField;
 		return $this;
 	}
 	
+	/**
+	 * Returns the reference (name of a database table) if it exists, otherwise
+	 * false.
+	 * 
+	 * @return boolean|string
+	 */
 	public function getReference() {
 		if(!empty($this->reference)) {
 			return $this->reference;
 		} else {
 			return false;
 		}
+	}
+	
+	/**
+	 * Sets a static reference. Overrides the field type to "staticReference".
+	 * 
+	 * @param type $staticReference
+	 * @return \MT_Admin_Field
+	 */
+	public function setStaticReference($staticReference) {
+		$this->type = self::TYPE_STATIC_REFERENCE;
+		$this->staticReference = $staticReference;
+		return $this;
 	}
 	
 	/**
@@ -91,21 +141,25 @@ class MT_Admin_Field {
 			case 'text':
 				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
 			case 'reference':
-				if($this->reference === 'gallery') {
+				return $value;
+			case self::TYPE_STATIC_REFERENCE:
+				if($this->staticReference === 'categorySubcategory') {
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
+						. $this->outputAllCategoriesSubcategories($value) .'
+						</select>';
+				}
+				else if($this->staticReference === 'gallery') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
 					<option value=""></option>'
 				. $this->outputAllGalleries($value) .'
 				</select>';
 				}
-				else if($this->reference === 'photographer') {
+				else if($this->staticReference === 'photographer') {
 					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>
 					<option value="0"></option>'						
 				. $this->outputAllPhotographers($value) .'
 				</select>';
 				}
-				else {
-					return $value;
-				}		
 		}
 	}
 	
@@ -199,7 +253,7 @@ class MT_Admin_Field {
 	 *
 	 * @return	void
 	 */
-	public function outputAllCategories() {
+	public function outputAllCategoriesSubcategories($selectedCategorySubcategory) {
 		$resultString = '';
 		$query = (new MT_QueryBuilder())
 				->from('category', array('id', 'name'))
@@ -208,7 +262,8 @@ class MT_Admin_Field {
 		$result = $query->getResult();
 		
 		foreach ($result as $item) {
-			$resultString .= $this->getSelectOption($item->id.'_'.$item->sub, $item->name.MT_Functions::getIfNotEmpty($item->subcategoryName, ' > '.$item->subcategoryName));
+			$value = $item->id.'_'.$item->sub;
+			$resultString .= $this->getSelectOption($value, $item->name.MT_Functions::getIfNotEmpty($item->subcategoryName, ' > '.$item->subcategoryName), MT_Functions::selected($selectedCategorySubcategory, $value));
 		}
 		return $resultString;
 	}
