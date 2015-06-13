@@ -76,7 +76,7 @@ function mt_page_news_generate() {
 				->setMaxLength(100),
 			(new MT_Admin_Field('text', 'Text', 'text'))->setRequired(),
 			(new MT_Admin_Field('gallery', 'Galerie'))
-				->setStaticReference('gallery')
+				->setReference('gallery')
 				->setRequired()
 		));
 		$editView->setData($newsData);
@@ -91,7 +91,7 @@ function mt_page_news() {
 			(new MT_Admin_Field('title', 'Title'))->setRequired(),
 			(new MT_Admin_Field('text', 'Text'))->setRequired(),
 			(new MT_Admin_Field('date', 'Datum', 'date'))->setDisabled(),
-			(new MT_Admin_Field('gallery', 'Galerie'))->setStaticReference('gallery')
+			(new MT_Admin_Field('gallery', 'Galerie'))->setReference('gallery')
 		));
 		$editView->outputContent();
 	} else {
@@ -163,7 +163,7 @@ function mt_page_galleries() {
 			(new MT_Admin_Field('description', 'Beschreibung', 'text')),
 			(new MT_Admin_Field('path', 'Pfad'))
 				->setDisabled(),			
-			(new MT_Admin_Field('category', 'Kategorie', 'reference'))
+			(new MT_Admin_Field('category', 'Kategorie'))
 				->setReference('category', 'name'),
 			(new MT_Admin_Field('subcategory', 'Unterkategorie', 'reference'))
 				->setReference('subcategory', 'name')

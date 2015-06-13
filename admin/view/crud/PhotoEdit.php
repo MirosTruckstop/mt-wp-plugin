@@ -125,9 +125,9 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		$fields['checked'] = new MT_Admin_Field('checked', NULL, 'bool');
 		$fields['path'] = new MT_Admin_Field('path', NULL, 'hidden');
 		$fields['gallery'] = (new MT_Admin_Field('gallery', NULL))
-							->setStaticReference('gallery')
+							->setReference('gallery')
 							->setRequired();
-		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL))->setStaticReference('photographer');
+		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL))->setReference('photographer');
 		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date'))->setMaxLength(19);
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
 

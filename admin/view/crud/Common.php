@@ -149,13 +149,17 @@ abstract class MT_Admin_View_Common {
 		$select = array();
 		$leftJoin = array();
 		foreach ($this->fields as $field) {
-			$reference = $field->getReference();
-			if ($reference) {
+			if ($field->getType() == MT_Admin_Field::TYPE_REFERENCE) {
+				$reference = $field->getReference();
 				if (!is_array($leftJoin[$reference])) {
 					$leftJoin[$reference] = array();
 				}
 				array_push($leftJoin[$reference], $field->referencedField . ' AS '.$reference);
-			} else {
+			}
+			else if ($field->getType() == MT_Admin_Field::TYPE_STATIC_REFERENCE) {
+				// Do nothing
+			}
+			else {
 				array_push($select, $field->name);
 			}
 		}

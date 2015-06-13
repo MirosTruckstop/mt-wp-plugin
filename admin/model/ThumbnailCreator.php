@@ -9,26 +9,22 @@ class MT_Admin_Model_ThumbnailCreator {
 	/**
 	 * Maximal height of a thumbnail
 	 */
-	const MAX_HEIGHT = 150;
+	const MAX_HEIGHT = 175;
 	/**
 	 * Quality of a thumbnail
 	 */
 	const QUALITY = 90;
 
-/*	public function resizeAllImages() {
-		$photo = new MT_Photo();
-		$i = 0;
-		$min = 0;
-		$range = 250;
+/*	public function resize() {
+		$query = (new MT_QueryBuilder())
+			->from('photo')
+			->whereEqual('gallery', 8)
+			->limitPage(1, 200);
 
-		foreach ($photo->getAll() as $item) {
-			if ($i >= $min && $i<$min+$range) {
-				//echo $i;
-				$this->resizeImage(MT_Photo::PHOTO_PATH.$item->path, MT_Photo::THUMBNAIL_PATH.$item->path);
-			} else if($i >= $min+$range) {
-				break;
-			}
-			$i++;
+		foreach ($query->getResult() as $item) {
+			echo $item->path;
+			echo self::create(MT_Photo::PHOTO_PATH.'/'.$item->path, MT_Photo::THUMBNAIL_PATH.'/'.$item->path);
+			echo "<br>";
 		}
 	}*/
 	
@@ -60,11 +56,11 @@ class MT_Admin_Model_ThumbnailCreator {
 		$width = $fileSize[0];
 		$height = $fileSize[1];
 
-		if( $width > $height ) {
-			$factor = $maxWidth / $width;
-		} else {
+//		if( $width > $height ) {
+//			$factor = $maxWidth / $width;
+//		} else {
 			$factor = $maxHeight / $height;
-		}
+//		}
 
 		$newWidth = round( $width * $factor );
 		$newHeight = round( $height * $factor );

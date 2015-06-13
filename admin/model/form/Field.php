@@ -2,6 +2,7 @@
 
 class MT_Admin_Field {
 	
+	const TYPE_REFERENCE = 'reference';
 	const TYPE_STATIC_REFERENCE = 'staticReference';
 	
 	public $name;
@@ -46,7 +47,16 @@ class MT_Admin_Field {
 	}
 	
 	/**
-	 * Sets the referance to another database table. Can be used for field type
+	 * Returns the type of the field.
+	 * 
+	 * @return string Field type
+	 */
+	public function getType() {
+		return $this->type;
+	}
+	
+	/**
+	 * Sets the referance to another database table. Overrides the field type to
 	 * "reference".
 	 * 
 	 * @param string $reference Reference, i.e. name of a database table without praefix
@@ -54,6 +64,7 @@ class MT_Admin_Field {
 	 * @return MT_Admin_Field
 	 */
 	public function setReference($reference, $referencedField = 'id') {
+		$this->type = self::TYPE_REFERENCE;
 		$this->reference = $reference;
 		$this->referencedField = $referencedField;
 		return $this;
@@ -140,25 +151,26 @@ class MT_Admin_Field {
 				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';
 			case 'text':
 				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
-			case 'reference':
-				return $value;
-			case self::TYPE_STATIC_REFERENCE:
-				if($this->staticReference === 'categorySubcategory') {
-					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
-						. $this->outputAllCategoriesSubcategories($value) .'
-						</select>';
-				}
-				else if($this->staticReference === 'gallery') {
+			case self::TYPE_REFERENCE:
+				if($this->reference === 'gallery') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
 					<option value=""></option>'
 				. $this->outputAllGalleries($value) .'
 				</select>';
 				}
-				else if($this->staticReference === 'photographer') {
+				else if($this->reference === 'photographer') {
 					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>
 					<option value="0"></option>'						
 				. $this->outputAllPhotographers($value) .'
 				</select>';
+				} else {
+					return $value;					
+				}
+			case self::TYPE_STATIC_REFERENCE:
+				if($this->staticReference === 'categorySubcategory') {
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
+						. $this->outputAllCategoriesSubcategories($value) .'
+						</select>';
 				}
 		}
 	}
@@ -228,8 +240,6 @@ class MT_Admin_Field {
 				->join('category', TRUE)
 				->joinLeft('subcategory', TRUE)
 				->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name', 'wp_mt_gallery.name'));
-			//TODO IS CALLED EACH TIME
-			//echo $query;
 			$this->cache = $query->getResult('ARRAY_A');
 		}
 		foreach ($this->cache as $row) {
