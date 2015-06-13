@@ -149,14 +149,6 @@ function mt_page_subcategories() {
 
 function mt_page_galleries() {
 	if ($_GET['type'] === 'edit') {
-		/*
-					$this->_title = 'Galerie';
-			$this->_table->setTableHead( array( 'Name', 'Beschreibung', 'Pfad', 'Kategorie', 'Unterkategorie' ) );
-			$this->_table->setTableFieldAttributes( array( 'required', '', 'disabled', 'disabled', 'disabled' ) );
-
-			$query = MT_Gallery::__getSqlQuery( array( 'gallery_name', 'gallery_description', 'gallery_path' ), 'category_name', 'subcategory_name' );
-*/
-			
 		$editView = new MT_View_Edit( new MT_Gallery($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),
