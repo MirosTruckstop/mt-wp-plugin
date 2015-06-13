@@ -156,9 +156,11 @@ function mt_page_galleries() {
 			(new MT_Admin_Field('path', 'Pfad'))
 				->setDisabled(),			
 			(new MT_Admin_Field('category', 'Kategorie'))
-				->setReference('category', 'name'),
-			(new MT_Admin_Field('subcategory', 'Unterkategorie', 'reference'))
+				->setReference('category', 'name')
+				->setDisabled(),
+			(new MT_Admin_Field('subcategory', 'Unterkategorie'))
 				->setReference('subcategory', 'name')
+				->setDisabled()
 		));
 		$editView->outputContent();
 	} else {

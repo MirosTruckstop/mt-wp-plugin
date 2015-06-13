@@ -3,7 +3,6 @@
 class MT_Admin_Field {
 	
 	const TYPE_REFERENCE = 'reference';
-	const TYPE_STATIC_REFERENCE = 'staticReference';
 	
 	public $name;
 	public $label;
@@ -152,7 +151,18 @@ class MT_Admin_Field {
 			case 'text':
 				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
 			case self::TYPE_REFERENCE:
-				if($this->reference === 'gallery') {
+				if($this->reference === 'category') {
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
+				. $this->outputAllCategories($value) .'
+				</select>';
+				}
+				else if($this->reference === 'subcategory') {
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
+						<option value=""></option>'
+				. $this->outputAllSubcategories($value) .'
+				</select>';
+				}
+				else if($this->reference === 'gallery') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
 					<option value=""></option>'
 				. $this->outputAllGalleries($value) .'
@@ -166,12 +176,12 @@ class MT_Admin_Field {
 				} else {
 					return $value;					
 				}
-			case self::TYPE_STATIC_REFERENCE:
+/*			case self::TYPE_STATIC_REFERENCE:
 				if($this->staticReference === 'categorySubcategory') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
 						. $this->outputAllCategoriesSubcategories($value) .'
 						</select>';
-				}
+				}*/
 		}
 	}
 	
@@ -220,6 +230,24 @@ class MT_Admin_Field {
 		}
 		return $resultString;
 	}
+	
+	private function outputAllCategories($selectedCategory) {
+		$resultString = '';
+		$query = MT_Category::getAll(array('id', 'name'));
+		foreach ($query as $item) {
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedCategory, $item->id));
+		}
+		return $resultString;		
+	}
+	
+	private function outputAllSubcategories($selectedSubcategory) {
+		$resultString = '';
+		$query = MT_Subcategory::getAll(array('id', 'name'));
+		foreach ($query as $item) {
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedSubcategory, $item->id));
+		}
+		return $resultString;		
+	}
 
 	/**
 	 * Outputs all galleries (Form: <optgroup>, <option>)
@@ -263,7 +291,7 @@ class MT_Admin_Field {
 	 *
 	 * @return	void
 	 */
-	public function outputAllCategoriesSubcategories($selectedCategorySubcategory) {
+/*	public function outputAllCategoriesSubcategories($selectedCategorySubcategory) {
 		$resultString = '';
 		$query = (new MT_QueryBuilder())
 				->from('category', array('id', 'name'))
@@ -276,5 +304,5 @@ class MT_Admin_Field {
 			$resultString .= $this->getSelectOption($value, $item->name.MT_Functions::getIfNotEmpty($item->subcategoryName, ' > '.$item->subcategoryName), MT_Functions::selected($selectedCategorySubcategory, $value));
 		}
 		return $resultString;
-	}
+	}*/
 }
