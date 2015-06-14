@@ -62,7 +62,7 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' || $this->model->name() == 'category' ) {
+		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' || $this->model->name() == 'category' || $this->model->name() == 'subcategory' ) {
 			echo MT_Functions::submitButton();
 		}
 		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-'.$this->model->name());

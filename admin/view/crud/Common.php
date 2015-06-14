@@ -109,6 +109,12 @@ abstract class MT_Admin_View_Common {
 //		}
 //	}
 	
+	/**
+	 * 
+	 * @param array $data
+	 * @return boolean True, if insert/update was successful
+	 * @throws Exception If inser/update failed
+	 */
 	protected function updateOrInsertAll($data) {
 		foreach ($data as $item) {
 			$id = $item['id'];

@@ -1,8 +1,12 @@
 <?php
-/*
- * Admin menu hook
+/**
+ * Type edit
  */
-add_action('admin_menu', 'mt_admin_menu');
+const TYPE_EDIT = 'edit';
+
+/**
+ * Admin menu hook: Add pages to menu.
+ */
 function mt_admin_menu() {
 
     // Add top-level and submenu menu item
@@ -19,7 +23,11 @@ function mt_admin_menu() {
 	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'edit_others_pages', 'mt-photographer', 'mt_page_photographers');
 	//add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'manage_options', 'mt-thumbnail', 'mt_page_thumbnails');
 }
+add_action('admin_menu', 'mt_admin_menu');
 
+/**
+ * Page edit photos
+ */
 function mt_page_photos() {
 	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
 
@@ -39,6 +47,9 @@ function mt_page_photos() {
 	}
 }
 
+/**
+ * Page add new photos
+ */
 function mt_page_photos_add() {
 	require_once(MT_DIR . '/admin/model/PhotoSearch.php');
 	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
@@ -54,6 +65,9 @@ function mt_page_photos_add() {
 	
 }
 
+/**
+ * Page generate news
+ */
 function mt_page_news_generate() {
 	require_once(MT_DIR . '/admin/model/NewsGeneration.php');
 
@@ -84,8 +98,11 @@ function mt_page_news_generate() {
 	}
 }
 
+/**
+ * Page list/edit news
+ */
 function mt_page_news() {
-	if ($_GET['type'] === 'edit') {
+	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_News($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('title', 'Title'))->setRequired(),
@@ -106,8 +123,11 @@ function mt_page_news() {
 	}
 }
 
+/**
+ * Page list/edit categories
+ */
 function mt_page_categories() {
-	if ($_GET['type'] === 'edit') {
+	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_Category($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),
@@ -125,15 +145,25 @@ function mt_page_categories() {
 	}
 }
 
+/**
+ * Page list/edit subcategories
+ */
 function mt_page_subcategories() {
-	if ($_GET['type'] === 'edit') {
-		$editView = new MT_View_Edit( new MT_Subcategory($_GET['id']) );
+	if ($_GET['type'] === TYPE_EDIT) {
+		$fieldCategory = (new MT_Admin_Field('category', 'Kategorie'))
+				->setReference('category')
+				->setRequired();
+		
+		$id = $_GET['id'];
+		if (!empty($id)) {
+			$fieldCategory->setDisabled();
+		}
+		
+		$editView = new MT_View_Edit(new MT_Subcategory($id));
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),
 			(new MT_Admin_Field('path', 'Pfad'))->setDisabled(),
-			(new MT_Admin_Field('name', 'Kategorie'))
-				->setReference('category')
-				->setDisabled(),			
+			$fieldCategory		
 		));	
 		$editView->outputContent();
 	} else {
@@ -148,7 +178,7 @@ function mt_page_subcategories() {
 }
 
 function mt_page_galleries() {
-	if ($_GET['type'] === 'edit') {
+	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_Gallery($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),
@@ -175,7 +205,7 @@ function mt_page_galleries() {
 }
 
 function mt_page_photographers() {
-	if ($_GET['type'] === 'edit') {
+	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_Photographer($_GET['id']) );
 		$editView->setFields(array(
 			(new MT_Admin_Field('name', 'Name'))->setRequired(),

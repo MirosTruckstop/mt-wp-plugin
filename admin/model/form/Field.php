@@ -223,7 +223,8 @@ class MT_Admin_Field {
 				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
 			case self::TYPE_REFERENCE:
 				if($this->reference === 'category') {
-					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
+					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
+							<option value=""></option>'
 				. $this->outputAllCategories($value) .'
 				</select>';
 				}

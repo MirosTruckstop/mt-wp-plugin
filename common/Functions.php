@@ -6,15 +6,28 @@
  */
 abstract class MT_Functions {
 
+	/**
+	 * Returns for a name a path, i.e. removes special characters etc.
+	 * 
+	 * @param string $name
+	 * @return string
+	 */
 	public static function nameToPath($name) {
 		// First array: search, second array: replace
-		return str_replace(array(' ', '.'), array('_', ''), strtolower($name));
+		return str_replace(array(' ', '.', '-'), array('_', '', '_'), strtolower($name));
 	}
 	
+	/**
+	 * Creates a directory if it not already exits.
+	 * 
+	 * @param string $path Path as string
+	 * @return boolen True, if dir exits or was created
+	 */
 	public static function createDirIfNotExists($path) {
 		if (!file_exists($path)) {
-			mkdir($path);
+			return mkdir($path);
 		}
+		return TRUE;
 	}
 	
 	/**

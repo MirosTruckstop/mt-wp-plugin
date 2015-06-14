@@ -19,6 +19,13 @@ class MT_QueryBuilder {
 		return $this;
 	}
 	
+	/**
+	 * Set from of the query.
+	 * 
+	 * @param string $tableName From table name
+	 * @param null|string|array $select Select from this field
+	 * @return MT_QueryBuilder
+	 */
 	public function from($tableName, $select = NULL) {
 		$this->tableName = $this->tablePraefix.$tableName;
 		$this->addToSelect($tableName, $select);
@@ -31,7 +38,7 @@ class MT_QueryBuilder {
 	 * @param string|true $joinTable
 	 * @param string $joinCondition
 	 * @param type $joinSelect
-	 * @return \MT_QueryBuilder
+	 * @return MT_QueryBuilder
 	 */
 	private function _generalJoin($type, $joinTable, $joinCondition, $joinSelect = NULL) {
 		if (!empty($joinTable) && !empty($joinCondition)) {
@@ -147,6 +154,13 @@ class MT_QueryBuilder {
 			.$this->limit;
 	}
 		
+	/**
+	 * Adds a join.
+	 * 
+	 * @param string $type Join type, i.e. 'JOIN', 'INNER JOIN'
+	 * @param string $joinTable Join table
+	 * @param string $joinCondition Join condition
+	 */
 	private function addToJoin($type, $joinTable, $joinCondition) {
 		$this->join .= ' '.$type.' '.$this->tablePraefix.$joinTable.'
 				ON '.$joinCondition;

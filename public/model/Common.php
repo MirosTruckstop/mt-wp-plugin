@@ -79,10 +79,9 @@ abstract class MT_Common {
 		
 	/**
 	 * 
-	 * @global type $wpdb
-	 * @param type $aggregateFunctionName Max, min
-	 * @param type $columnName
-	 * @return type
+	 * @param string $aggregateFunctionName Aggregate function, e.g. 'MAX', 'AVG'
+	 * @param string $columnName Name of the column
+	 * @return integer Results of aggregate
 	 */
 	public static function get_aggregate($aggregateFunctionName, $columnName, $whereCondition = NULL) {
 		$aggregateValue = self::_get_one_value($aggregateFunctionName.'('.$columnName.')', $whereCondition);
@@ -93,6 +92,12 @@ abstract class MT_Common {
 		}
 	}
 	
+	/**
+	 * 
+	 * @param string $columnName Name of the column
+	 * @param null|string $whereCondition
+	 * @return string Attribute
+	 */
 	public function get_attribute($columnName, $whereCondition = NULL) {
 		if (empty($whereCondition) && $this->hasId()) {
 			return self::_get_one_value($columnName, 'id=' . $this->id);
