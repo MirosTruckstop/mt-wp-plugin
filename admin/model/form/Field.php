@@ -12,6 +12,10 @@ class MT_Admin_Field {
 	 */
 	const TYPE_REFERENCE = 'reference';
 	/**
+	 * Field type data
+	 */
+	const TYPE_DATE = 'date';
+	/**
 	 * Name of the field (mostly database table column)
 	 * 
 	 * @var string
@@ -46,7 +50,12 @@ class MT_Admin_Field {
 	 * @var integer 
 	 */
 	private $maxLength;
-
+	/**
+	 * CSS class of the input field
+	 * 
+	 * @var string
+	 */
+	private $cssClass;
 	/**
 	 * Reference, i.e. name of a database table without praefix
 	 * 
@@ -60,9 +69,14 @@ class MT_Admin_Field {
 	 */
 	public $referencedField;
 	
-	private $staticReference;
+//	private $staticReference;
+	
+	/**
+	 * Can be used to store query results.
+	 * 
+	 * @var object 
+	 */
 	private $cache;
-	private $cssClass;
 	
 	/**
 	 * Create a (input) field.
@@ -125,16 +139,17 @@ class MT_Admin_Field {
 	 * @param type $staticReference
 	 * @return \MT_Admin_Field
 	 */
-	public function setStaticReference($staticReference) {
+/*	public function setStaticReference($staticReference) {
 		$this->type = self::TYPE_STATIC_REFERENCE;
 		$this->staticReference = $staticReference;
 		return $this;
-	}
+	}*/
 	
 	/**
 	 * Set the field as required.
 	 * 
 	 * @param   boolean $value  True, if element is required
+	 * @return MT_Admin_Field
 	 */
 	public function setRequired() {
 		$this->required = true;
@@ -145,19 +160,32 @@ class MT_Admin_Field {
 	 * Set the field as disabled.
 	 * 
 	 * @param   boolean $value True, if the field should be disabled
+	 * @return MT_Admin_Field
 	 */	
 	public function setDisabled() {
 		$this->disabled = true;
 		return $this;
 	}
 	
+	/**
+	 * Set the maximum length of the field.
+	 * 
+	 * @param integer $maxLength Maximum input length
+	 * @return MT_Admin_Field
+	 */
 	public function setMaxLength($maxLength) {
 		$this->maxLength = $maxLength;
 		return $this;
 	}
 	
+	/**
+	 * Get the content of the field as string.
+	 * 
+	 * @param string $value Value of the field
+	 * @return string Content of the field
+	 */
 	public function getString($value) {
-		if ($this->type === 'date') {
+		if ($this->type === self::TYPE_DATE) {
 			return date('m.d.Y, H:i', $value);
 		}
 		else {
@@ -165,6 +193,13 @@ class MT_Admin_Field {
 		}
 	}
 	
+	/**
+	 * Get the element/field.
+	 * 
+	 * @param string $value Value of the field
+	 * @param integer $elementNumber
+	 * @return string Element as string
+	 */
 	public function getElement($value, $elementNumber = NULL) {
 		if ($this->disabled) {
 			return $this->getString($value);
@@ -178,7 +213,7 @@ class MT_Admin_Field {
 		switch ($this->type) {
 			case 'string':
 				return $this->getInputField('text', $arrayElement, $value, 50);
-			case 'date':
+			case self::TYPE_DATE:
 				return $this->getInputField('text', $arrayElement, date('d.m.Y H:i:s', $value));
 			case 'hidden':
 				return $this->getInputField('hidden', $arrayElement, $value);
@@ -221,6 +256,15 @@ class MT_Admin_Field {
 		}
 	}
 	
+	/**
+	 * Returns an input field as string.
+	 * 
+	 * @param string $type Input type, e.g. 'text'
+	 * @param string $name Name of the input field
+	 * @param string $value Value of the input field
+	 * @param integer|null $size Size of the input field
+	 * @return string Input field as string
+	 */
 	private function getInputField($type, $name, $value, $size = NULL) {
 		$attribute = '';
 		if (!empty($size)) {

@@ -8,6 +8,11 @@
  */
 class MT_Admin_Model_PhotoSearch {
 
+	/**
+	 * Timestamp
+	 * 
+	 * @var integer
+	 */
 	private $time;
 	
 	/**
@@ -24,8 +29,8 @@ class MT_Admin_Model_PhotoSearch {
 	/**
 	 * Searchs new photos in the given directory and stores them.
 	 *
-	 * @param	string|undefined $dir Directory
-	 * @return	void|boolean False, if $dir is not a directory
+	 * @param	string|null $dir Directory
+	 * @return	boolean True, if search was successful
 	 */
 	public function search($dir = MT_Photo::PHOTO_PATH) { 
 		if (!is_dir($dir)) {
@@ -72,8 +77,15 @@ class MT_Admin_Model_PhotoSearch {
 			}
 		}
 		closedir($directoryHandle);
+		return TRUE;
 	}
 	
+	/**
+	 * Checks if the given file is a photo.
+	 * 
+	 * @param string $file File path as string
+	 * @return boolean True, if file is a photo
+	 */
 	private function isPhoto($file) {
 		$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 		return is_file($file) && in_array($fileExtension, self::$__photoExtensions);

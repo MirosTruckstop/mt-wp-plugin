@@ -11,7 +11,7 @@ class MT_Admin_NewsGeneration {
 	/**
 	 * Timestamp of the last news
 	 * 
-	 * @var int 
+	 * @var integer 
 	 */
 	private $timestampLatestNews;
 	
@@ -55,7 +55,17 @@ class MT_Admin_NewsGeneration {
 		return $news;
 	}
 	
-	private function generateTitle($catgegoryName, $subcategoryName, $galleryName, $galleryDate, $numPhotos) {
+	/**
+	 * Generates the title of the news entry.
+	 * 
+	 * @param string $catgegoryName Name of the category
+	 * @param string|null $subcategoryName Name of the subcategory
+	 * @param string $galleryName Name of the gallery
+	 * @param integer $galleryDate Date of the gallery as timestamp
+	 * @param integer $numPhotos Number of added photos
+	 * @return string Title of the news
+	 */
+	private function generateTitle($catgegoryName, $subcategoryName = NULL, $galleryName, $galleryDate, $numPhotos) {
 		$title = $catgegoryName;
 		if( !empty($subcategoryName) ) {
 			$title .= ' > ' . $subcategoryName;
@@ -77,6 +87,12 @@ class MT_Admin_NewsGeneration {
 		return $title;
 	}
 	
+	/**
+	 * Generates the text of the news entry.
+	 * 
+	 * @param integer $numPhotos Number of photos added
+	 * @return string Text of the news
+	 */
 	private function generateText($numPhotos) {
 		$text = $numPhotos . ' ';
 		if($numPhotos > 1) {
