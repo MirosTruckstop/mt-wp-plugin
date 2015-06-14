@@ -1,4 +1,9 @@
 <?php
+/**
+ * Configuration of the database on plugin installation.
+ * 
+ * @package config
+ */
 abstract class MT_Config_Db {
 	
 	private static function createTable($tableName, $sql) {

@@ -1,9 +1,10 @@
 <?php
 /**
- * Klasse um Uebersichtstabellen zu erstellen
+ * Admin list view, i.e. list a entries of an entity.
  *
  * @category   MT
- * @package    Admin
+ * @package    admin
+ * @subpackage view
  */
 class MT_View_List extends MT_Admin_View_Common {
 	

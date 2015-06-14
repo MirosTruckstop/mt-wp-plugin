@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Admin edit photos view, i.e. view to edit photos.
+ *  
+ * @package admin
+ * @subpackage view
+ */
 class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 	/**

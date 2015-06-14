@@ -1,6 +1,9 @@
 <?php
 /**
- * Abstract class which has helper functions to get data from the database
+ * Common model
+ * 
+ * @package public
+ * @subpackage model
  */
 abstract class MT_Common {
 

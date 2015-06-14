@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Category view, i.e. display category properties and its galleries.
+ *
+ * @package public
+ * @subpackage view
+ */
 class MT_View_Category extends MT_View_Common {
 
 	/**

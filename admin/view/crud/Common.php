@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Common admin view.
+ * 
+ * @package admin
+ * @subpackage view
+ */
 abstract class MT_Admin_View_Common {
 
 	/**

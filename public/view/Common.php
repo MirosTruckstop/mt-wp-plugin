@@ -1,4 +1,10 @@
 <?php
+/**
+ * Common view
+ * 
+ * @package public
+ * @subpackage view
+ */
 abstract class MT_View_Common {
 
 	private $title;

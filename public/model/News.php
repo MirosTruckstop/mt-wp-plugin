@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * News view, i.e. display all news entries.
+ * 
+ * @package public
+ * @subpackage model
+ */
 class MT_News extends MT_Common {
 	
 	public function __construct($id = NULL) {

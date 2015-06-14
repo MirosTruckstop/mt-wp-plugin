@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Photographer view, i.e. view details about one photographer.
+ * 
+ * @package public
+ * @subpackage view
+ */
 class MT_View_Photographer extends MT_View_Common {
 
 	/**

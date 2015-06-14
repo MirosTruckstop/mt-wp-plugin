@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * General view of a gallery.
+ * 
+ * @package public
+ * @subpackage view
+ */
 abstract class MT_View_Gallery extends MT_View_Common {
 
 	private $checkWidescreen;

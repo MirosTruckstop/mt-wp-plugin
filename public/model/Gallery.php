@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Model of a gallery.
+ * 
+ * @package public
+ * @subpackage model
+ */
 class MT_Gallery extends MT_Common {
 
 	/**

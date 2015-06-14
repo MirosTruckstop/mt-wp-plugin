@@ -1,14 +1,50 @@
 <?php
-
+/**
+ * (Input) fields used for forms.
+ * 
+ * @package admin
+ * @subpackage model
+ */
 class MT_Admin_Field {
 	
+	/**
+	 * Field type reference
+	 */
 	const TYPE_REFERENCE = 'reference';
-	
+	/**
+	 * Name of the field (mostly database table column)
+	 * 
+	 * @var string
+	 */
 	public $name;
+	/**
+	 * Label of the field
+	 * 
+	 * @var string 
+	 */
 	public $label;
+	/**
+	 * Type of the field: string|date|hidden|bool|text|reference
+	 * @var string 
+	 */
 	private $type;
+	/**
+	 * True, if field is required.
+	 * 
+	 * @var bollean 
+	 */
 	private $required = false;
+	/**
+	 * True, if field is disabled.
+	 * 
+	 * @var bolean
+	 */
 	public $disabled = false;
+	/**
+	 * Maximum input length of the field.
+	 * 
+	 * @var integer 
+	 */
 	private $maxLength;
 
 	/**
@@ -33,7 +69,7 @@ class MT_Admin_Field {
 	 * 
 	 * @param string $name Name of the field
 	 * @param string $label Label of the field
-	 * @param string $type Type of the field: string|date|hidden|bool|text|reference|staticReference
+	 * @param string $type Type of the field: string|date|hidden|bool|text|reference
 	 * @param null|string $cssClass
 	 * @return MT_Admin_Field
 	 */

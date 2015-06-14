@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Create a thumbnail photo.
+ * 
+ * @package admin
+ * @subpackage model
+ */
 class MT_Admin_Model_ThumbnailCreator {
 	
 	/**
@@ -31,8 +36,8 @@ class MT_Admin_Model_ThumbnailCreator {
 	/**
 	 * Creates a thumbnail of the given photo $photoPath.
 	 * 
-	 * @param type $photoPath
-	 * @param type $thumbnailPath
+	 * @param string $photoPath Path of the photo
+	 * @param string $thumbnailPath Thumbnail path
 	 * @return boolean True, if create was successful
 	 */
 	public static function create($photoPath, $thumbnailPath) {

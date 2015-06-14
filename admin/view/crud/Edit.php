@@ -1,9 +1,10 @@
 <?php
 /**
- * Service class for categories and subcategories
+ * Admin edition view, i.e. view for editing an entry of an entity.
  *
  * @category   MT
- * @package    Admin
+ * @package    admin
+ * @subpackage view
  */
 class MT_View_Edit extends MT_Admin_View_Common {
 	

@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Tag gallery view, i.e. display all photos with a given (hash-) tag.
+ * 
+ * @package public
+ * @subpackage view
+ */
 class MT_View_TagGallery extends MT_View_Gallery {
 
 	private $tag;

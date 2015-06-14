@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * @package public
+ * @subpackage view
+ */
 class MT_View_StaticGallery extends MT_View_Gallery {
 
 	private $item;

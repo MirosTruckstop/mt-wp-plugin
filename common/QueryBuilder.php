@@ -1,5 +1,9 @@
 <?php
-
+/**
+ * Create SQL queries.
+ * 
+ * @package common
+ */
 class MT_QueryBuilder {
 	
 	private $tablePraefix;

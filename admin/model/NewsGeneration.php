@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Automatically generate news entries based on new photo uploads (and newly
+ * create galleries).
+ * 
+ * @package admin
+ * @subpackage model
+ */
 class MT_Admin_NewsGeneration {
 	
 	/**

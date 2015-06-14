@@ -1,7 +1,8 @@
 <?php
 /**
- * Enthält einige hilfreiche Funktionen
- *
+ * Collection of helper functions.
+ * 
+ * @package common
  */
 abstract class MT_Functions {
 

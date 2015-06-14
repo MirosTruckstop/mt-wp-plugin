@@ -1,8 +1,10 @@
 <?php
 /**
- * Service class for categories and subcategories
+ * Model of a subcategory.
  *
  * @category   MT
+ * @package public
+ * @subpackage model
  */
 class MT_Subcategory extends MT_Common {
 	

@@ -1,5 +1,11 @@
 <?php
-
+/**
+ * Dashboard widget to display relevant information on the administration home
+ * page.
+ * 
+ * @package admin
+ * @subpackage view
+ */
 class MT_Admin_DashboardWidget {
 
 	/**

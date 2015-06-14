@@ -1,9 +1,10 @@
 <?php
 /**
- * Class for searching photos
+ * Search and store new photos.
  *
  * @category   MT
- * @package    Admin
+ * @package    admin
+ * @subpackage model
  */
 class MT_Admin_Model_PhotoSearch {
 
