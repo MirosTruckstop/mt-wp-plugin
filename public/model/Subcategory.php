@@ -21,18 +21,19 @@ class MT_Subcategory extends MT_Common {
 	}
 	
 	/**
-	 * Inserts a new category in the database and creats the folder.
+	 * Inserts a new subcategory in the database and creats it's folder.
 	 * 
-	 * @param array $data
+	 * @param array $data Data
 	 * @return boolean True, if insert was successful
 	 * @throws Exception If creation of the folder failed
 	 */
 	public static function insert($data) {
 		$data['path'] = MT_Functions::nameToPath($data['name']);
 		$categoryPath = (new MT_Category($data['category']))->get_attribute('path');
-		$path = MT_Photo::PHOTO_PATH.'/'.$categoryPath.'/'.$data['path'];
+		$path = $categoryPath.'/'.$data['path'];
 		if (parent::insert($data)) {
-			if (MT_Functions::createDirIfNotExists($path)) {
+			// Create category folder and thumbnail folder
+			if (MT_Functions::createDirIfNotExists(MT_Photo::PHOTO_PATH.'/'.$path) && MT_Functions::createDirIfNotExists(MT_Photo::THUMBNAIL_PATH.'/'.$path)) {
 				return TRUE;
 			} else {
 				throw new Exception('Could not create folder '.$path);
