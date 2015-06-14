@@ -35,14 +35,9 @@ class MT_Category extends MT_Common {
 	 * @throws Exception If creation of the folder failed
 	 */
 	public static function insert($data) {
-		$data['path'] = MT_Functions::nameToPath($data['name']);
+		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);
 		if (parent::insert($data)) {
-			// Create category folder and thumbnail folder
-			if (MT_Functions::createDirIfNotExists(MT_Photo::PHOTO_PATH.'/'.$data['path']) && MT_Functions::createDirIfNotExists(MT_Photo::THUMBNAIL_PATH.'/'.$data['path'])) {
-				return TRUE;
-			} else {
-				throw new Exception('Could not create folder '.$data['path']);
-			}
+			return MT_Admin_Model_File::createDirectory($path);
 		}
 		return FALSE;
 	}

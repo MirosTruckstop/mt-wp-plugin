@@ -26,6 +26,7 @@ define('MT_DIR', WP_PLUGIN_DIR.'/'.MT_NAME);
  * Require scripts
  */
 require_once(MT_DIR . '/admin/model/form/Field.php');
+require_once(MT_DIR . '/admin/model/File.php');
 require_once(MT_DIR . '/admin/view/crud/Common.php');
 require_once(MT_DIR . '/admin/view/crud/Edit.php');
 require_once(MT_DIR . '/admin/view/crud/List.php');
