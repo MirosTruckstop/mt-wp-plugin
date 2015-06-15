@@ -15,13 +15,6 @@ class MT_Admin_Model_PhotoSearch {
 	 */
 	private $time;
 	
-	/**
-	 * Supported photo extensions
-	 *
-	 * @var array
-	 */
-	private static $__photoExtensions = array('jpg', 'jpeg');
-	
 	public function __construct() {
 		return $this;
 	}
@@ -32,7 +25,7 @@ class MT_Admin_Model_PhotoSearch {
 	 * @param	string|null $dir Directory
 	 * @return	boolean True, if search was successful
 	 */
-	public function search($dir = MT_Photo::PHOTO_PATH) { 
+	public function search($dir = MT_Admin_Model_File::PHOTO_PATH) { 
 		if (!is_dir($dir)) {
 			return FALSE;
 		}
@@ -41,7 +34,7 @@ class MT_Admin_Model_PhotoSearch {
 			$path = $dir.'/'.$basename;
 			
 			// Skip "." and ".." files and the thumbnail folder
-			if($basename == '.' || $basename == '..' || $path == MT_Photo::THUMBNAIL_PATH) {
+			if($basename == '.' || $basename == '..' || $path == MT_Admin_Model_File::THUMBNAIL_PATH) {
 				continue;
 			}
 			// Folder	
@@ -49,13 +42,9 @@ class MT_Admin_Model_PhotoSearch {
 				$this->search($path);
 			}
 			// Photo file
-			else if($this->isPhoto($path)) {
+			else if(MT_Admin_Model_File::isPhoto($path)) {
 				// Store the photo path without PHOTO_PATH in the database
-				if ($dir == MT_Photo::PHOTO_PATH) {
-					$dbDirname = '';				
-				} else {
-					$dbDirname = str_replace(MT_Photo::PHOTO_PATH.'/', '', $dir).'/';					
-				}
+				$dbDirname = MT_Admin_Model_File::getDbPathFromDir($dir);
 				$dbFile = $dbDirname.$basename;
 		
 				if (!isset($this->time)) {
@@ -79,16 +68,5 @@ class MT_Admin_Model_PhotoSearch {
 		closedir($directoryHandle);
 		return TRUE;
 	}
-	
-	/**
-	 * Checks if the given file is a photo.
-	 * 
-	 * @param string $file File path as string
-	 * @return boolean True, if file is a photo
-	 */
-	private function isPhoto($file) {
-		$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-		return is_file($file) && in_array($fileExtension, self::$__photoExtensions);
-	}
+
 }
-?>

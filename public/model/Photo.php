@@ -6,21 +6,7 @@
  * @subpackage model
  */
 class MT_Photo extends MT_Common {
-	
-	/**
-	 * Relative (from administration view) photo path
-	 *
-	 * @var string
-	 */
-	const PHOTO_PATH = '../../bilder';
 
-	/**
-	 * Relative (from administration view) path to photo thumbnail folder.
-	 * 
-	 * @var string 
-	 */
-	const THUMBNAIL_PATH = '../../bilder/thumb';
-	
 	/**
 	 * Photo path
 	 *
@@ -40,26 +26,10 @@ class MT_Photo extends MT_Common {
 	public function isDeletable() {
 		return !empty($this->id);
 	}
-	
-//	public static function delete() {
-//		$path = parent::get_attribute('path');
-//		if (parent::delete('id = '.$this->getId())) {
-//			$photoDeleted = unlink(self::$__photoPath.$path);
-//			$thumbDeleted = unlink(self::$thumbnailPath.$path);
-//			if ($photoDeleted && $thumbDeleted) {
-//				return TRUE;
-//			} else {
-//				throw new Exception('Foto: '.$path.', ');
-//			}
-//		}
-//		return FALSE;
-//	}
-	
 
 	public function deleteOne() {
 		if ($this->isDeletable()) {
-			$file = self::PHOTO_PATH.'/'.parent::get_attribute('path');
-			if (unlink($file)) {
+			if (MT_Admin_Model_File::deletePhoto(parent::get_attribute('path'))) {
 				return parent::delete('id = '.$this->id);			
 			}
 		}
@@ -112,60 +82,15 @@ class MT_Photo extends MT_Common {
 	 * @param type $galleryId
 	 * @return string|false, new path if rename of the photo and it's thumbnail
 	 *	was successful. False otherwise.
-	 * @throws Exception If $oldFile is not a file or rename failed
+	 * @throws Exception MT_Admin_Model_File::renamePhoto
 	 */
-	private function renameFile($photoId, $oldFile, $galleryId) {
-		if (!is_file($oldFile)) {
-			throw new Exception('Rename failed: "'.$oldFile.'" is not a file');
-		}
-		
+	private function renameFile($photoId, $oldFile, $galleryId) {		
 		$gallery = new MT_Gallery($galleryId);
-		$dirname = self::PHOTO_PATH.'/'.$gallery->get_attribute('fullPath');
+		$dirname = $gallery->get_attribute('fullPath');
 		$basename = $gallery->get_attribute('path') . '_' . $photoId;
 			
-		$newFile = $dirname.$basename.'.'.strtolower(pathinfo($oldFile, PATHINFO_EXTENSION));
-		if (rename($oldFile, $newFile)) {
-			if ($this->createOrRenameThumbnail($oldFile, $newFile)) {
-				return str_replace(self::PHOTO_PATH.'/', '', $newFile);	
-			}	
-		} else {
-			throw new Exception('Rename failed: Could not move "'.$oldFile.'" to "'.$newFile.'"');
-		}
-	}
-	
-	/**
-	 * Checks if a thumbnail for $oldFile already exists. If that is the case
-	 * this thumnail gets moved to the new path according to $newFile.
-	 * Otherwise a thumbnail gets creted according to the path $newFile.
-	 * 
-	 * @param type $oldFile Old photo path
-	 * @param type $newFile New photo path
-	 * @return boolean True, if rename/create was successful
-	 * @throws Exception If rename/create failed
-	 */
-	private function createOrRenameThumbnail($oldFile, $newFile) {
-		$oldThumbnail = str_replace(self::PHOTO_PATH, self::THUMBNAIL_PATH, $oldFile);
-		$newThumbnail = str_replace(self::PHOTO_PATH, self::THUMBNAIL_PATH, $newFile);	
-		
-		// Thumbnail already exists
-		if (file_exists($oldThumbnail)) {
-			// Move thumbnail
-			if (rename($oldThumbnail, $newThumbnail)) {
-				return true;
-			} else {
-				throw new Exception('Could not rename thumbnail "'.$oldThumbnail.'" to "'.$newThumbnail.'"');
-			}
-		}
-		// Thumbnail does not exists
-		else {
-			// Create thumbnail
-			require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
-			if (MT_Admin_Model_ThumbnailCreator::create($newFile, $newThumbnail)) {
-				return true;
-			} else {
-				throw new Exception('Could not create thumbnail "'.$newThumbnail.'" for the file "'.$newFile.'"');				
-			}
-		}
+		$newDbFile = $dirname.$basename.'.'.strtolower(pathinfo($oldFile, PATHINFO_EXTENSION));
+		return MT_Admin_Model_File::renamePhoto($oldFile, $newDbFile);
 	}
 	
 	/**
@@ -187,21 +112,9 @@ class MT_Photo extends MT_Common {
 	}
 	
 	/**
-	 * Gibt die Anzahl der Seiten einer Galerie (abhängig von den
-	 * Benutzereinstellungen) zurück.
-	 *
-	 * @param	string	$id		Galleries ID
-	 * @param	string	$num	Number
-	 * @return	string			Number of pages
-	 */
-//	public static function getNumPages($galleryId, $num) {
-//		return ceil(self::getCount($galleryId) / $num ); // ceil liefert die nächste ganze Zahl (Aufrunden)
-//	}
-	
-	/**
 	 * Gibt die Anzahl der Bilder eines Fotografen zurück
 	 *
-	 * @return	int				Number of pictures
+	 * @return	integer	Number of photos
 	 */
 	public static function getNumPhotos($photographerId) {
 		return parent::get_aggregate('COUNT', 'id', "photographer = '".$photographerId."' AND `show` = '1'");
