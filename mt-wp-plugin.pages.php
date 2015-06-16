@@ -21,7 +21,7 @@ function mt_admin_menu() {
     add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'edit_others_pages', 'mt-subcategory', 'mt_page_subcategories');
     add_submenu_page('mt-news', 'Galerien', 'Galerien', 'edit_others_pages', 'mt-gallery', 'mt_page_galleries');
 	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'edit_others_pages', 'mt-photographer', 'mt_page_photographers');
-	//add_submenu_page('mt-news', 'Vorschaubilder', 'Vorschaubilder', 'manage_options', 'mt-thumbnail', 'mt_page_thumbnails');
+	add_submenu_page('mt-news', '[Entwicklung]', '[Entwicklung]', 'manage_options', 'mt-development', 'mt_page_development');
 }
 add_action('admin_menu', 'mt_admin_menu');
 
@@ -177,6 +177,9 @@ function mt_page_subcategories() {
 	}
 }
 
+/**
+ * Page list/edit galleries
+ */
 function mt_page_galleries() {
 	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_Gallery($_GET['id']) );
@@ -204,6 +207,9 @@ function mt_page_galleries() {
 	}	
 }
 
+/**
+ * Page list/edit photographers
+ */
 function mt_page_photographers() {
 	if ($_GET['type'] === TYPE_EDIT) {
 		$editView = new MT_View_Edit( new MT_Photographer($_GET['id']) );
@@ -222,7 +228,10 @@ function mt_page_photographers() {
 	}
 }
 
-function mt_page_thumbnails() {
+/**
+ * Page development, use for developing/coding only.
+ */
+function mt_page_development() {
 //	$query = (new MT_QueryBuilder())
 //			->from('photo')
 //			->orderBy('date');

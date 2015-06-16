@@ -25,6 +25,12 @@ class MT_Admin_Model_File {
 	 */
 	private static $__photoExtensions = array('jpg', 'jpeg');
 
+	/**
+	 * Returns the real file path from the given database file path.
+	 * 
+	 * @param string $path Database file path
+	 * @return string Real file path
+	 */
 	public static function getPathFromDbPath($path) {
 		return self::PHOTO_PATH.'/'.$path;
 	}
@@ -79,15 +85,21 @@ class MT_Admin_Model_File {
 	/**
 	 * Renames a photo and it's thumbnail.
 	 * 
-	 * @param string $oldFile
-	 * @param string $newDbFile
-	 * @return boolean
+	 * @param string $oldFile Real photo path or database photo path
+	 * @param string $newDbFile new database file path
+	 * @return boolean True, if rename was successful
 	 * @throws Exception If rename failed or $oldFile is not a file
 	 */
 	public static function renamePhoto($oldFile, $newDbFile) {
+		// Check if the $oldFile already is a real path
+		if (strpos($oldFile, self::PHOTO_PATH.'/') !== 0) {
+			// Change databse path to real path
+			$oldFile = self::getPathFromDbPath($oldFile);
+		}
+		
 		if (!is_file($oldFile)) {
 			throw new Exception('Rename failed: "'.$oldFile.'" is not a file');
-		}		
+		}
 		
 		$newFile = self::getPathFromDbPath($newDbFile);
 		if (rename($oldFile, $newFile)) {
@@ -122,8 +134,8 @@ class MT_Admin_Model_File {
 	 * this thumnail gets moved to the new path according to $newFile.
 	 * Otherwise a thumbnail gets creted according to the path $newFile.
 	 * 
-	 * @param type $oldFile Old photo path
-	 * @param type $newFile New photo path
+	 * @param type $oldFile Old real photo path
+	 * @param type $newFile New real photo path
 	 * @return boolean True, if rename/create was successful
 	 * @throws Exception If rename/create failed
 	 */
@@ -155,7 +167,7 @@ class MT_Admin_Model_File {
 	/**
 	 * Checks if the given file is a photo.
 	 * 
-	 * @param string $file File path as string
+	 * @param string $file Real file path as string
 	 * @return boolean True, if file is a photo
 	 */
 	public function isPhoto($file) {

@@ -48,13 +48,21 @@ class MT_Photo extends MT_Common {
 		return parent::get_aggregate('MAX', 'date', $whereCondition."`show` = 1");
 	}
 	
+	/**
+	 * 
+	 * @param array $data
+	 * @param array $conditionValue
+	 * @return boolean
+	 */
     public function update(array $data, array $conditionValue = NULL) {
-		if (!empty($data['gallery'])) {
+		// If $data contains key 'gallery' and 'path and if an ID is given
+		if ( !empty($data['gallery']) && !empty($data['path']) && !empty($conditionValue['id']) ) {
 			$data['path'] = $this->renameFile($conditionValue['id'], $data['path'], $data['gallery']);
 		} else {
 			unset($data['path']);
 		}
-		if (!MT_Functions::isTimestampInStringForm($data['date'])) {
+		// If $data contains key 'date'
+		if ( !empty($data['date']) && !MT_Functions::isTimestampInStringForm($data['date'])) {
 			$data['date'] = strtotime($data['date']);
 			// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
 			if (!MT_Functions::isTimestampInStringForm($data['date']) ) {
@@ -77,10 +85,10 @@ class MT_Photo extends MT_Common {
 	/**
 	 * Reanmes a photo and it's thumbnail.
 	 * 
-	 * @param type $photoId
-	 * @param string $oldFile
-	 * @param type $galleryId
-	 * @return string|false, new path if rename of the photo and it's thumbnail
+	 * @param integer $photoId ID of the photo
+	 * @param string $oldFile Current file path (can be the real or the database path)
+	 * @param integer $galleryId ID of the photos gallery
+	 * @return string|false New path if rename of the photo and it's thumbnail
 	 *	was successful. False otherwise.
 	 * @throws Exception MT_Admin_Model_File::renamePhoto
 	 */
