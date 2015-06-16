@@ -35,10 +35,36 @@ class MT_Gallery extends MT_Common {
 		return 'Galerien';
 	}
 
-	public static function insert($data) {
+	/**
+	 * Inserts a new gallery in the database and creats it's folder.
+	 * 
+	 * @param array $data
+	 * @return boolean True, if insert was successful
+	 * @throws Exception If $data is not valid oder creation of the folder failed
+	 */
+	public static function insert(array $data) {
+		$category = new MT_Category($data['category']);
+		$subcategoryPath = '';
+		
+		// If a subcategory is given
+		if(!empty($data['subcategory'])) {
+			$subcategory = new MT_Subcategory($data['subcategory']);
+			$subcategoryPath = $subcategory->get_attribute('path').'/';
+			
+			// Check if the given subcategory and category ID fit
+			if ($category->getId() != $subcategory->get_attribute('category')) {
+				throw new Exception('Kategorie mit Pfad "'.$subcategoryPath.'" ist keine Unterkategorie von Kategorie mit ID "'.$data['category'].'"');
+			}
+		}
+		
 		$data['date'] = time();
 		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);
-		return parent::insert($data);
+		$data['fullPath'] = $category->get_attribute('path').'/'.$subcategoryPath.$data['path'].'/';
+		
+		if(parent::insert($data)) {
+			return MT_Admin_Model_File::createDirectory($data['fullPath']);
+		}
+		return FALSE;
 	}
 	
 	/**

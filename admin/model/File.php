@@ -62,7 +62,7 @@ class MT_Admin_Model_File {
 	 * @throws Exception If creation of the folder failed
 	 */
 	public static function createDirectory($path) {
-		if (MT_Functions::createDirIfNotExists(self::PHOTO_PATH.'/'.$path) && MT_Functions::createDirIfNotExists(self::THUMBNAIL_PATH.'/'.$path)) {
+		if (self::createDirIfNotExists(self::PHOTO_PATH.'/'.$path) && self::createDirIfNotExists(self::THUMBNAIL_PATH.'/'.$path)) {
 			return TRUE;
 		} else {
 			throw new Exception('Could not create directory '.$path);

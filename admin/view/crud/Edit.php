@@ -32,10 +32,14 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	protected function outputHeadMessages() {
 		$data = stripslashes_deep($_POST['data']);
 		if(!empty($data)) {
-			if (parent::updateOrInsertAll($data)) {
-				MT_Functions::box( 'save' );
-			} else {
-				MT_Functions::box( 'exception', 'TODO: Fehler beim Einfügen');					
+			try {
+				if (parent::updateOrInsertAll($data)) {
+					MT_Functions::box('save');
+				} else {
+					throw new Exception('Unbekannter fehler beim Einfügen.');			
+				}				
+			} catch (Exception $e) {
+				MT_Functions::box('exception', $e->getMessage());
 			}
 		}
 		if($this->model->isDeletable()) {
@@ -62,9 +66,7 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		if ($this->model->hasId() || $this->model->name() == 'news' || $this->model->name() == 'photographer' || $this->model->name() == 'photo' || $this->model->name() == 'category' || $this->model->name() == 'subcategory' ) {
-			echo MT_Functions::submitButton();
-		}
+		echo MT_Functions::submitButton();
 		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-'.$this->model->name());
 	}
 

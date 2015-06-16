@@ -101,9 +101,9 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		if(!empty($data)) {
 			try {
 				parent::updateOrInsertAll($data);
-				MT_Functions::box( 'save' );
+				MT_Functions::box('save');
 			} catch (Exception $e) {
-				MT_Functions::box( 'exception', $e->getMessage());
+				MT_Functions::box('exception', $e->getMessage());
 			}
 		}
 	}

@@ -27,7 +27,7 @@ class MT_Subcategory extends MT_Common {
 	 * @return boolean True, if insert was successful
 	 * @throws Exception If creation of the folder failed
 	 */
-	public static function insert($data) {
+	public static function insert(array $data) {
 		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);
 		$categoryPath = (new MT_Category($data['category']))->get_attribute('path');
 		$path = $categoryPath.'/'.$data['path'];

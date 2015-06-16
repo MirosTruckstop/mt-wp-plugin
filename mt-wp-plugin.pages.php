@@ -182,18 +182,25 @@ function mt_page_subcategories() {
  */
 function mt_page_galleries() {
 	if ($_GET['type'] === TYPE_EDIT) {
-		$editView = new MT_View_Edit( new MT_Gallery($_GET['id']) );
+		$id = $_GET['id'];
+		$fieldCategory = (new MT_Admin_Field('category', 'Kategorie'))
+				->setReference('category', 'name')
+				->setRequired();
+		$fieldSubcategory = (new MT_Admin_Field('subcategory', 'Unterkategorie'))
+				->setReference('subcategory', 'name');
+		if (!empty($id)) {
+			$fieldCategory->setDisabled();
+			$fieldSubcategory->setDisabled();
+		}
+		$editView = new MT_View_Edit( new MT_Gallery($id) );
 		$editView->setFields(array(
-			(new MT_Admin_Field('name', 'Name'))->setRequired(),
+			(new MT_Admin_Field('name', 'Name'))
+				->setRequired(),
 			(new MT_Admin_Field('description', 'Beschreibung', 'text')),
 			(new MT_Admin_Field('path', 'Pfad'))
-				->setDisabled(),			
-			(new MT_Admin_Field('category', 'Kategorie'))
-				->setReference('category', 'name')
-				->setDisabled(),
-			(new MT_Admin_Field('subcategory', 'Unterkategorie'))
-				->setReference('subcategory', 'name')
-				->setDisabled()
+				->setDisabled(),		
+			$fieldCategory,
+			$fieldSubcategory
 		));
 		$editView->outputContent();
 	} else {
