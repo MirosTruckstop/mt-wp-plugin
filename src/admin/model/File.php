@@ -166,7 +166,7 @@ class MT_Admin_Model_File {
 		// Thumbnail does not exists
 		else {
 			// Create thumbnail
-			require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
+			require_once(MT_DIR . '/src/admin/model/ThumbnailCreator.php');
 			if (MT_Admin_Model_ThumbnailCreator::create($newFile, $newThumbnail)) {
 				return true;
 			} else {

@@ -25,30 +25,30 @@ define('MT_DIR', WP_PLUGIN_DIR.'/'.MT_NAME);
 /*
  * Require scripts
  */
-require_once(MT_DIR . '/admin/model/form/Field.php');
-require_once(MT_DIR . '/admin/model/File.php');
-require_once(MT_DIR . '/admin/view/crud/Common.php');
-require_once(MT_DIR . '/admin/view/crud/Edit.php');
-require_once(MT_DIR . '/admin/view/crud/List.php');
+require_once(MT_DIR . '/src/admin/model/form/Field.php');
+require_once(MT_DIR . '/src/admin/model/File.php');
+require_once(MT_DIR . '/src/admin/view/crud/Common.php');
+require_once(MT_DIR . '/src/admin/view/crud/Edit.php');
+require_once(MT_DIR . '/src/admin/view/crud/List.php');
 
-require_once(MT_DIR . '/common/Functions.php');
-require_once(MT_DIR . '/common/QueryBuilder.php');
+require_once(MT_DIR . '/src/common/Functions.php');
+require_once(MT_DIR . '/src/common/QueryBuilder.php');
 
-require_once(MT_DIR . '/public/model/Common.php');
-require_once(MT_DIR . '/public/model/Category.php');
-require_once(MT_DIR . '/public/model/Gallery.php');
-require_once(MT_DIR . '/public/model/Subcategory.php');
-require_once(MT_DIR . '/public/model/ManagementTemp.php');
-require_once(MT_DIR . '/public/model/News.php');
-require_once(MT_DIR . '/public/model/Photo.php');
-require_once(MT_DIR . '/public/model/Photographer.php');
+require_once(MT_DIR . '/src/public/model/Common.php');
+require_once(MT_DIR . '/src/public/model/Category.php');
+require_once(MT_DIR . '/src/public/model/Gallery.php');
+require_once(MT_DIR . '/src/public/model/Subcategory.php');
+require_once(MT_DIR . '/src/public/model/ManagementTemp.php');
+require_once(MT_DIR . '/src/public/model/News.php');
+require_once(MT_DIR . '/src/public/model/Photo.php');
+require_once(MT_DIR . '/src/public/model/Photographer.php');
 
 /*
  * Register activation hook 
  */
 register_activation_hook( __FILE__, 'mt_register_activation' );
 function mt_register_activation() {
-	require_once(MT_DIR . '/config/Db.php');
+	require_once(MT_DIR . '/src/config/Db.php');
 	MT_Config_Db::__setup_database_tables();
 	
 	add_option('datum_letzte_suche', 0, NULL, FALSE);
@@ -85,7 +85,7 @@ function mt_wp_dashboard_setup() {
 	);	
 }
 function mt_dashboard_widget_function() {
-	require_once(MT_DIR.'/admin/view/DashboardWidget.php');
+	require_once(MT_DIR.'/src/admin/view/DashboardWidget.php');
 	$dashboardWidget = new MT_Admin_DashboardWidget();
 	$dashboardWidget->outputContent();
 }

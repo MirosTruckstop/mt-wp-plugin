@@ -29,7 +29,7 @@ add_action('admin_menu', 'mt_admin_menu');
  * Page edit photos
  */
 function mt_page_photos() {
-	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
+	require_once(MT_DIR . '/src/admin/view/crud/PhotoEdit.php');
 
 	$tmp = new MT_Admin_Field(NULL, NULL);
 	$id = $_GET['mtId'];
@@ -51,8 +51,8 @@ function mt_page_photos() {
  * Page add new photos
  */
 function mt_page_photos_add() {
-	require_once(MT_DIR . '/admin/model/PhotoSearch.php');
-	require_once(MT_DIR . '/admin/view/crud/PhotoEdit.php');
+	require_once(MT_DIR . '/src/admin/model/PhotoSearch.php');
+	require_once(MT_DIR . '/src/admin/view/crud/PhotoEdit.php');
 
 	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
 	if(MT_Photo::getCountNewPhotos() < 10 or $_GET['action'] === 'search') {
@@ -69,7 +69,7 @@ function mt_page_photos_add() {
  * Page generate news
  */
 function mt_page_news_generate() {
-	require_once(MT_DIR . '/admin/model/NewsGeneration.php');
+	require_once(MT_DIR . '/src/admin/model/NewsGeneration.php');
 
 	$newsGeneration = new MT_Admin_NewsGeneration();
 	$newsData = $newsGeneration->getGeneratedNews();
