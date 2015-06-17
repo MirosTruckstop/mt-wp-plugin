@@ -44,14 +44,25 @@ class MT_Admin_Model_File {
 	}
 
 	/**
-	 * Returns for a name a path, i.e. removes special characters etc.
+	 * Returns for a name a path, i.e. removes special characters.
 	 * 
 	 * @param string $name
-	 * @return string
+	 * @return string Path
 	 */
 	public static function nameToPath($name) {
-		// First array: search, second array: replace
-		return str_replace(array(' ', '.', '-'), array('_', '', '_'), strtolower($name));
+		// Remove space in the front/end and make it lowercase
+		$name = strtolower(trim($name));
+		// Search and replace specific characters
+		return strtr($name, array(
+			' ' => '_',
+			'-' => '_',
+			'.' => '',
+			'&' => '',
+			'ä' => 'ae',
+			'ö' => 'oe',
+			'ü' => 'ue',
+			'ß' => 'ss'
+		));
 	}
 
 	/**
