@@ -25,23 +25,23 @@ define('MT_DIR', WP_PLUGIN_DIR.'/'.MT_NAME);
 /*
  * Require scripts
  */
-require_once(MT_DIR . '/src/admin/model/form/Field.php');
-require_once(MT_DIR . '/src/admin/model/File.php');
-require_once(MT_DIR . '/src/admin/view/crud/Common.php');
-require_once(MT_DIR . '/src/admin/view/crud/Edit.php');
-require_once(MT_DIR . '/src/admin/view/crud/List.php');
+require_once(MT_DIR . '/src/back-end/model/form/Field.php');
+require_once(MT_DIR . '/src/back-end/model/File.php');
+require_once(MT_DIR . '/src/back-end/view/crud/Common.php');
+require_once(MT_DIR . '/src/back-end/view/crud/Edit.php');
+require_once(MT_DIR . '/src/back-end/view/crud/List.php');
 
 require_once(MT_DIR . '/src/common/Functions.php');
 require_once(MT_DIR . '/src/common/QueryBuilder.php');
 
-require_once(MT_DIR . '/src/public/model/Common.php');
-require_once(MT_DIR . '/src/public/model/Category.php');
-require_once(MT_DIR . '/src/public/model/Gallery.php');
-require_once(MT_DIR . '/src/public/model/Subcategory.php');
-require_once(MT_DIR . '/src/public/model/ManagementTemp.php');
-require_once(MT_DIR . '/src/public/model/News.php');
-require_once(MT_DIR . '/src/public/model/Photo.php');
-require_once(MT_DIR . '/src/public/model/Photographer.php');
+require_once(MT_DIR . '/src/api/Common.php');
+require_once(MT_DIR . '/src/api/Category.php');
+require_once(MT_DIR . '/src/api/Gallery.php');
+require_once(MT_DIR . '/src/api/Subcategory.php');
+require_once(MT_DIR . '/src/api/ManagementTemp.php');
+require_once(MT_DIR . '/src/api/News.php');
+require_once(MT_DIR . '/src/api/Photo.php');
+require_once(MT_DIR . '/src/api/Photographer.php');
 
 /*
  * Register activation hook 
@@ -65,10 +65,10 @@ function mt_load_plugin_textdomain() {
 add_action('admin_enqueue_scripts', 'mt_admin_enqueue_scripts' );
 function mt_admin_enqueue_scripts() {
 	// Add css file
-    wp_enqueue_style('mt-style', plugins_url('admin/css/admin.css', __FILE__));
+    wp_enqueue_style('mt-style', plugins_url('back-end/css/back-end.css', __FILE__));
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js');
-	wp_enqueue_script('mt-script', plugins_url('admin/js/admin.js', __FILE__ ));
+	wp_enqueue_script('mt-script', plugins_url('back-end/js/admin.js', __FILE__ ));
 }
 
 /*
@@ -85,7 +85,7 @@ function mt_wp_dashboard_setup() {
 	);	
 }
 function mt_dashboard_widget_function() {
-	require_once(MT_DIR.'/src/admin/view/DashboardWidget.php');
+	require_once(MT_DIR.'/src/back-end/view/DashboardWidget.php');
 	$dashboardWidget = new MT_Admin_DashboardWidget();
 	$dashboardWidget->outputContent();
 }
