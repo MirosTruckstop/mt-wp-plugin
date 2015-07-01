@@ -41,6 +41,7 @@ class MT_Gallery extends MT_Common {
 	 * @param array $data
 	 * @return boolean True, if insert was successful
 	 * @throws Exception If $data is not valid oder creation of the folder failed
+	 * @deprecated since version 1.0
 	 */
 	public static function insert(array $data) {
 		$category = new MT_Category($data['category']);

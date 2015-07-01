@@ -4,6 +4,7 @@
  *
  * @package api
  * @subpackage public
+ * @deprecated since version 1.0
  */
 class MT_Subcategory extends MT_Common {
 	
@@ -25,6 +26,7 @@ class MT_Subcategory extends MT_Common {
 	 * @param array $data Data
 	 * @return boolean True, if insert was successful
 	 * @throws Exception If creation of the folder failed
+	 * @deprecated since version 1.0
 	 */
 	public static function insert(array $data) {
 		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);

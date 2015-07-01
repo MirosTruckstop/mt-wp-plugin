@@ -19,15 +19,18 @@ class MT_News extends MT_Common {
 		return 'News';
 	}
 	
+	/** @deprecated since version 1.0 */
 	public static function insert($data) {
 		$data['date'] = time();
 		return parent::insert($data);
 	}
 	
+	/** @deprecated since version 1.0 */
 	public function isDeletable() {
 		return !empty($this->id);
 	}
 	
+	/** @deprecated since version 1.0 */
 	public function deleteOne() {
 		if ($this->isDeletable()) {
 			return parent::delete('id = '.$this->id);

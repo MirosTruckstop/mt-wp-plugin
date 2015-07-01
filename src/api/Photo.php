@@ -123,6 +123,7 @@ class MT_Photo extends MT_Common {
 	 * Gibt die Anzahl der Bilder eines Fotografen zurück
 	 *
 	 * @return	integer	Number of photos
+	 * @deprecated since version 1.1
 	 */
 	public static function getNumPhotos($photographerId) {
 		return parent::get_aggregate('COUNT', 'id', "photographer = '".$photographerId."' AND `show` = '1'");

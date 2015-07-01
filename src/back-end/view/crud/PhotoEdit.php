@@ -7,6 +7,8 @@
  */
 class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
+	const CSS_CLASS_EDITABLE_DATA = 'editable-data';
+	
 	/**
 	 * When photos get uploaded, they get the current date as timestamp. But
 	 * between two phots there should be a distance of some seconds.
@@ -129,12 +131,14 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		$fields['id'] = new MT_Admin_Field('id', NULL, 'hidden');
 		$fields['checked'] = new MT_Admin_Field('checked', NULL, 'bool');
 		$fields['path'] = new MT_Admin_Field('path', NULL, 'hidden');
-		$fields['gallery'] = (new MT_Admin_Field('gallery', NULL))
-							->setReference('gallery')
-							->setRequired();
-		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL))->setReference('photographer');
-		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date'))->setMaxLength(19);
-		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete');
+		$fields['gallery'] = (new MT_Admin_Field('gallery', NULL, NULL, self::CSS_CLASS_EDITABLE_DATA))
+			->setReference('gallery')
+			->setRequired();
+		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, NULL, self::CSS_CLASS_EDITABLE_DATA))
+			->setReference('photographer');
+		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date '.self::CSS_CLASS_EDITABLE_DATA))
+			->setMaxLength(19);
+		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete '.self::CSS_CLASS_EDITABLE_DATA);
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $index => $item) {

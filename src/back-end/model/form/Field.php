@@ -206,8 +206,12 @@ class MT_Admin_Field {
 		}
 		$arrayElement = 'data['.$elementNumber.']['.$this->name.']';
 
+		$attribute = '';
 		if($this->required) {
-			$attribute = 'required';
+			$attribute .= 'required';
+		}
+		if(!empty($this->cssClass)) {
+			$attribute .= ' class="'.$this->cssClass.'"';
 		}
 		
 		switch ($this->type) {
@@ -220,7 +224,7 @@ class MT_Admin_Field {
 			case 'bool':
 				return '<input type="checkbox" name="'.$arrayElement.'" value="checked" '.($value ? 'checked' : '').'>';
 			case 'text':
-				return '<textarea name="'.$arrayElement.'" class="'.$this->cssClass.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
+				return '<textarea name="'.$arrayElement.'" cols="38" rows="4" '.$attribute.'>'.$value.'</textarea>';
 			case self::TYPE_REFERENCE:
 				if($this->reference === 'category') {
 					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>
@@ -280,7 +284,7 @@ class MT_Admin_Field {
 		if (!empty($this->cssClass)) {
 			$attribute .= ' class="'.$this->cssClass.'"';
 		}
-		return '<input type="'.$type.'" name="'.$name.'" value="'.$value.'"'.$attribute.'>';
+		return '<input type="'.$type.'" name="'.$name.'" value="'.$value.'" '.$attribute.'>';
 	}
 	
 	/**

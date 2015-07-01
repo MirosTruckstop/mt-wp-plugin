@@ -103,6 +103,7 @@ abstract class MT_Common {
 	 * @param string $columnName Name of the column
 	 * @param null|string $whereCondition
 	 * @return string Attribute
+	 * @deprecated since version 1.0
 	 */
 	public function get_attribute($columnName, $whereCondition = NULL) {
 		if (empty($whereCondition) && $this->hasId()) {
