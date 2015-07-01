@@ -197,6 +197,7 @@ function mt_page_galleries() {
 			(new MT_Admin_Field('name', 'Name'))
 				->setRequired(),
 			(new MT_Admin_Field('description', 'Beschreibung', 'text')),
+			(new MT_Admin_Field('keywords', 'Keywords', 'text')),			
 			(new MT_Admin_Field('path', 'Pfad'))
 				->setDisabled(),		
 			$fieldCategory,

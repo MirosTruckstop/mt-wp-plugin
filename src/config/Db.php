@@ -29,6 +29,7 @@ abstract class MT_Config_Db {
 			`subcategory` tinyint(2) unsigned NOT NULL DEFAULT '0',
 			`name` varchar(35) NOT NULL,
 			`description` text NOT NULL,
+			`keywords` text NOT NULL,
 			`path` varchar(40) NOT NULL,
 			`fullPath` varchar(100) NOT NULL,
 			`date` int(10) unsigned NOT NULL,
