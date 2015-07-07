@@ -5,6 +5,7 @@
  * 
  * @package back-end
  * @subpackage model
+ * @deprecated since version 1.0
  */
 class MT_Admin_NewsGeneration {
 	

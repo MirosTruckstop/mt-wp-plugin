@@ -3,6 +3,7 @@
  * 
  * @package back-end
  * @subpackage model
+ * @deprecated since version 1.0
  */
 class MT_Admin_Model_File {
 	
@@ -30,11 +31,13 @@ class MT_Admin_Model_File {
 	 * 
 	 * @param string $path Database file path
 	 * @return string Real file path
+	 * @deprecated since version 1.0
 	 */
 	public static function getPathFromDbPath($path) {
 		return self::PHOTO_PATH.'/'.$path;
 	}
 	
+	/** @deprecated since version 1.0 */
 	public static function getDbPathFromDir($dir) {
 		if ($dir == self::PHOTO_PATH) {
 			return '';				
@@ -48,6 +51,7 @@ class MT_Admin_Model_File {
 	 * 
 	 * @param string $name
 	 * @return string Path
+	 * @deprecated since version 1.0
 	 */
 	public static function nameToPath($name) {
 		// Remove space in the front/end and make it lowercase
@@ -71,6 +75,7 @@ class MT_Admin_Model_File {
 	 * @param string $path
 	 * @return boolean True, if creation was successful
 	 * @throws Exception If creation of the folder failed
+	 * @deprecated since version 1.0
 	 */
 	public static function createDirectory($path) {
 		if (self::createDirIfNotExists(self::PHOTO_PATH.'/'.$path) && self::createDirIfNotExists(self::THUMBNAIL_PATH.'/'.$path)) {
@@ -100,6 +105,7 @@ class MT_Admin_Model_File {
 	 * @param string $newDbFile new database file path
 	 * @return boolean True, if rename was successful
 	 * @throws Exception If rename failed or $oldFile is not a file
+	 * @deprecated since version 1.0
 	 */
 	public static function renamePhoto($oldFile, $newDbFile) {
 		// Check if the $oldFile already is a real path
@@ -127,6 +133,7 @@ class MT_Admin_Model_File {
 	 * 
 	 * @param string $dbPath
 	 * @return boolean
+	 * @deprecated since version 1.0
 	 */
 	public static function deletePhoto($dbPath) {
 		if (unlink(self::PHOTO_PATH.'/'.$dbPath)) {
@@ -166,7 +173,7 @@ class MT_Admin_Model_File {
 		// Thumbnail does not exists
 		else {
 			// Create thumbnail
-			require_once(MT_DIR . '/src/admin/model/ThumbnailCreator.php');
+			require_once(MT_DIR . '/src/back-end/model/ThumbnailCreator.php');
 			if (MT_Admin_Model_ThumbnailCreator::create($newFile, $newThumbnail)) {
 				return true;
 			} else {
@@ -180,6 +187,7 @@ class MT_Admin_Model_File {
 	 * 
 	 * @param string $file Real file path as string
 	 * @return boolean True, if file is a photo
+	 * @deprecated since version 1.0
 	 */
 	public function isPhoto($file) {
 		$fileExtension = strtolower(pathinfo($file, PATHINFO_EXTENSION));

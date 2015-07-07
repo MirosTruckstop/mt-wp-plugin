@@ -4,6 +4,7 @@
  * 
  * @package back-end
  * @subpackage model
+ * @deprecated since version 1.0
  */
 class MT_Admin_Model_ThumbnailCreator {
 	
@@ -39,6 +40,7 @@ class MT_Admin_Model_ThumbnailCreator {
 	 * @param string $photoPath Path of the photo
 	 * @param string $thumbnailPath Thumbnail path
 	 * @return boolean True, if create was successful
+	 * @deprecated since version 1.0
 	 */
 	public static function create($photoPath, $thumbnailPath) {
 		return self::resizeImage($photoPath, $thumbnailPath, self::MAX_WIDTH, self::MAX_HEIGHT, self::QUALITY);

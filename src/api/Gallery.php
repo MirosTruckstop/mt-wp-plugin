@@ -75,6 +75,7 @@ class MT_Gallery extends MT_Common {
 	 * @param	string	$id		Galleries full path
 	 * @param	string			Galleries Id
 	 * @return False oder ID
+	 * @deprecated since version 1.0
 	 */
 	public static function getIdFromPath($path) {
 		// Add a backslash, if path doesn't end with one
@@ -88,6 +89,7 @@ class MT_Gallery extends MT_Common {
 	 * Get full path of all galleries.
 	 * 
 	 * @return array    Gallery id as key and path as value
+	 * @deprecated since version 1.0
 	 */
 	public static function __getAllGalleryPaths() {
 		if (empty(self::$__allGalleryPaths)) {
@@ -105,6 +107,7 @@ class MT_Gallery extends MT_Common {
       * 
       * @param int $id Gallery id
       * @return string   Full path
+	  * @deprecated since version 0.1
       */
     public function getFullPath() {
         $galleryPaths = self::__getAllGalleryPaths();
@@ -131,6 +134,7 @@ class MT_Gallery extends MT_Common {
 	 * @param	string		$subcategorieID		Subategories ID
 	 * @return	boolean
 	 * @throws	Exception
+	 * @deprecated since version 0.1
 	 */
 	public static function checkLinkToHauptparkplatz( $categorieId, $subcategorieId = '0' ) {
 		return (parent::get_attribute('id', "category = '". $categorieId . "' AND subcategory = '" . $subcategorieId . "' AND hauptparkplatz != ''")) != FALSE;
@@ -141,6 +145,7 @@ class MT_Gallery extends MT_Common {
 	 *
 	 * @param	int		$id	Gallery id
 	 * @return	boolean
+	 * @deprecated since version 1.0
 	 */
 	public function checkGalleryIsNew() {
 		return (time() - MT_Photo::getLatestPhotoDate($this->id) <= self::$__newTimestamp);
@@ -151,6 +156,7 @@ class MT_Gallery extends MT_Common {
 	 *
 	 * @param	string	$id		Galleries ID
 	 * @return	boolean
+	 * @deprecated since version 0.1
 	 */
 	public function checkIsPhotoInGallery() {
 		return (MT_Photo::getCount($this->id) > 0);

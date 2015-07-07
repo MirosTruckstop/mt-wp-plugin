@@ -77,6 +77,7 @@ class MT_Photo extends MT_Common {
 	 *
 	 * @param	string		$path	Photo's  database path
 	 * @return	boolean
+	 * @deprecated since version 1.0
 	 */
 	public static function checkPhotoIsInDb($path) {
 		return parent::get_attribute('id', "path = '".$path."'");

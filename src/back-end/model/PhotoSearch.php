@@ -4,6 +4,7 @@
  *
  * @package    back-end
  * @subpackage model
+ * @deprecated since version 1.0
  */
 class MT_Admin_Model_PhotoSearch {
 
@@ -23,6 +24,7 @@ class MT_Admin_Model_PhotoSearch {
 	 *
 	 * @param	string|null $dir Directory
 	 * @return	boolean True, if search was successful
+	 * @deprecated since version 1.0
 	 */
 	public function search($dir = MT_Admin_Model_File::PHOTO_PATH) { 
 		if (!is_dir($dir)) {

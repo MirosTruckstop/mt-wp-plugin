@@ -4,6 +4,7 @@
  * 
  * @package api
  * @subpackage public
+ * @deprecated since version 1.0
  */
 class MT_News extends MT_Common {
 	
