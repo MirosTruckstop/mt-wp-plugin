@@ -54,7 +54,7 @@ abstract class MT_Config_Db {
 		self::createTable('photo', "
 			`id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
 			`path` varchar(100) NOT NULL,
-			`name_old` varchar(30) NOT NULL,
+			`name_old` varchar(50) NOT NULL,
 			`gallery` tinyint(2) unsigned NOT NULL,
 			`description` text NOT NULL,
 			`photographer` tinyint(2) unsigned NOT NULL DEFAULT '1',

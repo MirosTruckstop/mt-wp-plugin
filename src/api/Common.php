@@ -30,7 +30,8 @@ abstract class MT_Common {
      *
      * @param  array  $data - Data to enter into the database table
      *
-     * @return InsertQuery ID or false Object
+     * @return int InsertQuery ID
+	 * @throws Exception If insert failed
      */
     public static function insert(array $data) {
         if(empty($data)) {
@@ -39,7 +40,12 @@ abstract class MT_Common {
 
         global $wpdb;
         $wpdb->insert(self::getTableName(), $data);
-        return $wpdb->insert_id;
+        $insertId = $wpdb->insert_id;
+		if ($insertId) {
+			return $insertId;
+		} else {
+			throw new Exception('Failed to insert data');
+		}
     }
 	
 	public function isDeletable() {
