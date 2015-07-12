@@ -71,7 +71,7 @@ abstract class MT_Functions {
 	 * 							'sort', 'num'
 	 */
 	public static function getUserSettings($sort, $num, $page) {
-		// User ip
+/*		// User ip
 		$ip = $_SERVER['REMOTE_ADDR'];
 		
 		$mangementTemp = new MT_ManagementTemp($ip);
@@ -102,7 +102,7 @@ abstract class MT_Functions {
 		// Werte des Besuchers in Datenbank speichern
 		if( empty( $sortDb ) ) {								// Werte sind noch nicht gespeichert
 			$mangementTemp->insert(array(
-				'id' => $ip,
+				'ip' => $ip,
 				'num' => $num,
 				'sort' => $sort				
 			));
@@ -111,7 +111,7 @@ abstract class MT_Functions {
 				'num' => $num,
 				'sort' => $sort
 			));
-		}
+		}*/
 
 		return array(
 			'sort'	=> $sort,
