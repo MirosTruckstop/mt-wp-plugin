@@ -34,7 +34,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		if (empty($this->item)) {
 			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
 		}
-		
+				
 		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
 //		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
@@ -44,56 +44,65 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		// Anzahl der Bilder in der Galerie
 		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
 		
-		// Pagination
-		$url = explode(',', $_SERVER['REQUEST_URI']);
-		$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
+		// If page parameter is greater then the maximum
+		if ($num && $page > 1 && $page >= ceil($this->_numPhotos / $num )) {
+			$this->_numPhotos = FALSE;
+		} else {
+			// Pagination
+			$url = explode(',', $_SERVER['REQUEST_URI']);
+			$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
 
-		parent::setTitle($this->item->galleryName);
-		parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
-		parent::setWidescreen($this->_numPhotos > 0);
+			parent::setTitle($this->item->galleryName);
+			parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
+			parent::setWidescreen($this->_numPhotos > 0);
 
-		// Breadcrumb
-		$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
-		$breadcrumb = array(
-			$categoryLink => $this->item->categoryName
-		);
-		if (!empty($this->item->subcategoryName)) {
-			$breadcrumb[$categoryLink . '#'] = $this->item->subcategoryName;
-		}
-		$breadcrumb[''] = $this->item->galleryName;
-		parent::setBreadcrumb($breadcrumb);
+			// Breadcrumb
+			$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
+			$breadcrumb = array(
+				$categoryLink => $this->item->categoryName
+			);
+			if (!empty($this->item->subcategoryName)) {
+				$breadcrumb[$categoryLink . '#'] = $this->item->subcategoryName;
+			}
+			$breadcrumb[''] = $this->item->galleryName;
+			parent::setBreadcrumb($breadcrumb);
+		}		
 	}
 
-	public function outputContent() {
-		$query = (new MT_QueryBuilder())
-			->from('photo', array('id as photoId', 'path', 'description', 'date'))
-			->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
-			->whereEqual('gallery', $this->item->galleryId)
-			->whereEqual('`show`', '1')
-			->orderBy('date')
-			->limitPage($this->userSettings['page'], $this->userSettings['num']);
-				
-		// Sortierung der Bild nach dem Datum
-		if($this->userSettings['sort'] === 'date') {
-			$query->orderBy('date DESC');
-		}
-		
-		// ggf. Galeriebeschreibung
-		if (!empty( $this->item->description)) {
-			echo '<p>' . $this->item->description . '</p>';
-		}
-			
-		if ($this->_numPhotos > 0) {
-			$this->_outputContentHeader();
-			$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
-			$this->_outputContentFooter();
+	public function outputContent() {		
+		if ($this->_numPhotos >= 0) {
+			$query = (new MT_QueryBuilder())
+				->from('photo', array('id as photoId', 'path', 'description', 'date'))
+				->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
+				->whereEqual('gallery', $this->item->galleryId)
+				->whereEqual('`show`', '1')
+				->orderBy('date')
+				->limitPage($this->userSettings['page'], $this->userSettings['num']);
+
+			// Sortierung der Bild nach dem Datum
+			if($this->userSettings['sort'] === 'date') {
+				$query->orderBy('date DESC');
+			}
+
+			// ggf. Galeriebeschreibung
+			if (!empty( $this->item->description)) {
+				echo '<p>' . $this->item->description . '</p>';
+			}
+
+			if ($this->_numPhotos > 0) {
+				$this->_outputContentHeader();
+				$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
+				$this->_outputContentFooter();
+			} else {
+				// Falls sich in der Galerie noch keine Bilder befinden
+				?>
+				<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
+				<p><?php _e('In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!', MT_NAME); ?></p>
+				<p><?php _e('Zurück zur Übersicht', MT_NAME); ?>: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
+				<?php
+			}			
 		} else {
-			// Falls sich in der Galerie noch keine Bilder befinden
-			?>
-			<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
-			<p><?php _e('In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!', MT_NAME); ?></p>
-			<p><?php _e('Zurück zur Übersicht', MT_NAME); ?>: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
-			<?php
+			get_template_part('content', 'none');			
 		}
 	}
 
@@ -105,6 +114,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 	 */
 	private function _outputContentHeader() {
 		$location = "location = '".$this->item->galleryId.",page=".$this->userSettings["page"]."&'+this.options[this.selectedIndex].value;";
+		$locationPage1 = "location = '".$this->item->galleryId.",page=1&'+this.options[this.selectedIndex].value;";
 		?>
 			<div id="auswahl_leiste">
 				<table width="100%" cellSpacing="0" cellPadding="2">
@@ -112,7 +122,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 						<th>&nbsp;<?php _e('Bilder', MT_NAME); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
 						<td>
 							<?php _e('Bilder pro Seite', MT_NAME); ?>:&nbsp;
-							<select name="num" size="1" onchange="<?php echo $location; ?>">
+							<select name="num" size="1" onchange="<?php echo $locationPage1; ?>">
 								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '5'); ?>>5</option>
 								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '10'); ?>>10</option>
 								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>

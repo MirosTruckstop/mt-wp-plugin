@@ -187,8 +187,8 @@ abstract class MT_Functions {
 	public static function __outputPagination($totalNumberOfItem, $page, $num, $sort, $baseUrl = NULL) {
 		$resultString = '<div id="seiten_leiste"><p>';
 		
-		$anzahl_seiten = ceil($totalNumberOfItem / $num );
-
+		$total_pages = ceil($totalNumberOfItem / $num );
+		
 		// Eine Seite zurueck
 		if($page > 1) {
 			$resultString .= self::_outputPaginationLink($page - 1, $num, $sort, '« '.__('Zurück', MT_NAME), $baseUrl);
@@ -200,11 +200,11 @@ abstract class MT_Functions {
         $points = TRUE;
                 
 		// Die einzelnen Seiten
-		for($i = 1; $i <= $anzahl_seiten; $i++) {
+		for($i = 1; $i <= $total_pages; $i++) {
 			//echo '&nbsp;&nbsp;';
 			if($i == $page) {
 				$resultString .= '&nbsp;&nbsp;<b>' . $i . '</b>';
-			} else if( abs($i - $page) < 10 || $i == 1 || $i == $anzahl_seiten ) {
+			} else if( abs($i - $page) < 10 || $i == 1 || $i == $total_pages ) {
 				$resultString .= '&nbsp;&nbsp;';
 				$resultString .= self::_outputPaginationLink($i, $num, $sort, $i, $baseUrl);
 				$points = TRUE;
@@ -216,7 +216,7 @@ abstract class MT_Functions {
 	
 		// Eine Seite vor
 		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;';
-		if( $page == $anzahl_seiten ) {
+		if( $page == $total_pages ) {
 			$resultString .= '<span class="style_grew">'.__('Weiter', MT_NAME).' »</span>';
 		} else {
 			$resultString .= self::_outputPaginationLink($page + 1, $num, $sort, __('Weiter', MT_NAME) . ' »', $baseUrl);
