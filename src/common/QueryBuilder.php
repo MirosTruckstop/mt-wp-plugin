@@ -108,6 +108,8 @@ class MT_QueryBuilder {
 	 * 
 	 * @param string|array $orderBy
 	 * @return MT_QueryBuilder
+	 * 
+	 * @deprecated since version number
 	 */
 	public function orderBy($orderBy) {
 		if(!empty($orderBy)) {
@@ -119,6 +121,7 @@ class MT_QueryBuilder {
 		return $this;
 	}	
 	
+	/** @deprecated since version number */
 	public function limit($amount, $offset = NULL) {
 		if(!empty($offset) && !empty($amount)) {
 			$this->limit = ' LIMIT '.$offset.', '.$amount;
