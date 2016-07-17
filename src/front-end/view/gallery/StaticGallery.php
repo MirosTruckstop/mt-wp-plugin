@@ -45,7 +45,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
 		
 		// If page parameter is greater then the maximum
-		if ($num && $page > 1 && $page >= ceil($this->_numPhotos / $num )) {
+		if ($num && $page > 1 && $page > ceil($this->_numPhotos / $num )) {
 			$this->_numPhotos = FALSE;
 		} else {
 			// Pagination
