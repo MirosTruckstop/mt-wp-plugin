@@ -28,7 +28,7 @@ class MT_Photographer extends MT_Common {
 	}
 	
 	/** @deprecated since version 1.0 */
-	public static function insert($data) {
+	public static function insert(array $data) {
 		$data['date'] = time();
 		return parent::insert($data);
 	}

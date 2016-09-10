@@ -36,7 +36,7 @@ class MT_Category extends MT_Common {
 	 * @throws Exception If creation of the folder failed
 	 * @deprecated since version 1.0
 	 */
-	public static function insert($data) {
+	public static function insert(array $data) {
 		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);
 		if (parent::insert($data)) {
 			return MT_Admin_Model_File::createDirectory($data['path']);
