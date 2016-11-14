@@ -9,7 +9,7 @@ abstract class MT_View_Common {
 
 	private $title;
 	private $description;
-	private $breadcrumb;
+	private $breadcrumb = array();
 	
 	public abstract function outputContent();
 	
@@ -17,7 +17,7 @@ abstract class MT_View_Common {
 		$this->title = $value;
 	}
 	
-    public function setDescription($value) {
+	public function setDescription($value) {
 		$this->description = $value;
 	}
 	
@@ -25,25 +25,15 @@ abstract class MT_View_Common {
 		$this->breadcrumb = $value;
 	}
 	
-	public function outputTitle() {
-		echo $this->title;
+	public function getTitle() {
+		return $this->title;
 	}
 	
-    public function outputDescription() {
+	public function outputDescription() {
 		echo $this->description;
 	}
 
-	public function outputBreadcrumb() {
-		if ($this->breadcrumb) {
-			echo '<div id="link_leiste" itemscope itemtype="http://data-vocabulary.org/Breadcrumb">';
-
-			foreach ($this->breadcrumb as $link => $label) {
-				echo '<a href="'.$link.'" itemprop="url"><span itemprop="title">'.$label.'</span></a>';
-				if (!empty($link)) {
-					echo '&nbsp;>&nbsp;';
-				}
-			}
-			echo '</div>';
-		}
+	public function getBreadcrumb() {
+		return $this->breadcrumb;
 	}
 }
