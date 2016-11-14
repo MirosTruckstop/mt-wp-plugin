@@ -106,3 +106,4 @@ function mt_dashboard_widget_function() {
 require_once(MT_DIR . '/mt-wp-plugin.routing.php');
 require_once(MT_DIR . '/mt-wp-plugin.shortcodes.php');
 require_once(MT_DIR . '/mt-wp-plugin.pages.php');
+require_once(MT_DIR . '/mt-wp-plugin.template.php');
