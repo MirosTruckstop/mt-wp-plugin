@@ -15,3 +15,10 @@ function mt_dashboard_widget_function() {
 	$dashboardWidget = new MT_Admin_DashboardWidget();
 	$dashboardWidget->outputContent();
 }
+
+function mt_widgets_init() {
+	require_once(MT_DIR . '/src/front-end/widget/MT_Widget_Recent_News.php');
+	register_widget( 'MT_Widget_Recent_News' );
+}
+
+add_action( 'widgets_init', 'mt_widgets_init' );

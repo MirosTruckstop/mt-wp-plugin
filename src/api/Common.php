@@ -62,10 +62,11 @@ abstract class MT_Common {
 	/**
 	 * @deprecated since version 1.0
 	 */
-	public static function getAll($select = '*', $orderBy = NULL) {
+	public static function getAll($select = '*', $orderBy = NULL, $limit = Null) {
 		$query = (new MT_QueryBuilder())
 			->from(static::name(), $select)
-			->orderBy($orderBy);
+			->orderBy($orderBy)
+			->limit($limit);
 		return $query->getResult();
 	}
 
@@ -130,20 +131,20 @@ abstract class MT_Common {
      *
      * @return Updated object
      */
-    public function update(array $data, array $conditionValue = NULL) {
-        if(empty($data)) {
-            return FALSE;
-        }
+	public function update(array $data, array $conditionValue = NULL) {
+		if(empty($data)) {
+			return FALSE;
+		}
 		
 		if(!empty($this->id)) {
 			$conditionValue['id'] = $this->id;
 		}
 
 		global $wpdb;
-        return $wpdb->update(self::getTableName(), $data, $conditionValue);
-    }
+	return $wpdb->update(self::getTableName(), $data, $conditionValue);
+	}
 
-    /**
+	/**
      * Delete row on the database table
      *
      * @param  array  $conditionValue - Key value pair for the where clause of the query
@@ -151,11 +152,11 @@ abstract class MT_Common {
      * @return Int - Num rows deleted
 	 * @deprecated since version 1.0
      */
-    public static function delete($whereCondition) {
-        global $wpdb;
+	public static function delete($whereCondition) {
+		global $wpdb;
 		$wpdb->query('DELETE FROM '.self::getTableName(). ' WHERE '.$whereCondition);
 		return TRUE;
-    }
+	}
 
 }
 ?>
