@@ -34,7 +34,7 @@ class MT_Admin_DashboardWidget {
 		$query = (new MT_QueryBuilder())
 			->from('photo', 'path')
 			->join('gallery', TRUE, 'name');
-		foreach ($query->getResult() as $item) {				
+		foreach ($query->getResult() as $item) {
 			$file = MT_Admin_Model_File::getPathFromDbPath($item->path);
 			
 			if( !file_exists( $file ) ) {

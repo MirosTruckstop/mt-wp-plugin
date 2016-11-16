@@ -64,33 +64,16 @@ function mt_load_plugin_textdomain() {
  */
 add_action('admin_enqueue_scripts', 'mt_admin_enqueue_scripts' );
 function mt_admin_enqueue_scripts() {
-	// Add css file
 	wp_enqueue_style('mt-style', plugins_url('src/back-end/css/back-end.css', __FILE__));
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js');
 	wp_enqueue_script('mt-script', plugins_url('src/back-end/js/back-end.js', __FILE__ ));
 }
 
-/*
- * Add a widget to the dashboard.
- *
- * This function is hooked into the 'wp_dashboard_setup' action below.
- */
-add_action('wp_dashboard_setup', 'mt_wp_dashboard_setup');
-function mt_wp_dashboard_setup() {
-	wp_add_dashboard_widget(
-		'mt_dashboard_widget',
-		'MiRo\'s Truckstop',
-		'mt_dashboard_widget_function'
-	);	
-}
-function mt_dashboard_widget_function() {
-	require_once(MT_DIR.'/src/back-end/view/DashboardWidget.php');
-	$dashboardWidget = new MT_Admin_DashboardWidget();
-	$dashboardWidget->outputContent();
-}
+
 
 require_once(MT_DIR . '/mt-wp-plugin.routing.php');
+require_once(MT_DIR . '/mt-wp-plugin.widgets.php');
 require_once(MT_DIR . '/mt-wp-plugin.shortcodes.php');
 require_once(MT_DIR . '/mt-wp-plugin.pages.php');
 require_once(MT_DIR . '/mt-wp-plugin.template.php');

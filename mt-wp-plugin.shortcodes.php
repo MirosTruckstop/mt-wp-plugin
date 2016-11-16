@@ -129,7 +129,7 @@ function mt_add_shortcode_news() {
 			$returnString .= '
 			</table>
 			<hr>
-			<center><h1>' . $dateYear . '</h1></center>';
+			<center><h2>' . $dateYear . '</h2></center>';
 		}
 
 		// Month
@@ -146,9 +146,9 @@ function mt_add_shortcode_news() {
 			<h3>' . $dateMonth . '</h3>
 			<table class="table_quer" cellSpacing="4" cellPadding="1">
 				<colgroup>
-    				<col width="95px">
-    				<col width="*">
-  				</colgroup>';
+					<col width="95px">
+					<col width="*">
+				</colgroup>';
 					}
 					
 		// Day
@@ -167,7 +167,7 @@ function mt_add_shortcode_news() {
 		$returnString .= '<td><a href="' . $news_link . '">' . $item->title . '</a><br>' . $item->text . '</td>
 				</tr>';
 	}
-	$returnString .= '</table>';		
+	$returnString .= '</table>';
 	return $returnString;
 }
 
