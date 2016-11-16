@@ -37,11 +37,6 @@ function mt_add_shortcode_latest_photo_date($atts) {
 	return strftime($a['format'], (new MT_Photo())->getLatestPhotoDate());
 }
 
-add_shortcode('mt_guestbook', 'mt_add_shortcode_guestbook');
-function mt_add_shortcode_guestbook() {
-	return '<iframe onload="if ( typeof ResizeIframe != \'undefined\' ) res = ResizeIframe; else if ( typeof top.ResizeIframe != \'undefined\' ) res = top.ResizeIframe; res.resize(document, this.id);" src="http://www.rosensturm.de/tinc?key=WnXUPJB7&amp;start=-1&amp;reverse=1" class="gaestebuch" id="tincInclude2624">X</iframe>';
-}
-
 add_shortcode('mt_statistics', 'mt_add_shortcode_statistics');
 function mt_add_shortcode_statistics() {
 	$returnString = '
