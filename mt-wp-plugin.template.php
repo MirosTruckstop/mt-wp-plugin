@@ -1,14 +1,27 @@
 <?php
 
-add_filter('the_title', 'mt_the_title', 10, 2);
-function mt_the_title( $title, $id ) {
+add_filter('document_title_parts', 'mt_pre_get_document_title' );
+function mt_pre_get_document_title( $title ) {
 	global $view;
 
 	// TODO: Remove this hack
 	$viewType = get_query_var('mtView');
-	if (!empty($viewType) && !isset($view)) {
+	if (!empty($viewType)) {
 		set_view($viewType);
 	}
+
+	if (method_exists($view, 'getTitle')) {
+		$title['title'] = $view->getTitle();
+	}
+
+	return $title;
+}
+
+add_filter('the_title', 'mt_the_title', 10, 2);
+function mt_the_title( $title, $id ) {
+	global $view;
+
+
 
 	if ($id == get_the_ID() && method_exists($view, 'getTitle')) {
 		return $view->getTitle();
