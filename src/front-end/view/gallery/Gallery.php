@@ -67,18 +67,18 @@ abstract class MT_View_Gallery extends MT_View_Common {
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
 <!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
 				<span itemprop="keywords">'.$item['keywords'].'</span>
-			    <p><img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/'.$item['path'].'" itemprop="contentURL"><br>
-				'.$galleryString
-			    .$photographerString
-				.$dateString.'</p>
-			    <p><span itemprop="description">'.$descriptionString.'</span></p>
+				<div>
+					<img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/'.$item['path'].'" itemprop="contentURL"><br>
+				'.$galleryString.$photographerString.$dateString.'<br>
+					<span itemprop="description">'.$descriptionString.'</span>
+				</div>
 			</div>';
 	}
 	
 	private function _outputThumb(array $item) {
 		echo '<img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/thumb/'.$item['path'].'">';
 	}
-        
+
 	/**
 	 * Removes special chars etc and return a clear keyword string
 	 * 

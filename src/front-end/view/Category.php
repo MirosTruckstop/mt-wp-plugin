@@ -65,12 +65,12 @@ class MT_View_Category extends MT_View_Common {
 				$numGalleries = MT_Gallery::getNumGalleries($this->item->id , $row['subcategoryId']);
 				
 				if (!empty($row['subcategoryName'])) {
-					echo '<h2>'.$row['subcategoryName'].'</h2>';
+					echo '<h3>'.$row['subcategoryName'].'</h3>';
 				}
 
- 				// Beginn der Liste
-  				echo '<ul>';
-  			}
+				// Beginn der Liste
+				echo '<ul>';
+			}
 
 			// Ausgabe der Galerien
 			$this->_outputListItem(self::$_galleryPath.$row['galleryId'], $row['galleryName'], MT_Photo::getCount($row['galleryId']), $tmpGallery->checkGalleryIsNew());
@@ -97,7 +97,7 @@ class MT_View_Category extends MT_View_Common {
 	 * @return	void
 	 */
 	private function _outputListItem($link, $name, $numPhotos, $isNew) {
-  		if($isNew) {
+			if($isNew) {
 			$newPhotos = '<span class="new">'.__('Neue Bilder', MT_NAME).'</span>';
 		}
 		echo '<li><a href="' . $link . '">' . $name . '</a>&nbsp;<span class="style_grew">(' . $numPhotos . ')</span>'. $newPhotos . '</li>';

@@ -69,7 +69,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 		}		
 	}
 
-	public function outputContent() {		
+	public function outputContent() {
 		if ($this->_numPhotos >= 0) {
 			$query = (new MT_QueryBuilder())
 				->from('photo', array('id as photoId', 'path', 'description', 'date'))
@@ -102,7 +102,7 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 				<?php
 			}			
 		} else {
-			get_template_part('content', 'none');			
+			get_template_part('content', 'none');
 		}
 	}
 
@@ -147,24 +147,8 @@ class MT_View_StaticGallery extends MT_View_Gallery {
 	 *
 	 * @return void
 	 */
-	private function _outputContentFooter() {	
-		?>
-				<table class="seitenleiste">
-					<colgroup>
-						<col width="100px" />
-						<col width="550px" />
-						<col width="100px" />
-					</colgroup>
-					<tr>
-						<td></td>
-						<td><?php echo $this->pagination; ?></td>
-						<td><span class="nach_oben"><a href="javascript:self.scrollTo(0,0)"><?php _e('Nach oben', MT_NAME); ?></a></span></td>
-					</tr>
-				</table>
-				<h2><?php _e('Nutzung der Bilder', MT_NAME); ?></h2>
-<p><?php _e('Alle Bilder auf dieser Seite unterliegen dem Copyright des jeweiligen Fotografens. Es ist nicht gestattet die Bilder 
-im Internet, etc. zu veröffentlichen.', MT_NAME); ?></p>
-		<?php
+	private function _outputContentFooter() {
+		 echo $this->pagination;
 	}
 }
 ?>
