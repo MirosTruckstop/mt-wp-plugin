@@ -74,6 +74,14 @@ function mt_admin_enqueue_scripts() {
 	wp_enqueue_script('mt-script', plugins_url('src/js/back-end/back-end.js', __FILE__ ));
 }
 
+/**
+ * Include style sheet.
+ */
+add_action( 'wp_enqueue_scripts', 'mt_wp_enqueue_scripts' );
+function mt_wp_enqueue_scripts() {
+	wp_enqueue_style('mt-style', plugins_url('/dist/front-end.css', __FILE__));
+}
+
 require_once(MT_DIR . '/mt-wp-plugin.routing.php');
 require_once(MT_DIR . '/mt-wp-plugin.widgets.php');
 require_once(MT_DIR . '/mt-wp-plugin.shortcodes.php');
