@@ -11,13 +11,13 @@ function mt_wp_dashboard_setup() {
 	);
 }
 function mt_dashboard_widget_function() {
-	require_once(MT_DIR.'/src/back-end/view/DashboardWidget.php');
+	require_once(MT_DIR_SRC_PHP.'/back-end/view/DashboardWidget.php');
 	$dashboardWidget = new MT_Admin_DashboardWidget();
 	$dashboardWidget->outputContent();
 }
 
 function mt_widgets_init() {
-	require_once(MT_DIR . '/src/front-end/widget/MT_Widget_Recent_News.php');
+	require_once(MT_DIR_SRC_PHP . '/front-end/widget/MT_Widget_Recent_News.php');
 	register_widget( 'MT_Widget_Recent_News' );
 }
 

@@ -173,7 +173,7 @@ class MT_Admin_Model_File {
 		// Thumbnail does not exists
 		else {
 			// Create thumbnail
-			require_once(MT_DIR . '/src/back-end/model/ThumbnailCreator.php');
+			require_once(MT_DIR_SRC_PHP . '/back-end/model/ThumbnailCreator.php');
 			if (MT_Admin_Model_ThumbnailCreator::create($newFile, $newThumbnail)) {
 				return true;
 			} else {

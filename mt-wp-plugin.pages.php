@@ -21,7 +21,6 @@ function mt_admin_menu() {
 	add_submenu_page('mt-news', 'Unterkategorien', 'Unterkategorien', 'edit_others_pages', 'mt-subcategory', 'mt_page_subcategories');
 	add_submenu_page('mt-news', 'Galerien', 'Galerien', 'edit_others_pages', 'mt-gallery', 'mt_page_galleries');
 	add_submenu_page('mt-news', 'Fotografen', 'Fotografen', 'edit_others_pages', 'mt-photographer', 'mt_page_photographers');
-	//add_submenu_page('mt-news', '[Entwicklung]', '[Entwicklung]', 'manage_options', 'mt-development', 'mt_page_development');
 }
 add_action('admin_menu', 'mt_admin_menu');
 
@@ -29,7 +28,7 @@ add_action('admin_menu', 'mt_admin_menu');
  * Page edit photos
  */
 function mt_page_photos() {
-	require_once(MT_DIR . '/src/back-end/view/crud/PhotoEdit.php');
+	require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/PhotoEdit.php');
 
 	$tmp = new MT_Admin_Field(NULL, NULL);
 	$id = $_GET['mtId'];
@@ -51,8 +50,8 @@ function mt_page_photos() {
  * Page add new photos
  */
 function mt_page_photos_add() {
-	require_once(MT_DIR . '/src/back-end/model/PhotoSearch.php');
-	require_once(MT_DIR . '/src/back-end/view/crud/PhotoEdit.php');
+	require_once(MT_DIR_SRC_PHP . '/back-end/model/PhotoSearch.php');
+	require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/PhotoEdit.php');
 
 	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
 	if(MT_Photo::getCountNewPhotos() < 10 or $_GET['action'] === 'search') {
@@ -69,7 +68,7 @@ function mt_page_photos_add() {
  * Page generate news
  */
 function mt_page_news_generate() {
-	require_once(MT_DIR . '/src/back-end/model/NewsGeneration.php');
+	require_once(MT_DIR_SRC_PHP . '/back-end/model/NewsGeneration.php');
 
 	$newsGeneration = new MT_Admin_NewsGeneration();
 	$newsData = $newsGeneration->getGeneratedNews();
@@ -234,26 +233,4 @@ function mt_page_photographers() {
 		$listView->setOrder('name');
 		$listView->outputContent();
 	}
-}
-
-/**
- * Page development, use for developing/coding only.
- */
-function mt_page_development() {
-//	$query = (new MT_QueryBuilder())
-//			->from('photo')
-//			->orderBy('date');
-//	$result = $query->getResult();
-//	$date = 1000;
-//	$photo = new MT_Photo();
-//	foreach ($result as $index => $item) {
-//		echo $index.$photo->date.'<br>';
-//		$photo->update(array(
-//			'date' => $date + $index * 10
-//		), array(
-//			'id' => $item->id
-//		));
-//	}
-//	require_once(MT_DIR . '/admin/model/ThumbnailCreator.php');
-//	(new MT_Admin_Model_ThumbnailCreator)->resize();
 }
