@@ -32,3 +32,14 @@ function mt_query_vars($vars){
 	array_push($vars, 'mtView', 'mtId', 'mtPage', 'mtNum', 'mtSort', 'mtSearch');
 	return $vars;
 }
+
+/*
+ * Redirect search '?s=<query>' to '/bilder/suche/<query>'
+ */
+add_action( 'template_redirect', 'mt_redirect_search' );
+function mt_redirect_search() {
+	if ( is_search() && !is_admin() ) {
+		wp_redirect( home_url( "/bilder/suche/". urlencode( get_query_var('s' ) ) ) );
+		exit();
+	}
+}
