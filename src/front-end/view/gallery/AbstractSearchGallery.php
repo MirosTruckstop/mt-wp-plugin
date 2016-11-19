@@ -13,7 +13,7 @@ abstract class AbstractSearchGallery extends MT_View_AbstractGallery {
 		$this->query = $query;
 	}
 	
-	public function outputContentByCondition($whereCondition, $limit=100) {
+	public function outputContentByCondition($whereCondition, $limit=75) {
 		$query = (new MT_QueryBuilder())
 			->from('photo', array('id AS photoId', 'path', 'description', 'date'))
 			->join('gallery', TRUE, array('id AS galleryId', 'name AS galleryName'))

@@ -16,8 +16,23 @@ class MT_View_SearchGallery extends AbstractSearchGallery {
 	
 	public function outputContent() {
 		$query = strtolower($this->query);
-		$condition = "wp_mt_photo.description LIKE '%".$query."%'";
-		$condition .= " OR wp_mt_photo.path LIKE '%".$query."%'";
+		$condition .= "wp_mt_photo.path LIKE '%".$query."%'";
+
+		// Create from query string 'hello world' conditation
+		// "OR (description LIKE '%hello%' AND description LIKE '%world%')"
+		$queryParts = explode(' ', $query);
+		$queryPartsCount = count($queryParts);
+		if ($queryPartsCount > 0) {
+			$condition .= " OR (";
+			for ($i = 0; $i < $queryPartsCount; $i++) {
+				if ($i > 0) {
+					$condition .= ' AND ';
+				}
+				$condition .= " wp_mt_photo.description LIKE '%".$queryParts[$i]."%'";
+			}
+			$condition .= ")";
+		}
+
 		parent::outputContentByCondition($condition);
 	}
 }
