@@ -127,10 +127,10 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>
 								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '200'); ?>>200</option>								
 							</select>
-							&nbsp;<?php _e('Sortieren nach', MT_NAME); ?>:&nbsp;
+							&nbsp;<?php _e('Sortierung', MT_NAME); ?>:&nbsp;
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Datum: Neu - Alt', MT_NAME); ?></option>
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Datum: Alt - Neu', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Neuste zuerst', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Älteste zuerst', MT_NAME); ?></option>
 							</select>
 						</td>
 					</tr>

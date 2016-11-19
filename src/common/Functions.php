@@ -160,7 +160,7 @@ abstract class MT_Functions {
 			self::button( 'javascript:history.back()', 'Abbrechen', 'button');
 		}
 	}
-        
+
 	/**
 	 * Überprüft ob ein String ein Timestamp ist.
 	 *
@@ -197,20 +197,24 @@ abstract class MT_Functions {
 		}
 		$resultString .= '&nbsp;&nbsp;|&nbsp;&nbsp;<b>'.__('Seite', MT_NAME).'</b>';
 	
-        $points = TRUE;
-                
+		$points = TRUE;
+
 		// Die einzelnen Seiten
 		for($i = 1; $i <= $total_pages; $i++) {
-			//echo '&nbsp;&nbsp;';
+			// Current page
 			if($i == $page) {
 				$resultString .= '&nbsp;&nbsp;<b>' . $i . '</b>';
-			} else if( abs($i - $page) < 10 || $i == 1 || $i == $total_pages ) {
-				$resultString .= '&nbsp;&nbsp;';
+			}
+			// Page less in range of 3, first or laste page
+			else if( abs($i - $page) < 4 || $i == 1 || $i == $total_pages ) {
+				$resultString .= '<span class="screen-small-hide">&nbsp;&nbsp;';
 				$resultString .= self::_outputPaginationLink($i, $num, $sort, $i, $baseUrl);
+				$resultString .= '</span>';
 				$points = TRUE;
 			} else if( $points ) {
-				$resultString .= '&nbsp;&nbsp;...';
+				$resultString .= '<span class="screen-small-hide">&nbsp;&nbsp;...';
 				$points = FALSE;
+				$resultString .= '</span>';
 			}
 		}
 	

@@ -46,8 +46,8 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 		// since they don't really have one
 		if ($item['date'] >= 10000) {
 			$schemaDateFormat = 'Y-m-d';
-			$mtDateFormat = 'd.m.Y - H:i:s';
-			$dateString = '&nbsp;|&nbsp<b>'.__('Eingestellt am', MT_NAME).':</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
+			$mtDateFormat = 'd.m.Y - H:i';
+			$dateString = '&nbsp;|<span class="screen-small-hide">&nbsp<b>'.__('Eingestellt am', MT_NAME).':</b></span>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
 		}
 		if (!empty($item['description'])) {
 			$descriptionString = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
