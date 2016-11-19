@@ -31,7 +31,8 @@ class MT_Widget_Recent_News extends WP_Widget {
 			
 			$title = explode(': ', $item->title);
 			if (count($title) >= 2) {
-				$output .= '<li><a href="' . $news_link . '">' . $title[1] . '</a></li>';
+				$shortTitle = str_replace('in der Galerie', 'in', $title[1]);
+				$output .= '<li><a href="' . $news_link . '">' . $shortTitle . '</a></li>';
 			}
 		}
 		$output .= '</ul>';

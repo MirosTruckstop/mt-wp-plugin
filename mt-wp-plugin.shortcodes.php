@@ -1,13 +1,10 @@
 <?php
-/*
- * 
- */
 add_shortcode('mt_photo', 'mt_photo');
 function mt_photo($atts) {
-    $a = shortcode_atts( array(
-        'id' => '',
+	$a = shortcode_atts( array(
+		'id' => '',
 		'width' => '200'
-    ), $atts);	
+	), $atts);
 	
 	$photo = new MT_Photo($a['id']);
 	$item = $photo->getOne(array('id', 'path'), 'ARRAY_A');
@@ -21,18 +18,18 @@ function mt_add_shortcode_numPhotos() {
 
 add_shortcode('latest_news_date', 'mt_add_shortcode_latest_news_date');
 function mt_add_shortcode_latest_news_date($atts) {
-    $a = shortcode_atts( array(
-        'format' => '%e. %B %Y'
-    ), $atts );
+	$a = shortcode_atts( array(
+		'format' => '%e. %B %Y'
+	), $atts );
 	
 	return strftime($a['format'], (new MT_News())->getLatestNewsTimestamp());
 }
 
 add_shortcode('latest_photo_date', 'mt_add_shortcode_latest_photo_date');
 function mt_add_shortcode_latest_photo_date($atts) {
-    $a = shortcode_atts( array(
-        'format' => '%e. %B %Y'
-    ), $atts );
+	$a = shortcode_atts( array(
+		'format' => '%e. %B %Y'
+	), $atts );
 	
 	return strftime($a['format'], (new MT_Photo())->getLatestPhotoDate());
 }
@@ -166,7 +163,6 @@ function mt_add_shortcode_news() {
 	return $returnString;
 }
 
-
 add_shortcode('mt_photographers', 'mt_add_shortcode_photographers');
 function mt_add_shortcode_photographers() {
 	$returnString = '<ul>';
@@ -175,7 +171,7 @@ function mt_add_shortcode_photographers() {
 	
 	$items = MT_Photographer::getAll(array('id', 'name'), 'name');
 	foreach ($items as $item) {
-		$returnString .= '<li><a href="'.MT_Photographer::$photographersPath.$item->id.'">'.$item->name.'</a>&nbsp;<span class="style_grew">('.$photo->getNumPhotos($item->id).')</span></li>';				
+		$returnString .= '<li><a href="'.MT_Photographer::$photographersPath.$item->id.'">'.$item->name.'</a>&nbsp;<span class="style_grew">('.$photo->getNumPhotos($item->id).')</span></li>';
 	}
 	$returnString .= '</ul>';
 	return $returnString;

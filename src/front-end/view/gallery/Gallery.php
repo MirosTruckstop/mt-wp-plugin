@@ -1,91 +1,153 @@
 <?php
 /**
- * General view of a gallery.
- * 
  * @package front-end
  * @subpackage view
  */
-abstract class MT_View_Gallery extends MT_View_Common {
+class MT_View_Gallery extends MT_View_AbstractGallery {
 
-	private $checkWidescreen;
-	
-	const PHOTO_PATH = '/bilder';
-	
-	public function checkWidescreen() {
-		return $this->checkWidescreen;
-	}
-	
-	public function setWidescreen($value) {
-		$this->checkWidescreen = $value;
-	}
+	private $item;
+	private $userSettings;
 	
 	/**
-	 * Output galleries photos
-	 * 
-	 * @param Object.MT_QueryBuilder $query Query
-	 * @param string $altPreafix
-	 * @param boolean $isThumbView True, if photos should be displayed only as
-	 *	thumbnail
-	 */
-	protected function _outputContentPhotos($query, $altPreafix, $isThumbView = FALSE) {
-		foreach ($query->getResult('ARRAY_A') as $item) {
-			$item['alt'] = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
-			$item['keywords'] = $this->__getPhotoKeywords($item['alt']);
-			if ($isThumbView) {
-				$this->_outputThumb($item);
-			} else {
-				$this->_outputPhoto($item);
-			}
-		}
-	}
-
-	/**
-	 * Ouput photo (Form: paragraph)
+	 * Number of photos in gallery
 	 *
-	 * @param	array $item
-	 * @return	void
+	 * @var int
 	 */
-	private function _outputPhoto(array $item) {
-		if (!empty($item['galleryName'])) {
-			$galleryString = '<b>'.__('Galerie', MT_NAME).':</b>&nbsp;<a href="/bilder/galerie/'.$item['galleryId'].'">'.$item['galleryName'].'</a>&nbsp;|&nbsp;';
-		}
-		if (!empty($item['photographerName'])) {
-			$photographerString = '<b>'.__('Fotograf', MT_NAME).':</b>&nbsp;<a href="/fotograf/'.$item['photographerId'].'" rel="author"><span itemprop="author" itemp>'.$item['photographerName'].'</span></a>';
-		}
-		// All images from the old website have a timestamp lower then 10000
-		// since they don't really have one
-		if ($item['date'] >= 10000) {
-			$schemaDateFormat = 'Y-m-d';
-			$mtDateFormat = 'd.m.Y - H:i:s';
-			$dateString = '&nbsp;|&nbsp<b>'.__('Eingestellt am', MT_NAME).':</b>&nbsp;<meta itemprop="datePublished" content="'.gmdate($schemaDateFormat, $item['date']).'">'.date($mtDateFormat, $item['date']);
-		}
-		if (!empty($item['description'])) {
-			$descriptionString = preg_replace('(#\S+)', '<a href="/bilder/tag/$0">$0</a>', $item['description']. ' ');
-			$descriptionString = str_replace('tag/#', 'tag/', $descriptionString);
-		}
-		
-		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
-<!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
-				<span itemprop="keywords">'.$item['keywords'].'</span>
-				<div>
-					<img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/'.$item['path'].'" itemprop="contentURL"><br>
-				'.$galleryString.$photographerString.$dateString.'<br>
-					<span itemprop="description">'.$descriptionString.'</span>
-				</div>
-			</div>';
-	}
-	
-	private function _outputThumb(array $item) {
-		echo '<img alt="'.$item['alt'].'" src="'.self::PHOTO_PATH.'/thumb/'.$item['path'].'">';
-	}
+	private $_numPhotos;
 
 	/**
-	 * Removes special chars etc and return a clear keyword string
-	 * 
-	 * @param   string $keywordsString  String with keywords
-	 * @return  string                  Keyword string
+	 * [...]
+	 *
+	 * @param	int	$id	Gallery id
+	 * [...]
 	 */
-	private function __getPhotoKeywords( $keywordsString ) {
-		return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
-	}	
+	public function __construct($id, $page, $num, $sort) {
+
+		// Construct query
+		$query = (New MT_QueryBuilder())
+			->from('gallery', array('id as galleryId', 'name as galleryName', 'description'))
+			->join('category', TRUE, array('id AS categoryId', 'name AS categoryName'))
+			->joinLeft('subcategory', TRUE, 'name as subcategoryName')
+			->whereEqual('wp_mt_gallery.id', $id);
+		$this->item = $query->getResultOne();
+				
+		if (empty($this->item)) {
+			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
+		}
+				
+		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
+		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
+//		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
+//			$this->userSettings[page] = 1;
+//		}
+
+		// Anzahl der Bilder in der Galerie
+		$this->_numPhotos = MT_Photo::getCount($this->item->galleryId);
+		
+		// If page parameter is greater then the maximum
+		if ($num && $page > 1 && $page > ceil($this->_numPhotos / $num )) {
+			$this->_numPhotos = FALSE;
+		} else {
+			// Pagination
+			$url = explode(',', $_SERVER['REQUEST_URI']);
+			$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
+
+			parent::setTitle($this->item->galleryName);
+			parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
+
+			// Breadcrumb
+			$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
+			$breadcrumb = array(
+				$categoryLink => $this->item->categoryName
+			);
+			if (!empty($this->item->subcategoryName)) {
+				$breadcrumb[$categoryLink . '#'] = $this->item->subcategoryName;
+			}
+			$breadcrumb[''] = $this->item->galleryName;
+			parent::setBreadcrumb($breadcrumb);
+		}		
+	}
+
+	public function outputContent() {
+		if ($this->_numPhotos >= 0) {
+			$query = (new MT_QueryBuilder())
+				->from('photo', array('id as photoId', 'path', 'description', 'date'))
+				->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
+				->whereEqual('gallery', $this->item->galleryId)
+				->whereEqual('`show`', '1')
+				->orderBy('date')
+				->limitPage($this->userSettings['page'], $this->userSettings['num']);
+
+			// Sortierung der Bild nach dem Datum
+			if($this->userSettings['sort'] === 'date') {
+				$query->orderBy('date DESC');
+			}
+
+			// ggf. Galeriebeschreibung
+			if (!empty( $this->item->description)) {
+				echo '<p>' . $this->item->description . '</p>';
+			}
+
+			if ($this->_numPhotos > 0) {
+				$this->_outputContentHeader();
+				$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
+				$this->_outputContentFooter();
+			} else {
+				// Falls sich in der Galerie noch keine Bilder befinden
+				?>
+				<p align="center"><img src="<?php echo wp_get_attachment_url(123); ?>"></p>
+				<p><?php _e('In dieser Galerie befinden sich noch keine Bilder! Schau später noch einmal vorbei!', MT_NAME); ?></p>
+				<p><?php _e('Zurück zur Übersicht', MT_NAME); ?>: <a href="<?php echo MT_Category::$_categoryPath . $this->item->categoryId; ?>"><?php echo $this->item->categoryName; ?></a></p>
+				<?php
+			}			
+		} else {
+			get_template_part('content', 'none');
+		}
+	}
+
+
+	/**
+	 * Output Auswahlleiste and pagination (Form: div, table)
+	 *
+	 * @return void
+	 */
+	private function _outputContentHeader() {
+		$location = "location = '".$this->item->galleryId.",page=".$this->userSettings["page"]."&'+this.options[this.selectedIndex].value;";
+		$locationPage1 = "location = '".$this->item->galleryId.",page=1&'+this.options[this.selectedIndex].value;";
+		?>
+			<div id="auswahl_leiste">
+				<table width="100%" cellSpacing="0" cellPadding="2">
+					<tr>
+						<th>&nbsp;<?php _e('Bilder', MT_NAME); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
+						<td>
+							<?php _e('Bilder pro Seite', MT_NAME); ?>:&nbsp;
+							<select name="num" size="1" onchange="<?php echo $locationPage1; ?>">
+								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '5'); ?>>5</option>
+								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '10'); ?>>10</option>
+								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>
+								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '200'); ?>>200</option>								
+							</select>
+							&nbsp;<?php _e('Sortieren nach', MT_NAME); ?>:&nbsp;
+							<select name="sort" size="1" onchange="<?php echo $location; ?>">
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Datum: Neu - Alt', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Datum: Alt - Neu', MT_NAME); ?></option>
+							</select>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<?php echo $this->pagination; ?>
+		<?php
+	}
+
+
+	/**
+	 * Output pagination, link to Hauptparkplatz, etc. (Form: table)
+	 *
+	 * @return void
+	 */
+	private function _outputContentFooter() {
+		 echo $this->pagination;
+	}
 }
+?>

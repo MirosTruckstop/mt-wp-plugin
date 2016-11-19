@@ -61,17 +61,24 @@ function set_view($viewType) {
 	global $view;
 
 	$id = intval(get_query_var('mtId'));
-
+	$search = urldecode(get_query_var('mtSearch'));
 	switch ($viewType) {
 		case 'bilder/galerie':
+			require_once(MT_DIR.'/src/front-end/view/gallery/AbstractGallery.php');
 			require_once(MT_DIR.'/src/front-end/view/gallery/Gallery.php');
-			require_once(MT_DIR.'/src/front-end/view/gallery/StaticGallery.php');
-			$view = new MT_View_StaticGallery($id, get_query_var('mtPage', 1), get_query_var('mtNum', 10), get_query_var('mtSort', 'date'));
+			$view = new MT_View_Gallery($id, get_query_var('mtPage', 1), get_query_var('mtNum', 10), get_query_var('mtSort', 'date'));
 			break;
 		case 'bilder/tag':
-			require_once(MT_DIR.'/src/front-end/view/gallery/Gallery.php');
+			require_once(MT_DIR.'/src/front-end/view/gallery/AbstractGallery.php');
+			require_once(MT_DIR.'/src/front-end/view/gallery/AbstractSearchGallery.php');
 			require_once(MT_DIR.'/src/front-end/view/gallery/TagGallery.php');
-			$view = new MT_View_TagGallery(get_query_var('mtTag'));
+			$view = new MT_View_TagGallery($search);
+			break;
+		case 'bilder/suche':
+			require_once(MT_DIR.'/src/front-end/view/gallery/AbstractGallery.php');
+			require_once(MT_DIR.'/src/front-end/view/gallery/AbstractSearchGallery.php');
+			require_once(MT_DIR.'/src/front-end/view/gallery/SearchGallery.php');
+			$view = new MT_View_SearchGallery($search);
 			break;
 		case 'bilder/kategorie':
 			require_once(MT_DIR.'/src/front-end/view/Category.php');

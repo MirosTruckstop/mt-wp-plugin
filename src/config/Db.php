@@ -21,7 +21,7 @@ abstract class MT_Config_Db {
 			`path` varchar(30) NOT NULL,
 			`description` text NOT NULL,
 			PRIMARY KEY (`id`),
-			UNIQUE KEY `path` (`path`)		
+			UNIQUE KEY `path` (`path`)
 		");
 		self::createTable('gallery', "
 			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
@@ -41,7 +41,7 @@ abstract class MT_Config_Db {
 			`num` tinyint(2) unsigned NOT NULL DEFAULT '10',
 			`sort` varchar(5) NOT NULL DEFAULT 'date',
 			`date` int(10) unsigned NOT NULL,
-			PRIMARY KEY (`ip`)		
+			PRIMARY KEY (`ip`)
 		");
 		self::createTable('news', "
 			`id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
@@ -49,7 +49,7 @@ abstract class MT_Config_Db {
 			`text` text NOT NULL,
 			`gallery` tinyint(2) unsigned NOT NULL,
 			`date` int(10) unsigned NOT NULL,
-			PRIMARY KEY (`id`)		
+			PRIMARY KEY (`id`)
 		");
 		self::createTable('photo', "
 			`id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
@@ -61,7 +61,7 @@ abstract class MT_Config_Db {
 			`date` int(10) unsigned NOT NULL,
 			`show` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`),
-			UNIQUE KEY `photo_path` (`path`)	
+			UNIQUE KEY `photo_path` (`path`)
 		");
 		self::createTable('photographer', "
 			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
@@ -76,6 +76,6 @@ abstract class MT_Config_Db {
 			`name` varchar(30) NOT NULL,
 			`path` varchar(35) NOT NULL,
 			PRIMARY KEY (`id`)
-		");		
+		");
 	}
 }

@@ -13,34 +13,34 @@ abstract class MT_Common {
 	public abstract static function name();
 
 	/**
-     * Constructor for the database class to inject the table name
-     *
-     * @param String $tableName - The current table name
-     */
-    public function __construct($id) {
+	 * Constructor for the database class to inject the table name
+	 *
+	 * @param String $tableName - The current table name
+	 */
+	public function __construct($id) {
 		$this->id = $id;
-    }
+	}
 	
 	private static function getTableName() {
 		return self::$dbPreafix.static::name();
 	}
 	
-    /**
-     * Insert data into the current data
-     *
-     * @param  array  $data - Data to enter into the database table
-     *
-     * @return int|bool InsertQuery ID or false
-     */
-    public static function insert(array $data) {
-        if(empty($data)) {
-            return FALSE;
-        }
+	/**
+	 * Insert data into the current data
+	 *
+	 * @param  array  $data - Data to enter into the database table
+	 *
+	 * @return int|bool InsertQuery ID or false
+	 */
+	public static function insert(array $data) {
+		if(empty($data)) {
+			return FALSE;
+		}
 
-        global $wpdb;
-        $wpdb->insert(self::getTableName(), $data);
+		global $wpdb;
+		$wpdb->insert(self::getTableName(), $data);
 		return $wpdb->insert_id;
-    }
+	}
 	
 	public function isDeletable() {
 		return false;
@@ -123,14 +123,14 @@ abstract class MT_Common {
 		return !empty($this->id);
 	}
 
-    /**
-     * Update a table record in the database
-     *
-     * @param  array  $data           - Array of data to be updated
-     * @param  array  $conditionValue - Key value pair for the where clause of the query
-     *
-     * @return Updated object
-     */
+	/**
+	 * Update a table record in the database
+	 *
+	 * @param  array  $data           - Array of data to be updated
+	 * @param  array  $conditionValue - Key value pair for the where clause of the query
+	 *
+	 * @return Updated object
+	 */
 	public function update(array $data, array $conditionValue = NULL) {
 		if(empty($data)) {
 			return FALSE;
@@ -145,13 +145,13 @@ abstract class MT_Common {
 	}
 
 	/**
-     * Delete row on the database table
-     *
-     * @param  array  $conditionValue - Key value pair for the where clause of the query
-     *
-     * @return Int - Num rows deleted
+	 * Delete row on the database table
+	 *
+	 * @param  array  $conditionValue - Key value pair for the where clause of the query
+	 *
+	 * @return Int - Num rows deleted
 	 * @deprecated since version 1.0
-     */
+	 */
 	public static function delete($whereCondition) {
 		global $wpdb;
 		$wpdb->query('DELETE FROM '.self::getTableName(). ' WHERE '.$whereCondition);

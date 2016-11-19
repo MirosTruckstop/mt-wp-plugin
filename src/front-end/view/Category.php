@@ -46,7 +46,7 @@ class MT_View_Category extends MT_View_Common {
 	 *
 	 * @return	void
 	 */
-	private function _outputContentGalleries() {		
+	private function _outputContentGalleries() {
 		$counter = 0;
 
 		// Construct query

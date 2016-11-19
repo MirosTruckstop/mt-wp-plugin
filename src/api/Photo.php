@@ -54,7 +54,7 @@ class MT_Photo extends MT_Common {
 	 * @param array $conditionValue
 	 * @return boolean
 	 */
-    public function update(array $data, array $conditionValue = NULL) {
+	public function update(array $data, array $conditionValue = NULL) {
 		// If $data contains key 'gallery' and 'path and if an ID is given
 		if ( !empty($data['gallery']) && !empty($data['path']) && !empty($conditionValue['id']) ) {
 			$data['path'] = $this->renameFile($conditionValue['id'], $data['path'], $data['gallery']);
