@@ -19,7 +19,7 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	 */
 	public function __construct($model) {
 		parent::__construct($model);
-		parent::setTitle($this->model->getName().' '.MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
+		parent::setTitle($this->model->getName().' '.MT_Util_Html::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 		parent::setPerPage(1);
 	}
 	
@@ -33,12 +33,12 @@ class MT_View_Edit extends MT_Admin_View_Common {
 		if(!empty($data)) {
 			try {
 				if (parent::updateOrInsertAll($data)) {
-					MT_Functions::box('save');
+					MT_Util_Html::box('save');
 				} else {
 					throw new Exception('Unbekannter fehler beim Einfügen.');			
 				}				
 			} catch (Exception $e) {
-				MT_Functions::box('exception', $e->getMessage());
+				MT_Util_Html::box('exception', $e->getMessage());
 			}
 		}
 		if($this->model->isDeletable()) {
@@ -48,15 +48,15 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	
 	private function _delete($action) {
 		if($action === 'delete') {
-			MT_Functions::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=deleteY', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
+			MT_Util_Html::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=deleteY', 'Ja, die Datei soll wirklich gelöscht werden!', 'deleteButton' );
 		} else if($action === 'deleteY') {
 			if ($this->model->deleteOne()) {
-				MT_Functions::box( 'delete' );
+				MT_Util_Html::box( 'delete' );
 			} else {
-				MT_Functions::box( 'notDelete' );
+				MT_Util_Html::box( 'notDelete' );
 			}	
 		} else {
-			MT_Functions::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=delete', 'Löschen', 'deleteButton' );
+			MT_Util_Html::button( '?page=mt-'.$this->model->name().'&type=edit&id='.$this->model->getId().'&action=delete', 'Löschen', 'deleteButton' );
 		}
 	}
 	
@@ -65,8 +65,8 @@ class MT_View_Edit extends MT_Admin_View_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		echo MT_Functions::submitButton();
-		echo '&#160;'.MT_Functions::cancelButton( '?page=mt-'.$this->model->name());
+		echo MT_Util_Html::submitButton();
+		echo '&#160;'.MT_Util_Html::cancelButton( '?page=mt-'.$this->model->name());
 	}
 
 

@@ -35,7 +35,8 @@ require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/Common.php');
 require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/Edit.php');
 require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/List.php');
 
-require_once(MT_DIR_SRC_PHP . '/common/Functions.php');
+require_once(MT_DIR_SRC_PHP . '/common/util/Common.php');
+require_once(MT_DIR_SRC_PHP . '/common/util/Html.php');
 require_once(MT_DIR_SRC_PHP . '/common/QueryBuilder.php');
 
 require_once(MT_DIR_SRC_PHP . '/api/Common.php');

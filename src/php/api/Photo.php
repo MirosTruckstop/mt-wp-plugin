@@ -62,10 +62,10 @@ class MT_Photo extends MT_Common {
 			unset($data['path']);
 		}
 		// If $data contains key 'date'
-		if ( !empty($data['date']) && !MT_Functions::isTimestampInStringForm($data['date'])) {
+		if ( !empty($data['date']) && !MT_Util_Common::isTimestampInStringForm($data['date'])) {
 			$data['date'] = strtotime($data['date']);
 			// Falls für Timestamp Quatsch eingeben wurde, behalte den alten.
-			if (!MT_Functions::isTimestampInStringForm($data['date']) ) {
+			if (!MT_Util_Common::isTimestampInStringForm($data['date']) ) {
 				unset($data['date']);
 			}
 		}

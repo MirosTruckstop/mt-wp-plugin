@@ -103,9 +103,9 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		if(!empty($data)) {
 			try {
 				parent::updateOrInsertAll($data);
-				MT_Functions::box('save');
+				MT_Util_Html::box('save');
 			} catch (Exception $e) {
-				MT_Functions::box('exception', $e->getMessage());
+				MT_Util_Html::box('exception', $e->getMessage());
 			}
 		}
 	}
@@ -117,8 +117,8 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	}
 
 	protected function _outputTableNavBottom() {
-		echo MT_Functions::submitButton();
-		echo '&#160;'.MT_Functions::cancelButton('?page=mt-' . $this->model->name());
+		echo MT_Util_Html::submitButton();
+		echo '&#160;'.MT_Util_Html::cancelButton('?page=mt-' . $this->model->name());
 	}
 
 	/**
@@ -170,7 +170,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	}
 	
 	protected function getPagination() {
-		return MT_Functions::__outputPagination(MT_Photo::getCount($this->gallery->getId()), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
+		return MT_Util_Html::__outputPagination(MT_Photo::getCount($this->gallery->getId()), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
 	}
 }
 ?>

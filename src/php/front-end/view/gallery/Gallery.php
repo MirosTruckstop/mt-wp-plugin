@@ -35,7 +35,7 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 			throw new Exception('Die ausgewählte Galerie exestiert nicht.');
 		}
 				
-		$this->userSettings = MT_Functions::getUserSettings($sort, $num, $page);
+		$this->userSettings = MT_Util_Common::getUserSettings($sort, $num, $page);
 		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
 //		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
 //			$this->userSettings[page] = 1;
@@ -50,7 +50,7 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 		} else {
 			// Pagination
 			$url = explode(',', $_SERVER['REQUEST_URI']);
-			$this->pagination =	MT_Functions::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
+			$this->pagination = MT_Util_Html::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
 
 			parent::setTitle($this->item->galleryName);
 			parent::setDescription('Fotogalerie ' . $this->item->galleryName . ' in der Kategorie ' . $this->item->categoryName);
@@ -122,15 +122,15 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 						<td>
 							<?php _e('Bilder pro Seite', MT_NAME); ?>:&nbsp;
 							<select name="num" size="1" onchange="<?php echo $locationPage1; ?>">
-								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '5'); ?>>5</option>
-								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '10'); ?>>10</option>
-								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '15'); ?>>15</option>
-								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Functions::selected($this->userSettings['num'], '200'); ?>>200</option>								
+								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '5'); ?>>5</option>
+								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '10'); ?>>10</option>
+								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '15'); ?>>15</option>
+								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '200'); ?>>200</option>								
 							</select>
 							&nbsp;<?php _e('Sortierung', MT_NAME); ?>:&nbsp;
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Functions::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Neuste zuerst', MT_NAME); ?></option>
-								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Functions::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Älteste zuerst', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Util_Html::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Neuste zuerst', MT_NAME); ?></option>
+								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Util_Html::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Älteste zuerst', MT_NAME); ?></option>
 							</select>
 						</td>
 					</tr>

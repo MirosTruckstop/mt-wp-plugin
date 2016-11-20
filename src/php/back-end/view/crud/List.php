@@ -16,7 +16,7 @@ class MT_View_List extends MT_Admin_View_Common {
 	 */
 	public function __construct($model) {
 		parent::__construct($model);
-		parent::setTitle($this->model->getName().' '.MT_Functions::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
+		parent::setTitle($this->model->getName().' '.MT_Util_Html::addButton( '?page=mt-'.$this->model->name().'&type=edit'));
 	}
 	
 	protected function outputHeadMessages() {

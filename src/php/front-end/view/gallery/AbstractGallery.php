@@ -19,7 +19,7 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 	 */
 	protected function _outputContentPhotos($query, $altPreafix, $isThumbView = FALSE) {
 		foreach ($query->getResult('ARRAY_A') as $item) {
-			$item['alt'] = $altPreafix . MT_Functions::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
+			$item['alt'] = $altPreafix . MT_Util_Common::getIfNotEmpty($item->description, ': '.$item->description); // photo's alternate text
 			$item['keywords'] = $this->__getPhotoKeywords($item['alt']);
 			if ($isThumbView) {
 				$this->_outputThumb($item);

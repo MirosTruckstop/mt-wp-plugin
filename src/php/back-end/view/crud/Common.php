@@ -101,14 +101,6 @@ abstract class MT_Admin_View_Common {
 <?php
 	}
 	
-//	protected function update($data, array $conditionValue = NULL) {
-//		if($this->model->update($data, $conditionValue) ) {
-//			MT_Functions::box( 'save' );
-//		} else {
-//			MT_Functions::box( 'exception', 'TODO: Fehler beim Aktu');
-//		}
-//	}
-	
 	/**
 	 * 
 	 * @param array $data

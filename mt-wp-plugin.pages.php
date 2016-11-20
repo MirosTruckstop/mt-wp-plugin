@@ -77,7 +77,7 @@ function mt_page_news_generate() {
 	if (!$newsGeneration->checkGenerateNews()) {
 		?>
 		<div class="wrap">
-			<h2>News <?php echo MT_Functions::addButton('?page=mt-'.MT_News::name().'&type=edit'); ?></h2>
+			<h2>News <?php echo MT_Util_Html::addButton('?page=mt-'.MT_News::name().'&type=edit'); ?></h2>
 		<p>Es gibt keine neuen Bilder, sodass keine News generiert werden können!</p>
 		</div>
 		<?php

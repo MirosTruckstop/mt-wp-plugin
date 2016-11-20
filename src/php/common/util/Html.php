@@ -1,10 +1,11 @@
 <?php
 /**
- * Collection of helper functions.
+ * Collection of helper functions for HTML.
  * 
  * @package common
+ * @subpackage util
  */
-abstract class MT_Functions {
+class MT_Util_Html {
 
 	/**
 	 * Output "selected"
@@ -20,14 +21,14 @@ abstract class MT_Functions {
 			return '';
 		}
 	}
-
-    /**
-      * Output information box.
-      * 
-      * @param   string      $typ    E.g. 'exception' or 'delete'
-      * @param   string|null $text   Textmeldung
-      * @return  void
-      */
+	
+	/**
+	 * Output information box.
+	 * 
+	 * @param   string      $typ    E.g. 'exception' or 'delete'
+	 * @param   string|null $text   Textmeldung
+	 * @return  void
+	 */
 	public static function box( $typ, $text = NULL ) {
 		if( $typ === 'exception' ) {
 			$id = 'red';
@@ -48,79 +49,7 @@ abstract class MT_Functions {
 
 		echo '<div class="box" id="' . $id . '">' . $text . '</div>';		
 	}
-
-	/**
-	 * Gibt $string zurück, falls $var nicht leer ist.
-	 *
-	 * @param	string		$var		Variable
-	 * @param	string		$string		String
-	 * @return	void|string	$string
-	 */
-	public static function getIfNotEmpty( $var, $string ) {
-		if( !empty ( $var ) ) {
-			return $string;
-		}
-	}
-
-	/**
-	 * Besucherdaten speichern / verwalten
-	 *
-	 * @param	string	$sort	Sortation
-	 * @param	string	$num	Number of images per page
-	 * @return	array			An associative array containing the determined
-	 * 							'sort', 'num'
-	 */
-	public static function getUserSettings($sort, $num, $page) {
-/*		// User ip
-		$ip = $_SERVER['REMOTE_ADDR'];
-		
-		$mangementTemp = new MT_ManagementTemp($ip);
-		$item = $mangementTemp->getOne(NULL, 'ARRAY_A');
-		$sortDb = $item['sort'];
-		$numDb = $item['num'];
-
-		// Ist die Sortierung noch nicht gesetzt
-		if( $sort !== 'date' && $sort !== '-date' ) {
-			// Falls vorhanden, wähle den gespeicherten Wert
-			if( !empty( $sortDb ) ) {
-				$sort = $sortDb;
-			} else {
-				$sort = 'date'; // default
-			}
-		}
-
-		// Ist die Anzahl der Bilder pro Seite noch nicht gesetzt
-		if($num != 5 && $num != 10 && $num != 15 && $num != 200) {
-			// Falls vorhanden, wähle den gespeicherten Wert
-			if( !empty( $numDb ) ) {
-				$num = $numDb;
-			} else {
-				$num = 10; // default
-			}
-		}
-					
-		// Werte des Besuchers in Datenbank speichern
-		if( empty( $sortDb ) ) {								// Werte sind noch nicht gespeichert
-			$mangementTemp->insert(array(
-				'ip' => $ip,
-				'num' => $num,
-				'sort' => $sort				
-			));
-		} else if( $sort != $sortDb || $num != $numDb ) {		// Gepeicherten Werte wurden verändert
-			$mangementTemp->update(array(
-				'num' => $num,
-				'sort' => $sort
-			));
-		}*/
-
-		return array(
-			'sort'	=> $sort,
-			'num'	=> $num,
-			'page'	=> $page
-		);
-	}
-
-
+	
 	#_______ Button _______#
 
 	/**
@@ -160,18 +89,7 @@ abstract class MT_Functions {
 			self::button( 'javascript:history.back()', 'Abbrechen', 'button');
 		}
 	}
-
-	/**
-	 * Überprüft ob ein String ein Timestamp ist.
-	 *
-	 * @param	string	$timestamp	Timestamp as string
-	 * @return	boolean			True, if it is a timestamp
-	 */
-	public static function isTimestampInStringForm( $timestamp ) {
-		return $timestamp == strval(intval($timestamp));
-	}
 	
-
 	/**
 	 * Output pagination
 	 * 
@@ -244,5 +162,4 @@ abstract class MT_Functions {
 	private function _outputPaginationLink($page, $num, $sort, $text, $baseUrl) {
 		return '<a href="'.$baseUrl.'page='.$page.'&num='.$num.'&sort='.$sort.'">'.$text.'</a>';
 	}
-	
 }

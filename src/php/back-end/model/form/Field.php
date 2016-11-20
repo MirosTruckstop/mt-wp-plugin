@@ -311,7 +311,7 @@ class MT_Admin_Field {
 			$this->cache = MT_Photographer::getAll(array('id', 'name'), 'name');
 		}
 		foreach ($this->cache as $item) {
-			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedPhotographer, $item->id));
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Util_Html::selected($selectedPhotographer, $item->id));
 		}
 		return $resultString;
 	}
@@ -320,7 +320,7 @@ class MT_Admin_Field {
 		$resultString = '';
 		$query = MT_Category::getAll(array('id', 'name'));
 		foreach ($query as $item) {
-			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedCategory, $item->id));
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Util_Html::selected($selectedCategory, $item->id));
 		}
 		return $resultString;		
 	}
@@ -329,7 +329,7 @@ class MT_Admin_Field {
 		$resultString = '';
 		$query = MT_Subcategory::getAll(array('id', 'name'));
 		foreach ($query as $item) {
-			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Functions::selected($selectedSubcategory, $item->id));
+			$resultString .= $this->getSelectOption($item->id, $item->name, MT_Util_Html::selected($selectedSubcategory, $item->id));
 		}
 		return $resultString;		
 	}
@@ -356,7 +356,7 @@ class MT_Admin_Field {
 			$this->cache = $query->getResult('ARRAY_A');
 		}
 		foreach ($this->cache as $row) {
-			$optgroup = $row['categoryName'] . MT_Functions::getIfNotEmpty( $row['subcategoryName'], ' > ' . $row['subcategoryName'] );
+			$optgroup = $row['categoryName'] . MT_Util_Common::getIfNotEmpty( $row['subcategoryName'], ' > ' . $row['subcategoryName'] );
 			if( $tempOptgroup != $optgroup ) {
 				$tempOptgroup = $optgroup;
 				// Nicht beim ersten Mal beenden
@@ -370,24 +370,4 @@ class MT_Admin_Field {
 		$resultString .= '</optgroup>';
 		return $resultString;
 	}
-	
-	/**
-	 * Output all categories and subcategories (Form: <option>)
-	 *
-	 * @return	void
-	 */
-/*	public function outputAllCategoriesSubcategories($selectedCategorySubcategory) {
-		$resultString = '';
-		$query = (new MT_QueryBuilder())
-				->from('category', array('id', 'name'))
-				->orderBy(array('wp_mt_category.name', 'wp_mt_subcategory.name'))
-				->joinLeftOuter('subcategory', 'wp_mt_subcategory.category = wp_mt_category.id', array('id AS subcategoryId', 'name AS subcategoryName'));
-		$result = $query->getResult();
-		
-		foreach ($result as $item) {
-			$value = $item->id.'_'.$item->sub;
-			$resultString .= $this->getSelectOption($value, $item->name.MT_Functions::getIfNotEmpty($item->subcategoryName, ' > '.$item->subcategoryName), MT_Functions::selected($selectedCategorySubcategory, $value));
-		}
-		return $resultString;
-	}*/
 }
