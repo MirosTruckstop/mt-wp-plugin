@@ -21,8 +21,6 @@ add_filter('the_title', 'mt_the_title', 10, 2);
 function mt_the_title( $title, $id ) {
 	global $view;
 
-
-
 	if ($id == get_the_ID() && method_exists($view, 'getTitle')) {
 		return $view->getTitle();
 	}
@@ -62,33 +60,42 @@ function set_view($viewType) {
 
 	$id = intval(get_query_var('mtId'));
 	$search = urldecode(get_query_var('mtSearch'));
+	
+	try {
+		$view = createView($viewType, $id, $search);
+	} catch (Exception $e) {
+		// get_template_part('content', 'none');
+		//header('HTTP/1.0 404 Not Found');
+		MT_Util_Common::log($e);
+	}
+}
+
+/**
+ * @throws Exception When $viewType is unknown
+ * @throws Exception When view creation failed
+ */
+function createView($viewType, $id, $search) {
 	switch ($viewType) {
 		case 'bilder/galerie':
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/Gallery.php');
-			$view = new MT_View_Gallery($id, get_query_var('mtPage', 1), get_query_var('mtNum', 10), get_query_var('mtSort', 'date'));
-			break;
+			return new MT_View_Gallery($id, get_query_var('mtPage', 1), get_query_var('mtNum', 10), get_query_var('mtSort', 'date'));
 		case 'bilder/tag':
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractSearchGallery.php');
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/TagGallery.php');
-			$view = new MT_View_TagGallery($search);
-			break;
+			return new MT_View_TagGallery($search);
 		case 'bilder/suche':
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractSearchGallery.php');
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/SearchGallery.php');
-			$view = new MT_View_SearchGallery($search);
-			break;
+			return new MT_View_SearchGallery($search);
 		case 'bilder/kategorie':
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/Category.php');
-			$view = new MT_View_Category($id);
-			break;
+			return new MT_View_Category($id);
 		case 'fotograf':
 			require_once(MT_DIR_SRC_PHP.'/front-end/view/Photographer.php');
-			$view = new MT_View_Photographer($id);
-			break;
-//		default:
-//			header('HTTP/1.0 404 Not Found');
+			return new MT_View_Photographer($id);
 	}
+	throw new Exception('Unknown view type: '.$viewType);
 }

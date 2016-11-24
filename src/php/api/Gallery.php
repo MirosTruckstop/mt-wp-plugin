@@ -12,7 +12,7 @@ class MT_Gallery extends MT_Common {
      * 
      * @var array   Gallery id as key and path as value
      */
-    static $__allGalleryPaths;
+	static $__allGalleryPaths;
 	
 	/**
 	 * How long a gallery is marked as 'new'
