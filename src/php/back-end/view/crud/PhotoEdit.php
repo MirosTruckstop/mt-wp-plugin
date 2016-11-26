@@ -31,7 +31,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		parent::setFields(array(
 			new MT_Admin_Field(NULL, 'Bild'),
 			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
-			new MT_Admin_Field(NULL, 'Beschreibung')			
+			new MT_Admin_Field(NULL, 'Beschreibung')
 		));
 		parent::setPerPage(10);
 		
@@ -59,9 +59,9 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		}
 		parent::setQuery($query);
 
-        $this->_updatePhotos(stripslashes_deep($_POST['data']));
+		$this->_updatePhotos(stripslashes_deep($_POST['data']));
 	}
-        
+
 	/**
 	 * Update photos in data base.
 	 * 
@@ -70,32 +70,34 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	private function _updatePhotos($data) {
 		if(!empty($data)) {
 			foreach ($data as $index => $item) {
-				// Update photo only, if checkbox is activated
-				if (array_key_exists('checked', $item)) {
-					unset($data[$index]['checked']);
-
-					// New photo
-					if (!($this->gallery->hasId())) {
-						$date = $data[$index]['date'];
-						// If date field is just the ordering number
-						if (strlen($date) <= 2) {
-							// Item with the lowest ordering integer (zero) should
-							// have the highest timestamp.
-							// 9: Ordering index from 0 to 9
-							$data[$index]['date'] = time() + ($this->perPage - 1 - $date) * self::SECONDS_BETWEEN_PHOTOS;
-						}
-						// Show picture
-						$data[$index]['show'] = 1;
-					}
-					// Photo in a gallery
-					else {
-						// If the ID of the gallery did not change
-						if ($data[$index]['gallery'] == $this->gallery->getId()) {
-							unset($data[$index]['gallery']);
-						}
-					}
-				} else {
+				// Update photo only, if checkbox is activated. Otherwise
+				// continue
+				if (!array_key_exists('checked', $item)) {
 					unset($data[$index]);
+					continue;
+				}
+
+				unset($data[$index]['checked']);
+
+				// New photo
+				if (!($this->gallery->hasId())) {
+					$date = $data[$index]['date'];
+					// If date field is just the ordering number
+					if (strlen($date) <= 2) {
+						// Item with the lowest ordering integer (zero) should
+						// have the highest timestamp.
+						// 9: Ordering index from 0 to 9
+						$data[$index]['date'] = time() + ($this->perPage - 1 - $date) * self::SECONDS_BETWEEN_PHOTOS;
+					}
+					// Show picture
+					$data[$index]['show'] = 1;
+				}
+				// Photo in a gallery
+				else {
+					// If the ID of the gallery did not change
+					if ($data[$index]['gallery'] == $this->gallery->getId()) {
+						unset($data[$index]['gallery']);
+					}
 				}
 			}
 		}

@@ -69,6 +69,9 @@ class MT_Photo extends MT_Common {
 				unset($data['date']);
 			}
 		}
+
+		MT_Util_Common::trimArrayEntry($data, 'description');
+
 		return parent::update($data, $conditionValue);
 	}
 	

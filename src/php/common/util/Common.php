@@ -79,13 +79,25 @@ abstract class MT_Util_Common {
 	}
 
 	/**
-	 * Überprüft ob ein String ein Timestamp ist.
+	 * Check of the given string is a timestamp.
 	 *
-	 * @param	string	$timestamp	Timestamp as string
-	 * @return	boolean			True, if it is a timestamp
+	 * @param string $timestamp Timestamp as string
+	 * @return boolean True, if it is a timestamp
 	 */
 	public static function isTimestampInStringForm( $timestamp ) {
 		return $timestamp == strval(intval($timestamp));
+	}
+	
+	/**
+	 * Trims the value for the given key, when the key exists.
+	 * 
+	 * @param array $array
+	 * @param string $key
+	 */
+	public static function trimArrayEntry(array &$array, $key) {
+		if ( array_key_exists($key, $array) ) {
+			$array[$key] = trim($array[$key]);
+		}
 	}
 
 }
