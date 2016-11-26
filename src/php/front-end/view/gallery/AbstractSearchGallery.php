@@ -23,6 +23,6 @@ abstract class AbstractSearchGallery extends MT_View_AbstractGallery {
 			->orderBy('date')
 			->limit($limit);
 
-		$this->_outputContentPhotos($query, $this->query);
+		$this->_outputContentPhotos($query->getResult());
 	}
 }

@@ -90,7 +90,7 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 
 			if ($this->_numPhotos > 0) {
 				$this->_outputContentHeader();
-				$this->_outputContentPhotos($query, $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
+				$this->_outputContentPhotos($query->getResult(), $this->item->galleryName.' (' . $this->item->categoryName . ')', $this->userSettings['num'] >= 200);
 				$this->_outputContentFooter();
 			} else {
 				// Falls sich in der Galerie noch keine Bilder befinden
