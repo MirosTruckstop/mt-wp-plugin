@@ -84,7 +84,7 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 			</div>';
 	}
 	
-	private function _outputThumb(array $item) {
+	private function _outputThumb($item) {
 		echo '<img alt="'.$item->alt.'" src="'.self::PHOTO_PATH.'/thumb/'.$item->path.'">';
 	}
 
