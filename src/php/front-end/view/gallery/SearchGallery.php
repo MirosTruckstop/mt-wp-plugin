@@ -15,6 +15,7 @@ class MT_View_SearchGallery extends AbstractSearchGallery {
 	}
 	
 	public function outputContent() {
+		MT_Util_Common::log('Query search: '. $this->query);
 		$query = strtolower($this->query);
 		$condition .= "wp_mt_photo.path LIKE '%".$query."%'";
 

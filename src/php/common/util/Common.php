@@ -100,4 +100,11 @@ abstract class MT_Util_Common {
 		}
 	}
 
+	/**
+	 * Logs the given string in the default PHP log file.
+	 */
+	public static function log($string) {
+		error_log(addslashes($string));
+	}
+
 }
