@@ -36,7 +36,7 @@ class MT_Gallery extends MT_Common {
 	}
 
 	/**
-	 * Inserts a new gallery in the database and creats it's folder.
+	 * Inserts a new gallery in the database and creates it's folder.
 	 * 
 	 * @param array $data
 	 * @return boolean True, if insert was successful
@@ -124,20 +124,6 @@ class MT_Gallery extends MT_Common {
 	 */
 	public static function getNumGalleries($categoryId, $subcategoryId = '0') {
 		return parent::get_aggregate('COUNT', 'name', "category = '" . $categoryId . "' AND subcategory = '" . $subcategoryId . "'");
-	}
-	
-	/**
-	 * Überprüft, ob die Gallerien in der Kategorie bzw. Unterkategorie mit dem
-	 * Hauptparkplatz verknüpft sind
-	 *
-	 * @param	string		$categorieID		Categories ID
-	 * @param	string		$subcategorieID		Subategories ID
-	 * @return	boolean
-	 * @throws	Exception
-	 * @deprecated since version 0.1
-	 */
-	public static function checkLinkToHauptparkplatz( $categorieId, $subcategorieId = '0' ) {
-		return (parent::get_attribute('id', "category = '". $categorieId . "' AND subcategory = '" . $subcategorieId . "' AND hauptparkplatz != ''")) != FALSE;
 	}
 	
 	/**
