@@ -36,13 +36,6 @@ abstract class MT_Config_Db {
 			PRIMARY KEY (`id`),
 			UNIQUE KEY `fullPath` (`fullPath`)		
 		");	
-		self::createTable('management_temp', "
-			`ip` varchar(15) NOT NULL DEFAULT '0',
-			`num` tinyint(2) unsigned NOT NULL DEFAULT '10',
-			`sort` varchar(5) NOT NULL DEFAULT 'date',
-			`date` int(10) unsigned NOT NULL,
-			PRIMARY KEY (`ip`)
-		");
 		self::createTable('news', "
 			`id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
 			`title` varchar(100) NOT NULL,
