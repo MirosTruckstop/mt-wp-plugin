@@ -66,7 +66,7 @@ function set_view($viewType) {
 	} catch (Exception $e) {
 		// get_template_part('content', 'none');
 		//header('HTTP/1.0 404 Not Found');
-		MT_Util_Common::log($e);
+		MT_Util_Common::log($e->getMessage());
 	}
 }
 
