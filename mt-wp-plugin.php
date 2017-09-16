@@ -24,7 +24,7 @@ define('MT_DIR', WP_PLUGIN_DIR.'/'.MT_NAME);
 /**
  * PHP source directory 
  */
-define('MT_DIR_SRC_PHP', MT_DIR.'/src/php');
+define('MT_DIR_SRC_PHP', MT_DIR.'/src/main/php');
 
 /*
  * Require scripts
