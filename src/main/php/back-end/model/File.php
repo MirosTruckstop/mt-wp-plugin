@@ -57,17 +57,20 @@ class MT_Admin_Model_File {
 		// Remove space in the front/end and make it lowercase
 		$name = strtolower(trim($name));
 		// Search and replace specific characters
-		return strtr($name, array(
+		$name = strtr($name, array(
 			' ' => '_',
 			'-' => '_',
-			'.' => '',
-			'&' => '',
+                        '/' => '_',
 			'ä' => 'ae',
 			'ö' => 'oe',
 			'ü' => 'ue',
 			'ß' => 'ss'
 		));
-	}
+                // Replace all characters except letters, numbers, spaces and underscores
+                $name = preg_replace('/[^ \w]+/', '', $name);
+                //Remove multiple whitespaces
+                return preg_replace('/_+/', '_', $name);
+        }
 
 	/**
 	 * Creates in the image and in the thumbnail folder a new directory.
