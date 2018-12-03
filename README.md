@@ -1,5 +1,7 @@
 # MT Wordpress Plugin
 
+[![Build Status](https://travis-ci.org/MirosTruckstop/mt-wp-plugin.svg?branch=master)](https://travis-ci.org/MirosTruckstop/mt-wp-plugin)
+
 ### Development
 
 Requirements
