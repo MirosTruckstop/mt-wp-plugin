@@ -1,0 +1,7 @@
+{
+    "name": "mt-wp-plugin",
+    "version": "0.1.0",
+    "devDependencies": {
+        "less": "3.9.*"
+    }
+}

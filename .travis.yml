@@ -1,8 +1,16 @@
-language: php
-php:
-  - '7.1'
-
-install:
-  - composer install
-
-script: ./vendor/bin/phpunit --bootstrap vendor/autoload.php src/test/php/
+matrix:
+    include:
+    - language: php
+      php:
+        - '7.1'
+      install:
+        - composer install
+      script: ./vendor/bin/phpunit --bootstrap vendor/autoload.php src/test/php/
+    - language: node_js
+      node_js:
+        - '8'
+      install:
+        - npm install
+      script:
+        - ./node_modules/less/bin/lessc src/less/back-end/back-end.less dist/back-end.css
+        - ./node_modules/less/bin/lessc src/less/front-end/front-end.less dist/front-end.css
