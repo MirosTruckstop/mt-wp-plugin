@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: MT Plugin
-Plugin URI: http://github.com/MirosTruckstop/mt_wp_plugin
+Plugin URI: https://github.com/MirosTruckstop/mt_wp_plugin
 Description: Wordpress plugin for MiRo's Truckstop
-Version: 0.1
+Version: 1.0.0
 Author: Xennis
 Text Domain: mt-wp-plugin
 */
