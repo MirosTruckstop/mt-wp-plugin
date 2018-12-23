@@ -11,6 +11,8 @@ abstract class MT_Config_Db {
 		$charset_collate = $wpdb->get_charset_collate();
 		
 		$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."mt_$tableName` ($sql) $charset_collate;";
+
+		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
 		dbDelta($sql);
 	}
 	
