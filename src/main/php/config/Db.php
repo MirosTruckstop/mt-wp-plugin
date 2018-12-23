@@ -8,10 +8,10 @@ abstract class MT_Config_Db {
 	
 	private static function createTable($tableName, $sql) {
 		global $wpdb;
-		$charset_collate = $wpdb->get_charset_collate();		
+		$charset_collate = $wpdb->get_charset_collate();
 		
-		$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."mt_$tableName` ($sql) $charset_collate;";	
-		$wpdb->query($sql);
+		$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."mt_$tableName` ($sql) $charset_collate;";
+		dbDelta($sql);
 	}
 	
 	public static function __setup_database_tables() {
@@ -50,11 +50,14 @@ abstract class MT_Config_Db {
 			`name_old` varchar(50) NOT NULL,
 			`gallery` tinyint(2) unsigned NOT NULL,
 			`description` text NOT NULL,
+			`detected_text` varchar(500) NOT NULL,
+			`search_text` varchar(100) NOT NULL,
 			`photographer` tinyint(2) unsigned NOT NULL DEFAULT '1',
 			`date` int(10) unsigned NOT NULL,
 			`show` tinyint(1) unsigned NOT NULL DEFAULT '0',
 			PRIMARY KEY (`id`),
-			UNIQUE KEY `photo_path` (`path`)
+			UNIQUE KEY `photo_path` (`path`),
+			FULLTEXT `search_text` (`search_text`),
 		");
 		self::createTable('photographer', "
 			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,

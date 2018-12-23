@@ -72,10 +72,18 @@ class MT_Photo extends MT_Common {
 
 		MT_Util_Common::trimArrayEntry($data, 'description');
 
+		$data['search_text'] = self::__createSearchText($data);
+		unset($data['detected_text']); # Filled by photo analysis plugin only
+
 		return parent::update($data, $conditionValue);
 	}
 	
-	/**
+	private static function __createSearchText($data) {
+		$result = $data['description'].' '.$data['detected_text'];
+		return strlen($result) > 1000 ? substr($result, 0, 999) : $result;
+	}
+
+		/**
 	 * Check photo is in database
 	 *
 	 * @param	string		$path	Photo's  database path

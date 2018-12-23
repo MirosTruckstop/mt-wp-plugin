@@ -246,18 +246,12 @@ class MT_Admin_Field {
 				}
 				else if($this->reference === 'photographer') {
 					return '<select name="'.$arrayElement.'" size="1" '.$attribute .'>
-					<option value="0"></option>'						
+					<option value="0"></option>'
 				. $this->outputAllPhotographers($value) .'
 				</select>';
 				} else {
-					return $value;					
+					return $value;
 				}
-/*			case self::TYPE_STATIC_REFERENCE:
-				if($this->staticReference === 'categorySubcategory') {
-					return '<select name="'. $arrayElement.'" size="1" '.$attribute .'>'
-						. $this->outputAllCategoriesSubcategories($value) .'
-						</select>';
-				}*/
 		}
 	}
 	

@@ -120,7 +120,7 @@ abstract class MT_Admin_View_Common {
 			else {
 				if (!$this->model->update($item, array('id' => $id))) {
 					throw new Exception('Aktualisieren des Objekts fehlgeschlafen: id='.$id);
-				}				
+				}
 			}
 		}
 		return TRUE;

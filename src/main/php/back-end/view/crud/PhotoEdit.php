@@ -16,7 +16,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	const SECONDS_BETWEEN_PHOTOS = 10;
 	
 	private $gallery;
-        
+
 	/**
 	 * Link to this site
 	 * 
@@ -25,7 +25,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	 * @var string
 	 */
 	private $_linkOfThisSite = '?page=mt-photo-add';
-        
+
 	public function __construct($galleryId = NULL, $page = NULL) {
 		parent::__construct(new MT_Photo(), $page);
 		parent::setFields(array(
@@ -47,7 +47,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		
 		// Set query
 		$query = (new MT_QueryBuilder())
-			->from('photo', array('id', 'path', 'date', 'gallery', 'description', 'photographer'))
+			->from('photo', array('id', 'path', 'date', 'gallery', 'description', 'detected_text', 'photographer'))
 			->limitPage($this->page, $this->perPage);
 		if($this->gallery->hasId()) {
 			$query->whereEqual('gallery', $this->gallery->getId())
@@ -141,6 +141,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date '.self::CSS_CLASS_EDITABLE_DATA))
 			->setMaxLength(19);
 		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete '.self::CSS_CLASS_EDITABLE_DATA);
+		$fields['detected_text'] = new MT_Admin_Field('detected_text', NULL, 'hidden');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $index => $item) {
@@ -149,9 +150,11 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>
 					<?php
-					echo $fields['id']->getElement($item->id, $index);
-					echo $fields['checked']->getElement(!$this->gallery->hasId(), $index);
-					echo $fields['path']->getElement($file, $index);
+						echo $fields['id']->getElement($item->id, $index);
+						echo $fields['checked']->getElement(!$this->gallery->hasId(), $index);
+						// Hidden fields:
+						echo $fields['path']->getElement($file, $index);
+						echo $fields['detected_text']->getElement($item->detected_text, $index);
 					?>
 				</td>
 				<td><img src="<?php echo $file; ?>" width="200px"></td>
@@ -164,7 +167,12 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 					<?php echo $fields['date']->getElement($item->date, $index);
 					?>
 				</td>
-				<td><?php echo $fields['description']->getElement($item->description, $index); ?></td>
+				<td><?php
+					echo $fields['description']->getElement($item->description, $index);
+					if (!empty($item->detected_text)) {
+						echo '<br>'.__('Im Bild erkannter Text').': '.$item->detected_text;
+					}
+				?></td>
 			</tr>
 		<?php
 			$counter++;
