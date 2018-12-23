@@ -83,7 +83,7 @@ class MT_Photo extends MT_Common {
 		return strlen($result) > 1000 ? substr($result, 0, 999) : $result;
 	}
 
-		/**
+	/**
 	 * Check photo is in database
 	 *
 	 * @param	string		$path	Photo's  database path
