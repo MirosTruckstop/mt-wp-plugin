@@ -140,5 +140,13 @@ class MT_Photo extends MT_Common {
 	public static function getNumPhotos($photographerId) {
 		return parent::get_aggregate('COUNT', 'id', "photographer = '".$photographerId."' AND `show` = '1'");
 	}
+	
+	public static function getRandom($select) {
+		$query = (new MT_QueryBuilder())
+			->from(static::name(), $select)
+			->orderBy('RAND()')
+			->limit(1);
+		return $query->getResultOne();
+	}
 
 }

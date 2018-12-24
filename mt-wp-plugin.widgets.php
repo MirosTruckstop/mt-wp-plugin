@@ -17,6 +17,8 @@ function mt_dashboard_widget_function() {
 }
 
 function mt_widgets_init() {
+	require_once(MT_DIR_SRC_PHP . '/front-end/widget/MT_Widget_Random_Photo.php');
+	register_widget( 'MT_Widget_Random_Photo' );
 	require_once(MT_DIR_SRC_PHP . '/front-end/widget/MT_Widget_Recent_News.php');
 	register_widget( 'MT_Widget_Recent_News' );
 }
