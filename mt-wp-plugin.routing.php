@@ -1,4 +1,6 @@
 <?php
+use MT\WP\Plugin\Api\RestController;
+
 $mtRewriteRuleIndex = '(bilder/galerie|bilder/kategorie|fotograf)/([0-9]{1,2})$';
 $mtRewriteRuleIndex2 = '(bilder/galerie)/([0-9]{1,2}),page=([0-9]{1,2})&num=([0-9]{1,3})&sort=(date|-date)$';
 $mtRewriteRuleIndex3 = '(bilder/tag|bilder/suche)/([^/]+)$';
@@ -36,4 +38,9 @@ add_action('template_redirect', function () {
 		wp_redirect(home_url("/bilder/suche/". urlencode(get_query_var('s'))));
 		exit();
 	}
+});
+
+add_action('rest_api_init', function () {
+	$controller = new RestController();
+	$controller->register_routes();
 });
