@@ -15,7 +15,9 @@ class MT_Admin_Model_PhotoSearch {
 	 */
 	private $time;
 	
-	public function __construct() {
+	public function __construct($paQueueClient = NULL) {
+		$this->paQueueClient = $paQueueClient;
+		$this->photoBaseUrl = get_bloginfo('url').'/bilder';
 		return $this;
 	}
 	
@@ -56,13 +58,17 @@ class MT_Admin_Model_PhotoSearch {
 
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist
 				if(!MT_Photo::checkPhotoIsInDb($dbFile)) {
-					MT_Photo::insert(array(
+					$id = MT_Photo::insert(array(
 						'path'        => $dbFile,
 						'name_old'    => $basename,
 						'gallery'     => MT_Gallery::getIdFromPath($dbDirname),
 						'date'        => $this->time,
 						'show'        => 0
 					));
+					if ($id && $this->paQueueClient) {
+						$message = $this->photoBaseUrl.'/'.$dbFile;
+						$this->paQueueClient->publish($message, ['id' => "$id"]);
+					}
 				}	
 			}
 		}

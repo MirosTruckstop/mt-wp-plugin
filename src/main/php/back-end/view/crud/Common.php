@@ -95,7 +95,7 @@ abstract class MT_Admin_View_Common {
 			<div class="tablenav bottom">
 				<?php echo $this->getPagination(); ?>
 				<?php $this->_outputTableNavBottom(); ?>
-			</div>			
+			</div>
 			</form>
 		</div>
 <?php

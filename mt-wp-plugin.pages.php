@@ -52,16 +52,21 @@ function mt_page_photos() {
 function mt_page_photos_add() {
 	require_once(MT_DIR_SRC_PHP . '/back-end/model/PhotoSearch.php');
 	require_once(MT_DIR_SRC_PHP . '/back-end/view/crud/PhotoEdit.php');
+	$paQueueClient = NULL;
+	# True, if the MT PA plugin exists
+	if (defined('MT_PA_NAME') && defined('MT_PA_OPTION_QUEUE_TOPIC')) {
+		require_once(plugin_dir_path(__FILE__).'../'.MT_PA_NAME.'/src/php/QueueClient.php');
+		$paQueueClient = new MT\PhotoAnalysis\QueueClient(get_option(MT_PA_OPTION_QUEUE_TOPIC));
+	}
 
 	// Nach neuen Bildern suchen, wenn weniger als 8 neue Bilder in der Datenbank gespeichert sind
 	if(MT_Photo::getCountNewPhotos() < 10 or $_GET['action'] === 'search') {
-		(new MT_Admin_Model_PhotoSearch())->search();
+		(new MT_Admin_Model_PhotoSearch($paQueueClient))->search();
 		// Datum der letzten Suche speichern
 		update_option('datum_letzte_suche', time());
 	}
 	$photoEditView = new MT_Admin_View_PhotoEdit();
 	$photoEditView->outputContent();
-	
 }
 
 /**
@@ -72,7 +77,6 @@ function mt_page_news_generate() {
 
 	$newsGeneration = new MT_Admin_NewsGeneration();
 	$newsData = $newsGeneration->getGeneratedNews();
-//	$newsData = array_slice($newsData,0,5);
 
 	if (!$newsGeneration->checkGenerateNews()) {
 		?>
