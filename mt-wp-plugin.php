@@ -67,21 +67,19 @@ function mt_load_plugin_textdomain() {
 /*
  * Admin scripts hook
  */
-add_action('admin_enqueue_scripts', 'mt_admin_enqueue_scripts' );
-function mt_admin_enqueue_scripts() {
+add_action('admin_enqueue_scripts', function() {
 	wp_enqueue_style('mt-style', plugins_url('/dist/back-end.css', __FILE__));
 	wp_enqueue_script('jquery');
 	wp_enqueue_script('jquery-ui', 'https://code.jquery.com/ui/1.11.4/jquery-ui.min.js');
 	wp_enqueue_script('mt-script', plugins_url('src/js/back-end/back-end.js', __FILE__ ));
-}
+});
 
 /**
  * Include style sheet.
  */
-add_action( 'wp_enqueue_scripts', 'mt_wp_enqueue_scripts' );
-function mt_wp_enqueue_scripts() {
+add_action('wp_enqueue_scripts', function() {
 	wp_enqueue_style('mt-style', plugins_url('/dist/front-end.css', __FILE__));
-}
+});
 
 require_once(MT_DIR . '/mt-wp-plugin.routing.php');
 require_once(MT_DIR . '/mt-wp-plugin.widgets.php');
