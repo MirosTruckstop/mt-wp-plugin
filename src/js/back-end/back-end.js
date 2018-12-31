@@ -18,14 +18,14 @@ jQuery(function() {
 	
 	/* -------- Autocomplete for the description -----------------------------*/
 	var availableDescriptions = [];
-    jQuery('.description-autocomplete')
+	jQuery('.description-autocomplete')
 	.autocomplete({
 		source: availableDescriptions
-    })
-    .focusout(function() {
+	})
+	.focusout(function() {
 		var val = jQuery(this).val();
 		if (val.length > 0 && jQuery.inArray(val, availableDescriptions) == -1) {
 			availableDescriptions.push(val);
 		}
-    });
+	});
 });
