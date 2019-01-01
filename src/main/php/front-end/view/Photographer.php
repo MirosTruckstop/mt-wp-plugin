@@ -1,11 +1,15 @@
 <?php
+namespace MT\WP\Plugin\Frontend\View;
+
+use MT\WP\Plugin\Api\MT_Photographer;
+use MT\WP\Plugin\Api\MT_Photo;
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+
 /**
  * Photographer view, i.e. view details about one photographer.
- * 
- * @package front-end
- * @subpackage view
  */
-class MT_View_Photographer extends MT_View_Common {
+class MT_View_Photographer extends MT_View_Common
+{
 
 	/**
 	 * Date format
@@ -16,13 +20,8 @@ class MT_View_Photographer extends MT_View_Common {
 	
 	private $item;
 
-	/**
-	 * [...]
-	 *
-	 * @param	string	$path	Photographer's id
-	 * [...]
-	 */
-	public function __construct($id) {
+	public function __construct($id)
+	{
 		$this->item = (new MT_Photographer($id))->getOne();
 		
 		if (empty($this->item)) {
@@ -38,9 +37,10 @@ class MT_View_Photographer extends MT_View_Common {
 		));
 	}
 
-	public function outputContent(){
+	public function outputContent()
+	{
 		$this->_outputContentPhotographer();
-		if($this->_numPhotos > 0) {
+		if ($this->_numPhotos > 0) {
 			$this->_outputContentPhotographerPhotos();
 		}
 	}
@@ -50,7 +50,8 @@ class MT_View_Photographer extends MT_View_Common {
 	 *
 	 * @return void
 	 */
-	private function _outputContentPhotographer() {
+	private function _outputContentPhotographer()
+	{
 		?>
 			<table class="table_quer">
 			 <tr>
@@ -59,7 +60,7 @@ class MT_View_Photographer extends MT_View_Common {
 			 </tr>
 			 <tr>
 			  <th><?php _e('Truckstop-Fotograf seit', MT_NAME); ?>:</th>
-			  <td><?php echo strftime(self::$_dateFormat, $this->item->date ); ?></td>
+			  <td><?php echo strftime(self::$_dateFormat, $this->item->date); ?></td>
 			 </tr>
 			 <tr>
 			  <th><?php _e('Anzahl der Fotos', MT_NAME); ?>:</th>
@@ -74,7 +75,8 @@ class MT_View_Photographer extends MT_View_Common {
 	 *
 	 * @return void
 	 */
-	private function _outputContentPhotographerPhotos() {
+	private function _outputContentPhotographerPhotos()
+	{
 		?>
 			<h2><?php _e('Bilder', MT_NAME); ?></h2>
 			<table class="table_hoch_2">
@@ -89,48 +91,46 @@ class MT_View_Photographer extends MT_View_Common {
 		$query = (new MT_QueryBuilder())
 			->from('photo')
 			->select('COUNT(wp_mt_photo.id) as numPhotos')
-			->joinInner('gallery', TRUE, array('id AS galleryId', 'name as galleryName'))
+			->joinInner('gallery', true, array('id AS galleryId', 'name as galleryName'))
 			->joinInner('category', 'wp_mt_category.id = wp_mt_gallery.category', array('id AS categoryId', 'name AS categoryName'))
 			->joinLeftOuter('subcategory', 'wp_mt_subcategory.id = wp_mt_gallery.subcategory', array('id AS subcategoryId', 'name subcategoryName'))
 			->whereEqual('wp_mt_photo.show', 1)
 			->whereEqual('photographer', $this->item->id)
 			->groupBy(array('categoryName', 'subcategoryName', 'galleryName'))
 			->orderBy(array('categoryName', 'subcategoryName', 'galleryName'));
-		foreach ($query->getResult() as $row) {	
-					
+		foreach ($query->getResult() as $row) {
 			// Category
-			if( $row->categoryId != $tempCategoryID ) {
+			if ($row->categoryId != $tempCategoryID) {
 				$tempCategoryID = $row->categoryId;
-			?>
+				?>
 			 <tr>
 			  <td><u><?php echo _($row->categoryName); ?></u></td>
 			  <td></td>
 			 </tr>
-			<?php
+				<?php
 			}
 
 			// Subcategory
-			if( $row->subcategoryId != $tempSubcategoryID ) {
+			if ($row->subcategoryId != $tempSubcategoryID) {
 				$tempSubcategoryID = $row->subcategoryId;
 				?>
 			 <tr>
 			  <td>&nbsp;&nbsp;»&nbsp;&nbsp;<?php echo $row->subcategoryName; ?></td>
 			  <td></td>
 			 </tr>
- 				<?php
+				<?php
 			}
-						
+
 			// Gallery
 			?>
 			 <tr>
 				 <td>&nbsp;&nbsp;&nbsp;&nbsp;»&nbsp;&nbsp;<a href="<?php echo MT_Photo::GALLERY_PATH_ABS; ?>/<?php echo $row->galleryId; ?>"><?php echo $row->galleryName; ?></a></td>
 			  <td><?php echo $row->numPhotos; ?></td>
 			 </tr>
- 			<?php
-			}
+			<?php
+		}
 		?>
 			</table>
 		<?php
 	}
 }
-?>

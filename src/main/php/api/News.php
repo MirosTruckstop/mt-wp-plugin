@@ -1,53 +1,53 @@
 <?php
+namespace MT\WP\Plugin\Api;
+
 /**
  * News view, i.e. display all news entries.
- * 
- * @package api
- * @subpackage public
- * @deprecated since version 1.0
  */
-class MT_News extends MT_Common {
+class MT_News extends MT_Common
+{
 	
-	public function __construct($id = NULL) {
+	public function __construct($id = null)
+	{
 		parent::__construct($id);
 	}
 	
-	public static function name() {
+	public static function name()
+	{
 		return 'news';
 	}
 	
-	public static function getName() {
+	public static function getName()
+	{
 		return 'News';
 	}
 	
-	/** @deprecated since version 1.0 */
-	public static function insert(array $data) {
+	public static function insert(array $data)
+	{
 		$data['date'] = time();
 		return parent::insert($data);
 	}
 	
-	/** @deprecated since version 1.0 */
-	public function isDeletable() {
+	public function isDeletable()
+	{
 		return !empty($this->id);
 	}
 	
-	/** @deprecated since version 1.0 */
-	public function deleteOne() {
+	public function deleteOne()
+	{
 		if ($this->isDeletable()) {
 			return parent::delete('id = '.$this->id);
 		}
-		return FALSE;
+		return false;
 	}
-	
-	######## Get ########
 	
 	/**
 	 * Gibt den Zeitstempel der letzten Neuigkeit zurück
 	 *
-	 * @return	int	Latest news timestamp
-	 * @deprecated since version 1.0
+	 * @return int	Latest news timestamp
 	 */
-	public static function getLatestNewsTimestamp() {
+	public static function getLatestNewsTimestamp()
+	{
 		return parent::get_aggregate('MAX', 'date');
 	}
 }

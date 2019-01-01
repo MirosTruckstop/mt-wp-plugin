@@ -1,22 +1,26 @@
 <?php
+namespace MT\WP\Plugin\Config;
+
 /**
  * Configuration of the database on plugin installation.
- * 
- * @package config
  */
-abstract class MT_Config_Db {
+abstract class MT_Config_Db
+{
 	
-	private static function createTable($tableName, $sql) {
+	private static function createTable($tableName, $sql)
+	{
 		global $wpdb;
 		$charset_collate = $wpdb->get_charset_collate();
 		
 		$sql = "CREATE TABLE IF NOT EXISTS `".$wpdb->prefix."mt_$tableName` ($sql) $charset_collate;";
 
-		require_once(ABSPATH.'wp-admin/includes/upgrade.php');
+		include_once ABSPATH.'wp-admin/includes/upgrade.php';
 		dbDelta($sql);
 	}
 	
-	public static function __setup_database_tables() {
+	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.MethodDoubleUnderscore
+	public static function __setup_database_tables()
+	{
 		self::createTable('category', "
 			`id` tinyint(2) unsigned NOT NULL AUTO_INCREMENT,
 			`name` varchar(25) NOT NULL,
@@ -36,8 +40,8 @@ abstract class MT_Config_Db {
 			`fullPath` varchar(100) NOT NULL,
 			`date` int(10) unsigned NOT NULL,
 			PRIMARY KEY (`id`),
-			UNIQUE KEY `fullPath` (`fullPath`)		
-		");	
+			UNIQUE KEY `fullPath` (`fullPath`)
+		");
 		self::createTable('news', "
 			`id` smallint(3) unsigned NOT NULL AUTO_INCREMENT,
 			`title` varchar(100) NOT NULL,

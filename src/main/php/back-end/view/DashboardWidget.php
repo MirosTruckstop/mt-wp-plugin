@@ -1,12 +1,16 @@
 <?php
+namespace MT\WP\Plugin\Backend\View;
+
+use MT\WP\Plugin\Api\MT_ManagementTemp;
+use MT\WP\Plugin\Backend\Model\MT_Admin_Model_File;
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+
 /**
  * Dashboard widget to display relevant information on the administration home
  * page.
- * 
- * @package back-end
- * @subpackage view
  */
-class MT_Admin_DashboardWidget {
+class MT_Admin_DashboardWidget
+{
 
 	/**
 	 * Time to delete temp files
@@ -17,7 +21,8 @@ class MT_Admin_DashboardWidget {
 	 */
 	private $_deleteTime = 86400;
 
-	public function outputContent() {
+	public function outputContent()
+	{
 		$this->_testPhotoPaths();
 		$this->_deleteTempFiles();
 	}
@@ -27,17 +32,18 @@ class MT_Admin_DashboardWidget {
 	 *
 	 * @return void
 	 */
-	private function _testPhotoPaths() {
+	private function _testPhotoPaths()
+	{
 		$errorMessage = '';
 		$errorCounter = 0;
 
 		$query = (new MT_QueryBuilder())
 			->from('photo', 'path')
-			->join('gallery', TRUE, 'name');
+			->join('gallery', true, 'name');
 		foreach ($query->getResult() as $item) {
 			$file = MT_Admin_Model_File::getPathFromDbPath($item->path);
 			
-			if( !file_exists( $file ) ) {
+			if (!file_exists($file)) {
 				$errorCounter++;
 				$errorMessage .= '<li>Fehler: <a href="'.$file.'" target="_blank">'.$file.'</a> aus der Galerie "'.$item->name.'" wurde nicht gefunden!</li>';
 			}
@@ -49,7 +55,7 @@ class MT_Admin_DashboardWidget {
 		}
 		
 		// Output
-		if($errorCounter > 0) {
+		if ($errorCounter > 0) {
 			echo '<ol>'.$errorMessage.'</ol>';
 		} else {
 			echo '<p>Alles OK! Alle Bilder wurden gefunden!</p>';
@@ -61,13 +67,14 @@ class MT_Admin_DashboardWidget {
 	 *
 	 * @return void
 	 */
-	private function _deleteTempFiles() {
+	private function _deleteTempFiles()
+	{
 		$unToDate = time() - $this->_deleteTime;
 
 		// Request number of temp files
 		$numTempFiles = MT_ManagementTemp::get_aggregate('COUNT', 'ip', "date <= '" . $unToDate . "'");
 		
-		if($numTempFiles > 0) {
+		if ($numTempFiles > 0) {
 			echo '<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('.$numTempFiles.')';
 
 			// Delete temp files

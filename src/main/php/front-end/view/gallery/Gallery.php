@@ -1,9 +1,14 @@
 <?php
-/**
- * @package front-end
- * @subpackage view
- */
-class MT_View_Gallery extends MT_View_AbstractGallery {
+namespace MT\WP\Plugin\Frontend\View\Gallery;
+
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+use MT\WP\Plugin\Api\MT_Category;
+use MT\WP\Plugin\Api\MT_Photo;
+use MT\WP\Plugin\Common\Util\MT_Util_Common;
+use MT\WP\Plugin\Common\Util\MT_Util_Html;
+
+class MT_View_Gallery extends MT_View_AbstractGallery
+{
 
 	private $item;
 	private $userSettings;
@@ -15,19 +20,14 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 	 */
 	private $_numPhotos;
 
-	/**
-	 * [...]
-	 *
-	 * @param	int	$id	Gallery id
-	 * [...]
-	 */
-	public function __construct($id, $page, $num, $sort) {
+	public function __construct($id, $page, $num, $sort)
+	{
 
 		// Construct query
-		$query = (New MT_QueryBuilder())
+		$query = (new MT_QueryBuilder())
 			->from('gallery', array('id as galleryId', 'name as galleryName', 'description'))
-			->join('category', TRUE, array('id AS categoryId', 'name AS categoryName'))
-			->joinLeft('subcategory', TRUE, 'name as subcategoryName')
+			->join('category', true, array('id AS categoryId', 'name AS categoryName'))
+			->joinLeft('subcategory', true, 'name as subcategoryName')
 			->whereEqual('wp_mt_gallery.id', $id);
 		$this->item = $query->getResultOne();
 				
@@ -42,13 +42,8 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 		}
 
 		$this->userSettings = MT_Util_Common::getUserSettings($sort, $num, $page);
-		// Anzahl der Seiten in dieser Galerie unter Berücksichtigung der Anzahl der Bilder
-//		if($this->userSettings['page'] > MT_Photo::getNumPages($this->item->galleryId, $this->userSettings['num'])) {
-//			$this->userSettings[page] = 1;
-//		}
-		
 		// If page parameter is greater then the maximum
-		if ($num && $page > 1 && $page > ceil($this->_numPhotos / $num )) {
+		if ($num && $page > 1 && $page > ceil($this->_numPhotos / $num)) {
 			throw new Exception('Die Galerie '.$this->item->galleryId.' besitzt keine Seite '.$page);
 		}
 
@@ -58,12 +53,14 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 		$this->_createBreadcrumb();
 	}
 	
-	private function _createPagination() {
+	private function _createPagination()
+	{
 		$url = explode(',', $_SERVER['REQUEST_URI']);
 		$this->pagination = MT_Util_Html::__outputPagination($this->_numPhotos, $this->userSettings['page'], $this->userSettings['num'], $this->userSettings['sort'], $url[0].',');
 	}
 	
-	private function _createBreadcrumb() {
+	private function _createBreadcrumb()
+	{
 		$categoryLink = MT_Category::$_categoryPath . $this->item->categoryId;
 		$breadcrumb = array(
 			$categoryLink => $this->item->categoryName
@@ -75,22 +72,23 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 		parent::setBreadcrumb($breadcrumb);
 	}
 
-	public function outputContent() {
+	public function outputContent()
+	{
 		$query = (new MT_QueryBuilder())
 			->from('photo', array('id as photoId', 'path', 'description', 'date'))
-			->joinLeft('photographer', TRUE, array('id as photographerId', 'name as photographerName'))
+			->joinLeft('photographer', true, array('id as photographerId', 'name as photographerName'))
 			->whereEqual('gallery', $this->item->galleryId)
 			->whereEqual('`show`', '1')
 			->orderBy('date')
 			->limitPage($this->userSettings['page'], $this->userSettings['num']);
 
 		// Sortierung der Bild nach dem Datum
-		if($this->userSettings['sort'] === 'date') {
+		if ($this->userSettings['sort'] === 'date') {
 			$query->orderBy('date DESC');
 		}
 
 		// ggf. Galeriebeschreibung
-		if (!empty( $this->item->description)) {
+		if (!empty($this->item->description)) {
 			echo '<p>' . $this->item->description . '</p>';
 		}
 
@@ -105,7 +103,8 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 	 *
 	 * @return void
 	 */
-	private function _outputContentHeader() {
+	private function _outputContentHeader()
+	{
 		$location = "location = '".$this->item->galleryId.",page=".$this->userSettings["page"]."&'+this.options[this.selectedIndex].value;";
 		$locationPage1 = "location = '".$this->item->galleryId.",page=1&'+this.options[this.selectedIndex].value;";
 		?>
@@ -140,8 +139,8 @@ class MT_View_Gallery extends MT_View_AbstractGallery {
 	 *
 	 * @return void
 	 */
-	private function _outputContentFooter() {
+	private function _outputContentFooter()
+	{
 		 echo $this->pagination;
 	}
 }
-?>

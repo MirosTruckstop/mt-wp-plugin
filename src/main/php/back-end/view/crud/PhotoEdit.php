@@ -1,11 +1,18 @@
 <?php
+namespace MT\WP\Plugin\Backend\View\Crud;
+
+use MT\WP\Plugin\Api\MT_Gallery;
+use MT\WP\Plugin\Api\MT_Photo;
+use MT\WP\Plugin\Backend\Model\Form\MT_Admin_Field;
+use MT\WP\Plugin\Backend\Model\MT_Admin_Model_File;
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+use MT\WP\Plugin\Common\Util\MT_Util_Html;
+
 /**
  * Admin edit photos view, i.e. view to edit photos.
- *  
- * @package back-end
- * @subpackage view
  */
-class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
+class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common
+{
 
 	const CSS_CLASS_EDITABLE_DATA = 'editable-data';
 	
@@ -19,19 +26,20 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 	/**
 	 * Link to this site
-	 * 
+	 *
 	 * Note: Workaround only
-	 * 
+	 *
 	 * @var string
 	 */
 	private $_linkOfThisSite = '?page=mt-photo-add';
 
-	public function __construct($galleryId = NULL, $page = NULL) {
+	public function __construct($galleryId = null, $page = null)
+	{
 		parent::__construct(new MT_Photo(), $page);
 		parent::setFields(array(
-			new MT_Admin_Field(NULL, 'Bild'),
-			new MT_Admin_Field(NULL, 'Galerie / Fotograf'),
-			new MT_Admin_Field(NULL, 'Beschreibung')
+			new MT_Admin_Field(null, 'Bild'),
+			new MT_Admin_Field(null, 'Galerie / Fotograf'),
+			new MT_Admin_Field(null, 'Beschreibung')
 		));
 		parent::setPerPage(10);
 		
@@ -49,7 +57,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		$query = (new MT_QueryBuilder())
 			->from('photo', array('id', 'path', 'date', 'gallery', 'description', 'detected_text', 'photographer'))
 			->limitPage($this->page, $this->perPage);
-		if($this->gallery->hasId()) {
+		if ($this->gallery->hasId()) {
 			$query->whereEqual('gallery', $this->gallery->getId())
 				->whereEqual('`show`', '1')
 				->orderBy('date DESC');
@@ -64,11 +72,14 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 
 	/**
 	 * Update photos in data base.
-	 * 
-	 * @param array $photos Photo ID's as keys an arrays as values
+	 *
+	 * @param array $data Photo ID's as keys an arrays as values
+	 *
+	 * @return void
 	 */
-	private function _updatePhotos($data) {
-		if(!empty($data)) {
+	private function _updatePhotos($data)
+	{
+		if (!empty($data)) {
 			foreach ($data as $index => $item) {
 				// Update photo only, if checkbox is activated. Otherwise
 				// continue
@@ -91,9 +102,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 					}
 					// Show picture
 					$data[$index]['show'] = 1;
-				}
-				// Photo in a gallery
-				else {
+				} else { // Photo in a gallery
 					// If the ID of the gallery did not change
 					if ($data[$index]['gallery'] == $this->gallery->getId()) {
 						unset($data[$index]['gallery']);
@@ -102,7 +111,7 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 			}
 		}
 		
-		if(!empty($data)) {
+		if (!empty($data)) {
 			try {
 				parent::updateOrInsertAll($data);
 				MT_Util_Html::box('save');
@@ -112,13 +121,15 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 		}
 	}
 	
-	protected function outputHeadMessages() {
-		if((!$this->gallery->hasId()) ) {
-			echo '<p>Insgesamt wurden <b>'.MT_Photo::getCountNewPhotos().' neue Bilder</b> gefunden! (Letzte Suche: ' . date( 'd.m.Y - H:i', get_option( 'datum_letzte_suche') ) . ' | <a href="' . $this->_linkOfThisSite . '&action=search">Neue Suche</a>)</p>';
+	protected function outputHeadMessages()
+	{
+		if ((!$this->gallery->hasId())) {
+			echo '<p>Insgesamt wurden <b>'.MT_Photo::getCountNewPhotos().' neue Bilder</b> gefunden! (Letzte Suche: ' . date('d.m.Y - H:i', get_option('datum_letzte_suche')) . ' | <a href="' . $this->_linkOfThisSite . '&action=search">Neue Suche</a>)</p>';
 		}
 	}
 
-	protected function _outputTableNavBottom() {
+	protected function _outputTableNavBottom()
+	{
 		echo MT_Util_Html::submitButton();
 		echo '&#160;'.MT_Util_Html::cancelButton('?page=mt-' . $this->model->name());
 	}
@@ -128,25 +139,26 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 	 *
 	 * @return void
 	 */
-	protected function _outputTableBody(){
+	protected function _outputTableBody()
+	{
 		$fields = array();
-		$fields['id'] = new MT_Admin_Field('id', NULL, 'hidden');
-		$fields['checked'] = new MT_Admin_Field('checked', NULL, 'bool');
-		$fields['path'] = new MT_Admin_Field('path', NULL, 'hidden');
-		$fields['gallery'] = (new MT_Admin_Field('gallery', NULL, NULL, self::CSS_CLASS_EDITABLE_DATA))
+		$fields['id'] = new MT_Admin_Field('id', null, 'hidden');
+		$fields['checked'] = new MT_Admin_Field('checked', null, 'bool');
+		$fields['path'] = new MT_Admin_Field('path', null, 'hidden');
+		$fields['gallery'] = (new MT_Admin_Field('gallery', null, null, self::CSS_CLASS_EDITABLE_DATA))
 			->setReference('gallery')
 			->setRequired();
-		$fields['photographer'] = (new MT_Admin_Field('photographer', NULL, NULL, self::CSS_CLASS_EDITABLE_DATA))
+		$fields['photographer'] = (new MT_Admin_Field('photographer', null, null, self::CSS_CLASS_EDITABLE_DATA))
 			->setReference('photographer');
-		$fields['date'] = (new MT_Admin_Field('date', NULL, 'date', 'date '.self::CSS_CLASS_EDITABLE_DATA))
+		$fields['date'] = (new MT_Admin_Field('date', null, 'date', 'date '.self::CSS_CLASS_EDITABLE_DATA))
 			->setMaxLength(19);
-		$fields['description'] = new MT_Admin_Field('description', NULL, 'text', 'description-autocomplete '.self::CSS_CLASS_EDITABLE_DATA);
-		$fields['detected_text'] = new MT_Admin_Field('detected_text', NULL, 'hidden');
+		$fields['description'] = new MT_Admin_Field('description', null, 'text', 'description-autocomplete '.self::CSS_CLASS_EDITABLE_DATA);
+		$fields['detected_text'] = new MT_Admin_Field('detected_text', null, 'hidden');
 
 		$counter = 0;			// Nummeriert die 8 Bilder
 		foreach ($this->getResult() as $index => $item) {
 			$file = MT_Admin_Model_File::getPathFromDbPath($item->path);
-		?>
+			?>
 			<tr class="tr-sort <?php echo ($counter % 2 == 1? ' alternate"' : ''); ?>">
 				<td>
 					<?php
@@ -168,19 +180,19 @@ class MT_Admin_View_PhotoEdit extends MT_Admin_View_Common {
 					?>
 				</td>
 				<td><?php
-					echo $fields['description']->getElement($item->description, $index);
-					if (!empty($item->detected_text)) {
-						echo '<br>'.__('Im Bild erkannter Text').': '.$item->detected_text;
-					}
+				echo $fields['description']->getElement($item->description, $index);
+				if (!empty($item->detected_text)) {
+					echo '<br>'.__('Im Bild erkannter Text').': '.$item->detected_text;
+				}
 				?></td>
 			</tr>
-		<?php
+			<?php
 			$counter++;
 		}
 	}
 	
-	protected function getPagination() {
+	protected function getPagination()
+	{
 		return MT_Util_Html::__outputPagination(MT_Photo::getCount($this->gallery->getId()), $this->page, $this->perPage, 'date', '?page=mt-photo&mtId='.$this->gallery->getId().'&mt');
 	}
 }
-?>

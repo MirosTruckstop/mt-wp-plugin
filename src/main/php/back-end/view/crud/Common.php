@@ -1,11 +1,15 @@
 <?php
+namespace MT\WP\Plugin\Backend\View\Crud;
+
+use MT\WP\Plugin\Api\MT_Common;
+use MT\WP\Plugin\Backend\Model\Form\MT_Admin_Field;
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+
 /**
  * Common admin view.
- * 
- * @package back-end
- * @subpackage view
  */
-abstract class MT_Admin_View_Common {
+abstract class MT_Admin_View_Common
+{
 
 	/**
 	 * Typ name (e.g. 'photographer')
@@ -29,51 +33,59 @@ abstract class MT_Admin_View_Common {
 	protected $query;
 	
 	private $title;
-	private $isSortActive = FALSE;
+	private $isSortActive = false;
 	private $pagination;
 
-	public function __construct($model, $page = NULL, $cssClass = 'widefat') {
+	public function __construct($model, $page = null, $cssClass = 'widefat')
+	{
 		if ($model instanceof MT_Common) {
 			$this->model = $model;
 			$this->page = $page;
 			$this->cssClass = $cssClass;
 		} else {
-			throw new Exception("\$model is not of type MT_Common", NULL, NULL);
+			throw new Exception("\$model is not of type MT_Common", null, null);
 		}
 	}
 	
-	public function setTitle($value) {
+	public function setTitle($value)
+	{
 		$this->title = $value;
 	}
 	
-	public function setQuery($value) {
+	public function setQuery($value)
+	{
 		if ($value instanceof MT_QueryBuilder) {
 			$this->query = $value;
 		}
 	}
 
-	public function setPerPage($value) {
+	public function setPerPage($value)
+	{
 		$this->perPage = $value;
 	}
 	
-	public function setOrder( $value ) {
+	public function setOrder($value)
+	{
 		$this->order = $value;
 	}
 
-	public function setFields($fields) {
+	public function setFields($fields)
+	{
 		array_unshift($fields, (new MT_Admin_Field('id', '#', 'hidden')));
 		$this->fields = $fields;
 	}
 	
-	public function setSortIsActive() {
-		$this->isSortActive = TRUE;
+	public function setSortIsActive()
+	{
+		$this->isSortActive = true;
 	}
 	
-	protected abstract function outputHeadMessages();
-	protected abstract function _outputTableBody();
-	protected abstract function _outputTableNavBottom();
+	abstract protected function outputHeadMessages();
+	abstract protected function _outputTableBody();
+	abstract protected function _outputTableNavBottom();
 
-	public function outputContent() {
+	public function outputContent()
+	{
 		?>
 		<div class="wrap">
 			<h2><?php echo $this->title; ?></h2>
@@ -98,16 +110,17 @@ abstract class MT_Admin_View_Common {
 			</div>
 			</form>
 		</div>
-<?php
+		<?php
 	}
 	
 	/**
-	 * 
-	 * @param array $data
+	 * @param array $data Data
+	 *
 	 * @return boolean True, if insert/update was successful
 	 * @throws Exception If inser/update failed
 	 */
-	protected function updateOrInsertAll($data) {
+	protected function updateOrInsertAll($data)
+	{
 		foreach ($data as $item) {
 			$id = $item['id'];
 			unset($item['id']);
@@ -115,15 +128,13 @@ abstract class MT_Admin_View_Common {
 				if (!$this->model->insert($item)) {
 					throw new Exception('Einfügen des Objekts fehlgeschlagen:'.$this->model);
 				}
-			}
-			// If item has an ID, update the item
-			else {
+			} else { // If item has an ID, update the item
 				if (!$this->model->update($item, array('id' => $id))) {
 					throw new Exception('Aktualisieren des Objekts fehlgeschlafen: id='.$id);
 				}
 			}
 		}
-		return TRUE;
+		return true;
 	}
 
 	/**
@@ -131,9 +142,10 @@ abstract class MT_Admin_View_Common {
 	 *
 	 * @return void
 	 */
-	protected function _outputTableHead() {
+	protected function _outputTableHead()
+	{
 		echo '<tr>';
-		for($i = 0; $i < count($this->fields); $i++) {
+		for ($i = 0; $i < count($this->fields); $i++) {
 			$field = $this->fields[$i];
 			if ($field->label == '#') {
 				echo '<th class="check-column"><input type="checkbox" name="checked" value="all"></th>';
@@ -144,7 +156,8 @@ abstract class MT_Admin_View_Common {
 		echo '</tr>';
 	}
 
-	protected function getResult() {
+	protected function getResult()
+	{
 		if (!empty($this->query)) {
 			return $this->query->getResult();
 		}
@@ -176,12 +189,12 @@ abstract class MT_Admin_View_Common {
 		return $query->getResult('ARRAY_A');
 	}
 	
-	private function getPagination() {
+	private function getPagination()
+	{
 		if (isset($this->page) && !isset($this->pagination)) {
 			$this->pagination = static::getPagination();
 		}
 		return $this->pagination;
 	}
-
 }
 

@@ -21,5 +21,5 @@ Create the CSS files
 
 Sync the required files
 ```sh
-rsync -r --relative *.php dist/ languages/ src/js src/main/ <host>:<wordpress-dir>/wp-content/plugins/mt-wp-plugin/
+rsync -r --relative *.php dist/ languages/ vendor/ src/js src/main/ <host>:<wordpress-dir>/wp-content/plugins/mt-wp-plugin/
 ```
