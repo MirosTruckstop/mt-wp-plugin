@@ -1,21 +1,23 @@
 <?php
+namespace MT\WP\Plugin\Common\Util;
+
 /**
  * Collection of helper functions.
- * 
- * @package common
- * @subpackage util
  */
-abstract class MT_Util_Common {
+abstract class MT_Util_Common
+{
 
 	/**
 	 * Returns $string, if $var is not empty.
 	 *
-	 * @param	string		$var		Variable
-	 * @param	string		$string		String
-	 * @return	void|string	$string
+	 * @param string $var    Variable
+	 * @param string $string String
+	 *
+	 * @return void|string $string
 	 */
-	public static function getIfNotEmpty( $var, $string ) {
-		if( !empty ( $var ) ) {
+	public static function getIfNotEmpty($var, $string)
+	{
+		if (!empty($var)) {
 			return $string;
 		}
 	}
@@ -23,12 +25,14 @@ abstract class MT_Util_Common {
 	/**
 	 * Creates array for user settings.
 	 *
-	 * @param	string	$sort	Sorting
-	 * @param	string	$num	Number of images per page
-	 * @return	array			An associative array containing the determined
-	 * 							'sort', 'num'
+	 * @param string $sort Sorting
+	 * @param string $num  Number of images per page
+	 * @param string $page Page
+	 *
+	 * @return array An associative array
 	 */
-	public static function getUserSettings($sort, $num, $page) {
+	public static function getUserSettings($sort, $num, $page)
+	{
 		return array(
 			'sort'	=> $sort,
 			'num'	=> $num,
@@ -40,29 +44,38 @@ abstract class MT_Util_Common {
 	 * Check of the given string is a timestamp.
 	 *
 	 * @param string $timestamp Timestamp as string
+	 *
 	 * @return boolean True, if it is a timestamp
 	 */
-	public static function isTimestampInStringForm( $timestamp ) {
+	public static function isTimestampInStringForm($timestamp)
+	{
 		return $timestamp == strval(intval($timestamp));
 	}
 	
 	/**
 	 * Trims the value for the given key, when the key exists.
-	 * 
-	 * @param array $array
-	 * @param string $key
+	 *
+	 * @param array  $array Array
+	 * @param string $key   Key
+	 *
+	 * @return void
 	 */
-	public static function trimArrayEntry(array &$array, $key) {
-		if ( array_key_exists($key, $array) ) {
+	public static function trimArrayEntry(array &$array, $key)
+	{
+		if (array_key_exists($key, $array)) {
 			$array[$key] = trim($array[$key]);
 		}
 	}
 
 	/**
 	 * Logs the given string in the default PHP log file.
+	 *
+	 * @param string $string Log message
+	 *
+	 * @return void
 	 */
-	public static function log($string) {
+	public static function log($string)
+	{
 		error_log(addslashes($string));
 	}
-
 }

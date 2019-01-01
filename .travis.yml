@@ -5,7 +5,9 @@ matrix:
         - '7.1'
       install:
         - composer install
-      script: ./vendor/bin/phpunit --bootstrap vendor/autoload.php src/test/php/
+      script:
+        - ./vendor/bin/phpunit --bootstrap vendor/autoload.php src/test/php/
+        - ./vendor/bin/phpcs --standard=ruleset.xml -s *.php src/
     - language: node_js
       node_js:
         - '8'

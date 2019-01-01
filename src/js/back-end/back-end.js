@@ -1,6 +1,6 @@
-jQuery(function() {
-	/* -------- Select rows on click -----------------------------------------*/	
-	jQuery('.editable-data').click(function() {
+jQuery(function () {
+	/* -------- Select rows on click -----------------------------------------*/
+	jQuery('.editable-data').click(function () {
 		jQuery(this).parent().parent().find('input[type=checkbox]').prop('checked', true);
 	});
 	
@@ -9,8 +9,8 @@ jQuery(function() {
 		cursor: 'move',
 		axis:   'y',
 		placeholder: 'tr-placeholder',
-		stop: function(event, table) {
-			jQuery('tbody .date').each(function( index ) {
+		stop: function (event, table) {
+			jQuery('tbody .date').each(function (index) {
 				jQuery(this).val(index);
 			});
 		}
@@ -22,7 +22,7 @@ jQuery(function() {
 	.autocomplete({
 		source: availableDescriptions
 	})
-	.focusout(function() {
+	.focusout(function () {
 		var val = jQuery(this).val();
 		if (val.length > 0 && jQuery.inArray(val, availableDescriptions) == -1) {
 			availableDescriptions.push(val);

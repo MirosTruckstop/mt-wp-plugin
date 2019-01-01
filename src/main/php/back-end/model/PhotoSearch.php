@@ -1,21 +1,25 @@
 <?php
+namespace MT\WP\Plugin\Backend\Model;
+
+use MT\WP\Plugin\Api\MT_Gallery;
+use MT\WP\Plugin\Api\MT_Photo;
+use MT\WP\Plugin\Backend\View\Crud\MT_Admin_View_PhotoEdit;
+
 /**
  * Search and store new photos.
- *
- * @package    back-end
- * @subpackage model
- * @deprecated since version 1.0
  */
-class MT_Admin_Model_PhotoSearch {
+class MT_Admin_Model_PhotoSearch
+{
 
 	/**
 	 * Timestamp
-	 * 
+	 *
 	 * @var integer
 	 */
 	private $time;
 	
-	public function __construct($paQueueClient = NULL) {
+	public function __construct($paQueueClient = null)
+	{
 		$this->paQueueClient = $paQueueClient;
 		$this->photoBaseUrl = get_bloginfo('url').'/bilder';
 		return $this;
@@ -24,28 +28,25 @@ class MT_Admin_Model_PhotoSearch {
 	/**
 	 * Searchs new photos in the given directory and stores them.
 	 *
-	 * @param	string|null $dir Directory
-	 * @return	boolean True, if search was successful
-	 * @deprecated since version 1.0
+	 * @param string|null $dir Directory
+	 *
+	 * @return boolean True, if search was successful
 	 */
-	public function search($dir = MT_Admin_Model_File::PHOTO_PATH) { 
+	public function search($dir = MT_Admin_Model_File::PHOTO_PATH)
+	{
 		if (!is_dir($dir)) {
-			return FALSE;
+			return false;
 		}
-		$directoryHandle = opendir( $dir );
-		while(false !== ($basename = readdir($directoryHandle))) {
+		$directoryHandle = opendir($dir);
+		while (false !== ($basename = readdir($directoryHandle))) {
 			$path = $dir.'/'.$basename;
 			
 			// Skip "." and ".." files and the thumbnail folder
-			if($basename == '.' || $basename == '..' || $path == MT_Admin_Model_File::THUMBNAIL_PATH) {
+			if ($basename == '.' || $basename == '..' || $path == MT_Admin_Model_File::THUMBNAIL_PATH) {
 				continue;
-			}
-			// Folder	
-			else if(is_dir($path)) {
+			} elseif (is_dir($path)) { // Folder
 				$this->search($path);
-			}
-			// Photo file
-			else if(MT_Admin_Model_File::isPhoto($path)) {
+			} elseif (MT_Admin_Model_File::isPhoto($path)) { // Photo file
 				// Store the photo path without PHOTO_PATH in the database
 				$dbDirname = MT_Admin_Model_File::getDbPathFromDir($dir);
 				$dbFile = $dbDirname.$basename;
@@ -57,7 +58,7 @@ class MT_Admin_Model_PhotoSearch {
 				}
 
 				// Ueberpruefen ob das Bild bereits in der Datenbank gespeichert ist
-				if(!MT_Photo::checkPhotoIsInDb($dbFile)) {
+				if (!MT_Photo::checkPhotoIsInDb($dbFile)) {
 					$id = MT_Photo::insert(array(
 						'path'        => $dbFile,
 						'name_old'    => $basename,
@@ -69,11 +70,10 @@ class MT_Admin_Model_PhotoSearch {
 						$message = $this->photoBaseUrl.'/'.$dbFile;
 						$this->paQueueClient->publish($message, ['id' => "$id"]);
 					}
-				}	
+				}
 			}
 		}
 		closedir($directoryHandle);
-		return TRUE;
+		return true;
 	}
-
 }

@@ -1,13 +1,13 @@
 <?php
+namespace MT\WP\Plugin\Api;
+
+use MT\WP\Plugin\Backend\Model\MT_Admin_Model_File;
+
 /**
  * Model of a category.
- *
- * @category   MT
- * @package api
- * @subpackage public
- * @deprecated since version 1.0
  */
-class MT_Category extends MT_Common {
+class MT_Category extends MT_Common
+{
 	
 	/**
 	 * Category path
@@ -16,32 +16,35 @@ class MT_Category extends MT_Common {
 	 */
 	public static $_categoryPath = '../kategorie/';
 
-	public function __construct($id = NULL) {
+	public function __construct($id = null)
+	{
 		parent::__construct($id);
 	}
 
-	public static function name() {
+	public static function name()
+	{
 		return 'category';
 	}
 	
-	public static function getName() {
+	public static function getName()
+	{
 		return 'Kategorien';
 	}
 
 	/**
 	 * Inserts a new category in the database and creats it's folder.
-	 * 
+	 *
 	 * @param array $data Data
+	 *
 	 * @return boolean True, if insert was successful
 	 * @throws Exception If creation of the folder failed
-	 * @deprecated since version 1.0
 	 */
-	public static function insert(array $data) {
+	public static function insert(array $data)
+	{
 		$data['path'] = MT_Admin_Model_File::nameToPath($data['name']);
 		if (parent::insert($data)) {
 			return MT_Admin_Model_File::createDirectory($data['path']);
 		}
-		return FALSE;
+		return false;
 	}
-
 }

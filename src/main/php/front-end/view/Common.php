@@ -1,39 +1,45 @@
 <?php
+namespace MT\WP\Plugin\Frontend\View;
+
 /**
  * Common view
- * 
- * @package front-end
- * @subpackage view
  */
-abstract class MT_View_Common {
+abstract class MT_View_Common
+{
 
 	private $title;
 	private $description;
 	private $breadcrumb = array();
 	
-	public abstract function outputContent();
+	abstract public function outputContent();
 	
-	public function setTitle($value) {
+	public function setTitle($value)
+	{
 		$this->title = $value;
 	}
 	
-	public function setDescription($value) {
+	public function setDescription($value)
+	{
 		$this->description = $value;
 	}
 	
-	public function setBreadcrumb(array $value) {
+	public function setBreadcrumb(array $value)
+	{
 		$this->breadcrumb = $value;
 	}
 	
-	public function getTitle() {
+	public function getTitle()
+	{
 		return $this->title;
 	}
 	
-	public function outputDescription() {
+	public function outputDescription()
+	{
 		echo $this->description;
 	}
 
-	public function getBreadcrumb() {
+	public function getBreadcrumb()
+	{
 		return $this->breadcrumb;
 	}
 }

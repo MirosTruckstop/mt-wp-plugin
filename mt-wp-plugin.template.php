@@ -1,7 +1,12 @@
 <?php
+use MT\WP\Plugin\Common\Util\MT_Util_Common;
+use MT\WP\Plugin\Frontend\View\Gallery\MT_View_Gallery;
+use MT\WP\Plugin\Frontend\View\Gallery\MT_View_SearchGallery;
+use MT\WP\Plugin\Frontend\View\Gallery\MT_View_TagGallery;
+use MT\WP\Plugin\Frontend\View\MT_View_Category;
+use MT\WP\Plugin\Frontend\View\MT_View_Photographer;
 
-add_filter('document_title_parts', 'mt_pre_get_document_title' );
-function mt_pre_get_document_title( $title ) {
+add_filter('document_title_parts', function ($title) {
 	global $view;
 
 	// TODO: Remove this hack
@@ -15,10 +20,13 @@ function mt_pre_get_document_title( $title ) {
 	}
 
 	return $title;
-}
+});
 
 add_filter('the_title', 'mt_the_title', 10, 2);
-function mt_the_title( $title, $id ) {
+// phpcs:disable PEAR.NamingConventions.ValidFunctionName.FunctionNoCapital, PEAR.NamingConventions.ValidFunctionName.FunctionNameInvalid
+function mt_the_title($title, $id)
+{
+	// phpcs:enable
 	global $view;
 
 	if ($id == get_the_ID() && method_exists($view, 'getTitle')) {
@@ -27,35 +35,34 @@ function mt_the_title( $title, $id ) {
 	return $title;
 }
 
-add_filter('body_class', 'mt_body_class');
-function mt_body_class( $classes ) {
+add_filter('body_class', function ($classes) {
 	global $view;
 	if (method_exists($view, 'checkWidescreen') && $view->checkWidescreen()) {
 		return array_merge($classes, array('widescreen'));
 	}
 	return $classes;
-}
+});
 
-add_filter('the_content', 'mt_the_content');
-function mt_the_content( $content ) {
+add_filter('the_content', function ($content) {
 	global $view;
 	if (method_exists($view, 'outputContent')) {
 		return $view->outputContent();
 	}
 	return $content;
-}
+});
 
-add_filter('mtTheme_breadcrumb_items', 'mt_mtTheme_breadcrumb_items');
-function mt_mtTheme_breadcrumb_items( $items ) {
+add_filter('mtTheme_breadcrumb_items', function ($items) {
 	global $view;
 	if (method_exists($view, 'getBreadcrumb')) {
 		return array_merge($items, $view->getBreadcrumb());
 	}
 	return $items;
-}
+});
 
-function set_view($viewType) {
-	require_once(MT_DIR_SRC_PHP . '/front-end/view/Common.php');
+// phpcs:disable PEAR.NamingConventions.ValidFunctionName.FunctionNoCapital, PEAR.NamingConventions.ValidFunctionName.FunctionNameInvalid
+function set_view($viewType)
+{
+	// phpcs:enable
 	global $view;
 
 	$id = intval(get_query_var('mtId'));
@@ -71,31 +78,29 @@ function set_view($viewType) {
 }
 
 /**
+ * @param string $viewType View type
+ * @param int    $id       Id
+ * @param string $search   Search
+ *
+ * @return MT_View_AbstractGallery
  * @throws Exception When $viewType is unknown
  * @throws Exception When view creation failed
  */
-function createView($viewType, $id, $search) {
+function createView($viewType, $id, $search)
+{
+	// phpcs:disable PEAR.WhiteSpace.ScopeIndent.IncorrectExact
 	switch ($viewType) {
 		case 'bilder/galerie':
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/Gallery.php');
 			return new MT_View_Gallery($id, get_query_var('mtPage', 1), get_query_var('mtNum', 10), get_query_var('mtSort', 'date'));
 		case 'bilder/tag':
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractSearchGallery.php');
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/TagGallery.php');
 			return new MT_View_TagGallery($search);
 		case 'bilder/suche':
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractGallery.php');
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/AbstractSearchGallery.php');
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/gallery/SearchGallery.php');
 			return new MT_View_SearchGallery($search);
 		case 'bilder/kategorie':
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/Category.php');
 			return new MT_View_Category($id);
 		case 'fotograf':
-			require_once(MT_DIR_SRC_PHP.'/front-end/view/Photographer.php');
 			return new MT_View_Photographer($id);
 	}
+	// phpcs:enable
 	throw new Exception('Unknown view type: '.$viewType);
 }

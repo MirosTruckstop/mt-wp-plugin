@@ -1,40 +1,45 @@
 <?php
+namespace MT\WP\Plugin\Api;
+
+use MT\WP\Plugin\Common\MT_QueryBuilder;
+
 /**
  * Common model
- * 
- * @package api
- * @subpackage public
  */
-abstract class MT_Common {
+abstract class MT_Common
+{
 
 	protected $id;
 	public static $dbPreafix = 'wp_mt_';
 
-	public abstract static function name();
+	abstract public static function name();
 
 	/**
 	 * Constructor for the database class to inject the table name
 	 *
-	 * @param String $tableName - The current table name
+	 * @param String $id - The current table name
 	 */
-	public function __construct($id) {
+	public function __construct($id)
+	{
 		$this->id = $id;
 	}
 	
-	private static function getTableName() {
+	private static function getTableName()
+	{
 		return self::$dbPreafix.static::name();
 	}
 	
 	/**
 	 * Insert data into the current data
 	 *
-	 * @param  array  $data - Data to enter into the database table
+	 * @param array $data - Data to enter into the database table
 	 *
 	 * @return int|bool InsertQuery ID or false
 	 */
-	public static function insert(array $data) {
-		if(empty($data)) {
-			return FALSE;
+	public static function insert(array $data)
+	{
+		if (empty($data)) {
+			return false;
 		}
 
 		global $wpdb;
@@ -42,27 +47,24 @@ abstract class MT_Common {
 		return $wpdb->insert_id;
 	}
 	
-	public function isDeletable() {
+	public function isDeletable()
+	{
 		return false;
 	}
 	
-	/**
-	 * @deprecated since version 1.0
-	 */
-	public function getOne($select = NULL, $outputType = 'OBJECT') {
-		if(!empty($this->id)) {
+	public function getOne($select = null, $outputType = 'OBJECT')
+	{
+		if (!empty($this->id)) {
 			$query = (new MT_QueryBuilder())
 				->from(static::name(), $select)
 				->whereEqual(self::getTableName().'.id', $this->id);
-			return $query->getResultOne($outputType);		
+			return $query->getResultOne($outputType);
 		}
-		return FALSE;
+		return false;
 	}
 	
-	/**
-	 * @deprecated since version 1.0
-	 */
-	public static function getAll($select = '*', $orderBy = NULL, $limit = Null) {
+	public static function getAll($select = '*', $orderBy = null, $limit = null)
+	{
 		$query = (new MT_QueryBuilder())
 			->from(static::name(), $select)
 			->orderBy($orderBy)
@@ -70,7 +72,8 @@ abstract class MT_Common {
 		return $query->getResult();
 	}
 
-	private static function _get_one_value($select, $whereCondition = NULL) {
+	private static function _get_one_value($select, $whereCondition = null)
+	{
 		$query = (new MT_QueryBuilder())
 			->from(static::name())
 			->select($select)
@@ -80,19 +83,21 @@ abstract class MT_Common {
 		if (!empty($value)) {
 			return $value;
 		} else {
-			return FALSE;
+			return false;
 		}
 	}
 		
 	/**
-	 * 
 	 * @param string $aggregateFunctionName Aggregate function, e.g. 'MAX', 'AVG'
-	 * @param string $columnName Name of the column
+	 * @param string $columnName            Name of the column
+	 * @param string $whereCondition        Condition
+	 *
 	 * @return integer Results of aggregate
 	 */
-	public static function get_aggregate($aggregateFunctionName, $columnName, $whereCondition = NULL) {
+	public static function get_aggregate($aggregateFunctionName, $columnName, $whereCondition = null)
+	{
 		$aggregateValue = self::_get_one_value($aggregateFunctionName.'('.$columnName.')', $whereCondition);
-		if($aggregateValue) {
+		if ($aggregateValue) {
 			return $aggregateValue;
 		} else {
 			return 0;
@@ -100,63 +105,63 @@ abstract class MT_Common {
 	}
 	
 	/**
-	 * 
-	 * @param string $columnName Name of the column
-	 * @param null|string $whereCondition
+	 * @param string      $columnName     Name of the column
+	 * @param null|string $whereCondition Condition
+	 *
 	 * @return string Attribute
-	 * @deprecated since version 1.0
 	 */
-	public function get_attribute($columnName, $whereCondition = NULL) {
+	public function get_attribute($columnName, $whereCondition = null)
+	{
 		if (empty($whereCondition) && $this->hasId()) {
 			return self::_get_one_value($columnName, 'id=' . $this->id);
-		}
-		elseif (!empty($whereCondition)) {
+		} elseif (!empty($whereCondition)) {
 			return self::_get_one_value($columnName, $whereCondition);
 		}
 	}
 	
-	public function getId() {
+	public function getId()
+	{
 		return $this->id;
 	}
 	
-	public function hasId() {
+	public function hasId()
+	{
 		return !empty($this->id);
 	}
 
 	/**
 	 * Update a table record in the database
 	 *
-	 * @param  array  $data           - Array of data to be updated
-	 * @param  array  $conditionValue - Key value pair for the where clause of the query
+	 * @param array $data           - Array of data to be updated
+	 * @param array $conditionValue - Key value pair for the where clause of the query
 	 *
 	 * @return Updated object
 	 */
-	public function update(array $data, array $conditionValue = NULL) {
-		if(empty($data)) {
-			return FALSE;
+	public function update(array $data, array $conditionValue = null)
+	{
+		if (empty($data)) {
+			return false;
 		}
 		
-		if(!empty($this->id)) {
+		if (!empty($this->id)) {
 			$conditionValue['id'] = $this->id;
 		}
 
 		global $wpdb;
-	return $wpdb->update(self::getTableName(), $data, $conditionValue);
+		return $wpdb->update(self::getTableName(), $data, $conditionValue);
 	}
 
 	/**
 	 * Delete row on the database table
 	 *
-	 * @param  array  $conditionValue - Key value pair for the where clause of the query
+	 * @param array $whereCondition - Key value pair for the where clause of the query
 	 *
 	 * @return Int - Num rows deleted
-	 * @deprecated since version 1.0
 	 */
-	public static function delete($whereCondition) {
+	public static function delete($whereCondition)
+	{
 		global $wpdb;
 		$wpdb->query('DELETE FROM '.self::getTableName(). ' WHERE '.$whereCondition);
-		return TRUE;
+		return true;
 	}
-
 }
-?>

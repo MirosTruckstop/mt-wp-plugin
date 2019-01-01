@@ -1,23 +1,28 @@
 <?php
+namespace MT\WP\Plugin\Frontend\View\Gallery;
+
+use MT\WP\Plugin\Common\Util\MT_Util_Common;
+use MT\WP\Plugin\Frontend\View\MT_View_Common;
+
 /**
  * General view of a gallery.
- * 
- * @package front-end
- * @subpackage view
  */
-abstract class MT_View_AbstractGallery extends MT_View_Common {
+abstract class MT_View_AbstractGallery extends MT_View_Common
+{
 	
 	const PHOTO_PATH = '/bilder';
 	
 	/**
 	 * Output galleries photos
-	 * 
-	 * @param array $photos Photos
-	 * @param string $altPreafix
-	 * @param boolean $isThumbView True, if photos should be displayed only as
-	 *	thumbnail
+	 *
+	 * @param array   $photos      Photos
+	 * @param string  $altPreafix  Alt prefix
+	 * @param boolean $isThumbView True, if photos should be displayed only as thumbnail
+	 *
+	 * @return void
 	 */
-	protected function _outputContentPhotos(array $photos, $altPreafix = '', $isThumbView = FALSE) {
+	protected function _outputContentPhotos(array $photos, $altPreafix = '', $isThumbView = false)
+	{
 		if (empty($photos)) {
 			_e('Keine Bilder gefunden.', MT_NAME);
 			return;
@@ -39,22 +44,26 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 	 * set "<prefix>: <description>" will be returned. If only one of the
 	 * strings is set, this string will be returned. Otherwise an empty string
 	 * will be returned.
-	 * 
-	 * @param string $description
-	 * @param string $prefix
+	 *
+	 * @param string $description Description
+	 * @param string $prefix      Prefix
+	 *
 	 * @return string
 	 */
-	private function _getPhotoAlternateText($description, $prefix = '') {
+	private function _getPhotoAlternateText($description, $prefix = '')
+	{
 		return $prefix . MT_Util_Common::getIfNotEmpty($description, MT_Util_Common::getIfNotEmpty($prefix, ': ').$description);
 	}
 
 	/**
 	 * Ouput photo (Form: paragraph)
 	 *
-	 * @param	array $item
-	 * @return	void
+	 * @param array $item Item
+	 *
+	 * @return void
 	 */
-	private function _outputPhoto($item) {
+	private function _outputPhoto($item)
+	{
 		if (!empty($item->galleryName)) {
 			$galleryString = '<b>'.__('Galerie', MT_NAME).':</b>&nbsp;<a href="/bilder/galerie/'.$item->galleryId.'">'.$item->galleryName.'</a>&nbsp;|&nbsp;';
 		}
@@ -74,7 +83,6 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 		}
 		
 		echo '<div class="photo" itemscope itemtype="http://schema.org/ImageObject">
-<!--            <span itemprob="publisher">MiRo\'s Truckstop</span>-->
 				<span itemprop="keywords">'.$item->keywords.'</span>
 				<div>
 					<img alt="'.$item->alt.'" src="'.self::PHOTO_PATH.'/'.$item->path.'" itemprop="contentURL"><br>
@@ -84,17 +92,21 @@ abstract class MT_View_AbstractGallery extends MT_View_Common {
 			</div>';
 	}
 	
-	private function _outputThumb($item) {
+	private function _outputThumb($item)
+	{
 		echo '<img alt="'.$item->alt.'" src="'.self::PHOTO_PATH.'/thumb/'.$item->path.'">';
 	}
 
 	/**
 	 * Removes special chars etc and return a clear keyword string
-	 * 
-	 * @param   string $keywordsString  String with keywords
-	 * @return  string                  Keyword string
+	 *
+	 * @param string $keywordsString String with keywords
+	 *
+	 * @return string Keyword string
 	 */
-	private function __getPhotoKeywords( $keywordsString ) {
+	// phpcs:disable PEAR.NamingConventions.ValidFunctionName.MethodDoubleUnderscore
+	private function __getPhotoKeywords($keywordsString)
+	{
 		return str_replace(array('& ', '(', ')', ':', '"', 'in '), '', $keywordsString);
-	}	
+	}
 }
