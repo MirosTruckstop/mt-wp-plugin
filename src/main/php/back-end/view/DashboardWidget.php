@@ -1,7 +1,6 @@
 <?php
 namespace MT\WP\Plugin\Backend\View;
 
-use MT\WP\Plugin\Api\MT_ManagementTemp;
 use MT\WP\Plugin\Backend\Model\MT_Admin_Model_File;
 use MT\WP\Plugin\Common\MT_QueryBuilder;
 
@@ -24,7 +23,6 @@ class MT_Admin_DashboardWidget
 	public function outputContent()
 	{
 		$this->_testPhotoPaths();
-		$this->_deleteTempFiles();
 	}
 
 	/**
@@ -59,26 +57,6 @@ class MT_Admin_DashboardWidget
 			echo '<ol>'.$errorMessage.'</ol>';
 		} else {
 			echo '<p>Alles OK! Alle Bilder wurden gefunden!</p>';
-		}
-	}
-
-	/**
-	 * Deletes all temp files older then 24 hours
-	 *
-	 * @return void
-	 */
-	private function _deleteTempFiles()
-	{
-		$unToDate = time() - $this->_deleteTime;
-
-		// Request number of temp files
-		$numTempFiles = MT_ManagementTemp::get_aggregate('COUNT', 'ip', "date <= '" . $unToDate . "'");
-		
-		if ($numTempFiles > 0) {
-			echo '<p class="style_green">Alles OK! Temporäre Dateien wurden gelöscht ('.$numTempFiles.')';
-
-			// Delete temp files
-			MT_ManagementTemp::delete('date <= '.$unToDate);
 		}
 	}
 }
