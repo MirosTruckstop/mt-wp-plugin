@@ -111,16 +111,16 @@ class MT_View_Gallery extends MT_View_AbstractGallery
 			<div id="auswahl_leiste">
 				<table width="100%" cellSpacing="0" cellPadding="2">
 					<tr>
-						<th>&nbsp;<?php _e('Bilder', MT_NAME); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
+						<th class="screen-small-hide">&nbsp;<?php _e('Bilder', MT_NAME); ?>:&nbsp;<?php echo $this->_numPhotos; ?></th>
 						<td>
-							<?php _e('Bilder pro Seite', MT_NAME); ?>:&nbsp;
+							<label for="num"><?php _e('Bilder pro Seite', MT_NAME); ?></label>:&nbsp;
 							<select name="num" size="1" onchange="<?php echo $locationPage1; ?>">
 								<option value="num=5&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '5'); ?>>5</option>
 								<option value="num=10&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '10'); ?>>10</option>
 								<option value="num=15&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '15'); ?>>15</option>
 								<option value="num=200&sort=<?php echo $this->userSettings['sort']; ?>" <?php echo MT_Util_Html::selected($this->userSettings['num'], '200'); ?>>200</option>								
 							</select>
-							&nbsp;<?php _e('Sortierung', MT_NAME); ?>:&nbsp;
+							&nbsp;<span class="screen-small-hide"><label for="sort"><?php _e('Sortierung', MT_NAME); ?></label>:&nbsp;</span>
 							<select name="sort" size="1" onchange="<?php echo $location; ?>">
 								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=date" <?php echo MT_Util_Html::selected($this->userSettings['sort'], 'date'); ?>><?php _e('Neuste zuerst', MT_NAME); ?></option>
 								<option value="num=<?php echo $this->userSettings['num']; ?>&sort=-date" <?php echo MT_Util_Html::selected($this->userSettings['sort'], '-date'); ?>><?php _e('Älteste zuerst', MT_NAME); ?></option>
