@@ -7,7 +7,6 @@
     "description": "",
     "name": "mt/wp-plugin",
     "require-dev": {
-        "apigen/apigen": "4.1.*",
         "phpunit/phpunit": "7.4.*",
         "squizlabs/php_codesniffer": "3.4.*"
     }
