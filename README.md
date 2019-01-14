@@ -9,7 +9,7 @@ Requirements
 
 Steps
 1. Install the requirements: `composer install`
-2. Run the unittests: `./vendor/bin/phpunit --bootstrap vendor/autoload.php  src/test/php/`
+2. Run the unittests: `./vendor/bin/phpunit --bootstrap vendor/autoload.php src/test/php/`
 
 #### Sync required files
 
@@ -21,5 +21,5 @@ Create the CSS files
 
 Sync the required files
 ```sh
-rsync -r --relative *.php dist/ languages/ vendor/ src/js src/main/ <host>:<wordpress-dir>/wp-content/plugins/mt-wp-plugin/
+rsync -r --relative *.php dist/ languages/ vendor/autoload.php vendor/composer src/js src/main/ <host>:<wordpress-dir>/wp-content/plugins/mt-wp-plugin/
 ```
