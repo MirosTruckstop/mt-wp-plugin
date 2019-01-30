@@ -67,8 +67,8 @@ class MT_Admin_Model_PhotoSearch
 						'show'        => 0
 					));
 					if ($id && $this->paQueueClient) {
-						$message = $this->photoBaseUrl.'/'.$dbFile;
-						$this->paQueueClient->publish($message, ['id' => "$id"]);
+						$image_uri = $this->photoBaseUrl.'/'.$dbFile;
+						$this->paQueueClient->publish($image_uri, ['id' => "$id"]);
 					}
 				}
 			}
