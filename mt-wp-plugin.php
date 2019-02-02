@@ -59,6 +59,8 @@ add_action('admin_enqueue_scripts', function () {
  */
 add_action('wp_enqueue_scripts', function () {
 	wp_enqueue_style('mt-style', plugins_url('/dist/front-end.css', __FILE__));
+	wp_enqueue_script('mt-vue', 'https://cdn.jsdelivr.net/npm/vue/dist/vue.js');
+	wp_enqueue_script('mt-axios', 'https://unpkg.com/axios/dist/axios.min.js');
 });
 
 require_once MT_DIR . '/mt-wp-plugin.routing.php';

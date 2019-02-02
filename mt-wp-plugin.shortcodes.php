@@ -159,12 +159,11 @@ add_shortcode('mt_news', function ($atts) {
 });
 
 add_shortcode('mt_photographers', function ($atts) {
-	$returnString = '<ul>';
-	$photo = new MT_Photo();
-	$items = MT_Photographer::getAll(array('id', 'name'), 'name');
-	foreach ($items as $item) {
-		$returnString .= '<li><a href="'.MT_Photographer::$photographersPath.$item->id.'">'.$item->name.'</a>&nbsp;<span class="style_grew">('.$photo->getNumPhotos($item->id).')</span></li>';
-	}
-	$returnString .= '</ul>';
-	return $returnString;
+	return '
+<ul id="app">
+	<li v-for="item in info">
+		<a :href="\'fotograf/\' + item.id">{{ item.name }}</a>&nbsp;<span class="style_grew">({{ item.num_photos }})</span>
+	</li>
+</ul>
+<script type="text/javascript" src="'.plugins_url('src/js/front-end/front-end.js', __FILE__).'"></script>';
 });
