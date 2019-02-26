@@ -1,6 +1,7 @@
 <?php
 namespace MT\WP\Plugin\Frontend\View\Gallery;
 
+use \Exception as Exception;
 use MT\WP\Plugin\Common\MT_QueryBuilder;
 use MT\WP\Plugin\Api\MT_Category;
 use MT\WP\Plugin\Api\MT_Photo;

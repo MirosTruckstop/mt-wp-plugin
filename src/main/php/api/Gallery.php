@@ -1,6 +1,7 @@
 <?php
 namespace MT\WP\Plugin\Api;
 
+use \Exception as Exception;
 use MT\WP\Plugin\Backend\Model\MT_Admin_Model_File;
 use MT\WP\Plugin\Common\MT_QueryBuilder;
 

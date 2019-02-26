@@ -1,6 +1,7 @@
 <?php
 namespace MT\WP\Plugin\Backend\View\Crud;
 
+use \Exception as Exception;
 use MT\WP\Plugin\Common\Util\MT_Util_Html;
 
 /**

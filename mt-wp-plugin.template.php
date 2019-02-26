@@ -1,4 +1,5 @@
 <?php
+use \Exception as Exception;
 use MT\WP\Plugin\Common\Util\MT_Util_Common;
 use MT\WP\Plugin\Frontend\View\Gallery\MT_View_Gallery;
 use MT\WP\Plugin\Frontend\View\Gallery\MT_View_SearchGallery;
