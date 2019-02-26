@@ -14,6 +14,7 @@ class MT_QueryBuilder
 	private $groupBy = '';
 	private $orderBy = '';
 	private $limit = '';
+	private $where = '';
 	
 	public function __construct($tablePraefix = 'wp_mt_')
 	{
