@@ -133,7 +133,8 @@ class MT_Admin_Model_File
 				return str_replace(self::PHOTO_PATH.'/', '', $newFile);
 			}
 		} else {
-			throw new Exception('Rename failed: Could not move "'.$oldFile.'" to "'.$newFile.'"');
+			$error_msg = error_get_last()['message'] ?? null;
+			throw new Exception('Rename failed: :'.$error_msg);
 		}
 	}
 	
