@@ -1,6 +1,7 @@
 <?php
 namespace MT\WP\Plugin\Backend\View\Crud;
 
+use \Exception as Exception;
 use MT\WP\Plugin\Api\MT_Common;
 use MT\WP\Plugin\Backend\Model\Form\MT_Admin_Field;
 use MT\WP\Plugin\Common\MT_QueryBuilder;

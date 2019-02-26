@@ -1,6 +1,7 @@
 <?php
 namespace MT\WP\Plugin\Backend\Model;
 
+use \Exception as Exception;
 use MT\WP\Plugin\Backend\Model\MT_Admin_Model_ThumbnailCreator;
 
 class MT_Admin_Model_File

@@ -64,6 +64,7 @@ class MT_Photo extends MT_Common
 	 * @param array $conditionValue Condition
 	 *
 	 * @return boolean
+	 * @throws Exception MT_Admin_Model_File::renamePhoto
 	 */
 	public function update(array $data, array $conditionValue = null)
 	{
