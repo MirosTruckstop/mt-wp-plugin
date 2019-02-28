@@ -24,7 +24,7 @@ add_shortcode('latest_news_date', function ($atts) {
 		'format' => '%e. %B %Y'
 	), $atts);
 	
-	return strftime($a['format'], (new MT_News())->getLatestNewsTimestamp());
+	return utf8_encode(strftime($a['format'], (new MT_News())->getLatestNewsTimestamp()));
 });
 
 add_shortcode('latest_photo_date', function ($atts) {
@@ -32,7 +32,7 @@ add_shortcode('latest_photo_date', function ($atts) {
 		'format' => '%e. %B %Y'
 	), $atts);
 	
-	return strftime($a['format'], (new MT_Photo())->getLatestPhotoDate());
+	return utf8_encode(strftime($a['format'], (new MT_Photo())->getLatestPhotoDate()));
 });
 
 add_shortcode('mt_statistics', function ($atts) {
@@ -113,7 +113,7 @@ add_shortcode('mt_news', function ($atts) {
 		}
 
 		// Year
-		$dateYear = strftime('%Y', $item->date);
+		$dateYear = utf8_encode(strftime('%Y', $item->date));
 		if ($dateYear != $dateYear_old && $dateYear != date('Y', time())) {
 			$dateYear_old = $dateYear;
 			$returnString .= '
@@ -123,7 +123,7 @@ add_shortcode('mt_news', function ($atts) {
 		}
 
 		// Month
-		$dateMonth = strftime('%B', $item->date);
+		$dateMonth = utf8_encode(strftime('%B', $item->date));
 		if ($dateMonth != $dateMonth_old) {
 			// Beim ersten Monat <table> noch nicht beenden
 			if (!empty($dateMonth_old)) {
@@ -143,7 +143,7 @@ add_shortcode('mt_news', function ($atts) {
 		// Day
 		$returnString .= '<tr>';
 				
-		$dateDay = strftime('%a, %d.%m.', $item->date);
+		$dateDay = utf8_encode(strftime('%a, %d.%m.', $item->date));
 				
 		if ($dateDay != $dateDay_old) {
 			$dateDay_old = $dateDay;

@@ -61,7 +61,7 @@ class MT_View_Photographer extends MT_View_Common
 			 </tr>
 			 <tr>
 			  <th><?php _e('Truckstop-Fotograf seit', MT_NAME); ?>:</th>
-			  <td><?php echo strftime(self::$_dateFormat, $this->item->date); ?></td>
+			  <td><?php echo utf8_encode(strftime(self::$_dateFormat, $this->item->date)); ?></td>
 			 </tr>
 			 <tr>
 			  <th><?php _e('Anzahl der Fotos', MT_NAME); ?>:</th>
