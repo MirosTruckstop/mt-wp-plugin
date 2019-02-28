@@ -11,6 +11,11 @@ Text Domain: mt-wp-plugin
 // phpcs:enable
 
 /*
+ * Set locale for correct dates
+ */
+setlocale(LC_ALL, get_locale().'.'.get_bloginfo('charset'), get_locale());
+
+/*
  * Set timezone
  */
 date_default_timezone_set(get_option('timezone_string'));
