@@ -13,7 +13,7 @@ Text Domain: mt-wp-plugin
 /*
  * Set locale for correct dates
  */
-setlocale(LC_ALL, get_locale().'.'.get_bloginfo('charset'), get_locale());
+setlocale(LC_ALL, get_locale());
 
 /*
  * Set timezone
